@@ -1,0 +1,28 @@
+Creating a separate `Enrollment` model as a junction table between `DanceClass` and `Dancer` models offers several advantages over directly connecting `Dancer` to `DanceClass` with an array field. Here are some reasons why this approach is better:
+
+1. **Rich Relationships**:
+   - An `Enrollment` model can store additional information about the relationship between a `Dancer` and a `DanceClass`. For instance, it might store the date of enrollment, attendance records, performance grades, or any other relevant information.
+   - This provides a rich relationship that can evolve over time as the application's requirements change.
+
+2. **Database Normalization**:
+   - Using a junction table like `Enrollment` is a normalized approach that helps maintain data integrity and consistency in many-to-many relationships.
+   - It's a common practice in database design, making your schema more understandable and maintainable.
+
+3. **Scalability**:
+   - As the number of dancers and classes grows, a separate `Enrollment` model helps to keep the database organized and querying efficient.
+   - Direct arrays can become problematic in terms of performance and management in larger datasets.
+
+4. **Ease of Querying**:
+   - It’s easier and more efficient to query, update, or delete relationships through a dedicated `Enrollment` model.
+   - Complex queries and joins are more straightforward with this kind of setup.
+
+5. **Extensibility**:
+   - If your application evolves to include new features or data points related to a dancer's enrollment in a class, having a separate `Enrollment` model makes it easier to extend the schema.
+
+6. **Data Integrity**:
+   - An `Enrollment` model helps ensure data integrity by clearly defining the relationships and potentially setting up cascading deletes or updates.
+
+7. **Consistency**:
+   - This approach promotes a consistent way of handling many-to-many relationships throughout your application, which is beneficial for code maintainability and readability.
+
+These advantages make the `Enrollment` model a more robust and flexible choice for managing the many-to-many relationship between dancers and dance classes in your web application.

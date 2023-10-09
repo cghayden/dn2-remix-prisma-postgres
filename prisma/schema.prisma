@@ -1,0 +1,171 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String    // Hashed password
+  role      UserRole  // Enum to identify user role
+  parent    Parent?   // Nullable relations to specific user types
+  studio    Studio?
+  instructor Instructor?
+}
+
+enum UserRole {
+  PARENT
+  STUDIO
+  INSTRUCTOR
+  // ... more roles as needed
+}
+
+model Parent {
+  id       Int       @id @default(autoincrement())
+  user     User      @relation(fields: [userId], references: [id])
+  userId   Int       @unique // relation scalar field, Foreign key to User
+  dancers  Dancer[]
+  // classes  DanceClass[]
+  // ... other specific fields
+}
+
+model Dancer {
+  id          Int         @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  birthdate   DateTime
+  parent      Parent      @relation(fields: [parentId], references: [id])
+  parentId    Int
+  enrollments Enrollment[]
+  studios     Studio[]
+}
+
+model Studio {
+  id            Int            @id @default(autoincrement())
+  user          User           @relation(fields: [userId], references: [id])
+  userId        Int            @unique // relation scalar field, Foreign key to User
+  danceClasses  DanceClass[]
+  instructors   Instructor[]
+  dancers       Dancer[]
+  enrollments   Enrollment[]
+  }
+
+model Instructor {
+  id       Int      @id @default(autoincrement())
+  user     User     @relation(fields: [userId], references: [id])
+  userId   Int      @unique // Foreign key to User
+  studios  Studio[] // Many-to-many relationship with Studio
+}
+
+// EXPLICIT StudioInstructor model: would allow for metadata on the studio to instructor relationship, i.e. who created to instrucor role at a studio or added/subtracted permissions of an instructor at a studio 
+// model StudioInstructor {
+//   studioId     Int
+//   instructorId Int
+//   studio       Studio    @relation(fields: [studioId], references: [id])
+//   instructor   Instructor @relation(fields: [instructorId], references: [id])
+//   @@id([studioId, instructorId])
+// }
+
+model Enrollment {
+  id          Int         @id @default(autoincrement())
+  dancer      Dancer      @relation(fields: [dancerId], references: [id])
+  dancerId    Int
+  class       DanceClass  @relation(fields: [classId], references: [id])
+  classId     Int
+  studio      Studio      @relation(fields: [studioId], references: [id])
+  studioId    Int         
+  requested   DateTime?   @default(now())
+  approved    DateTime?   @default(now())
+}
+
+model DanceClass {
+  id           Int          @id @default(autoincrement())
+  name         String
+  style        String?
+  shoes        String?
+  tights       String?
+  notes        String?
+  song         String?
+  instructor   String?
+  studio       Studio       @relation(fields: [studioId], references: [id])
+  studioId     Int
+  enrollments  Enrollment[]
+  schedules    Schedule[]
+}
+
+model Schedule {
+  id         Int         @id @default(autoincrement())
+  class      DanceClass @relation(fields: [classId], references: [id])
+  classId    Int
+  startTime  DateTime
+  endTime    DateTime
+  dayOfWeek  String      @default("Monday")
+}
+
+
+// notes:
+
+
+// Creating a separate `Schedule` model can bring several benefits compared to having `startTime`, `endTime`, and `dayOfWeek` fields directly on the `DanceClass` model. Here are some considerations:
+
+// 1. **Flexibility**:
+//    - With a separate `Schedule` model, you can handle multiple schedule entries for a single `DanceClass`. This can be useful if a dance class meets at different times on different days.
+//    - It allows for more complex scheduling scenarios such as classes that meet bi-weekly, or have differing schedules through the year.
+
+// 2. **Normalization**:
+//    - Database normalization helps to eliminate redundancy and inconsistent dependency by organizing data in database tables.
+//    - By separating schedules into their own model, you can maintain a cleaner, normalized database schema which adheres to good database design practices.
+
+// 3. **Ease of Updating**:
+//    - It’s easier to manage and update schedules independently without affecting the `DanceClass` table.
+//    - This separation can help reduce the complexity and potential errors when updating class schedules.
+
+// 4. **Reusability**:
+//    - If schedules are stored separately, they could potentially be reused for different dance classes or other scheduled entities within the system.
+
+// 5. **Query Efficiency**:
+//    - Having a separate `Schedule` model can lead to more efficient queries, as you can fetch or update schedule information without touching the `DanceClass` table.
+//    - This is particularly useful in larger systems or systems with a lot of database traffic.
+
+// 6. **Extensibility**:
+//    - If in the future, scheduling needs become more complex (e.g., adding location, instructor availability, special notes for certain days), having a separate `Schedule` model makes it easier to extend the schema to accommodate these new requirements.
+
+// 7. **Clearer Relations**:
+//    - With a `Schedule` model, you can clearly define the relationship between a dance class and its schedule(s), which can be more intuitive and self-explanatory for others (or future-you) working on the project.
+
+// These are general benefits and the actual impact may vary based on the specific requirements and scale of your application.
+
+
+
+// Creating a separate `Enrollment` model as a junction table between `DanceClass` and `Dancer` models offers several advantages over directly connecting `Dancer` to `DanceClass` with an array field. Here are some reasons why this approach is better:
+
+// 1. **Rich Relationships**:
+//    - An `Enrollment` model can store additional information about the relationship between a `Dancer` and a `DanceClass`. For instance, it might store the date of enrollment, attendance records, performance grades, or any other relevant information.
+//    - This provides a rich relationship that can evolve over time as the application's requirements change.
+
+// 2. **Database Normalization**:
+//    - Using a junction table like `Enrollment` is a normalized approach that helps maintain data integrity and consistency in many-to-many relationships.
+//    - It's a common practice in database design, making your schema more understandable and maintainable.
+
+// 3. **Scalability**:
+//    - As the number of dancers and classes grows, a separate `Enrollment` model helps to keep the database organized and querying efficient.
+//    - Direct arrays can become problematic in terms of performance and management in larger datasets.
+
+// 4. **Ease of Querying**:
+//    - It’s easier and more efficient to query, update, or delete relationships through a dedicated `Enrollment` model.
+//    - Complex queries and joins are more straightforward with this kind of setup.
+
+// 5. **Extensibility**:
+//    - If your application evolves to include new features or data points related to a dancer's enrollment in a class, having a separate `Enrollment` model makes it easier to extend the schema.
+
+// 6. **Data Integrity**:
+//    - An `Enrollment` model helps ensure data integrity by clearly defining the relationships and potentially setting up cascading deletes or updates.
+
+// 7. **Consistency**:
+//    - This approach promotes a consistent way of handling many-to-many relationships throughout your application, which is beneficial for code maintainability and readability.
+
+// These advantages make the `Enrollment` model a more robust and flexible choice for managing the many-to-many relationship between dancers and dance classes in your web application.
