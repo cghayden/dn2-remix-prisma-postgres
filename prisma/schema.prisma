@@ -11,13 +11,13 @@ model User {
   id        Int       @id @default(autoincrement())
   email     String    @unique
   password  String    // Hashed password
-  role      UserRole  // Enum to identify user role
+  type      UserType  // Enum to identify user role
   parent    Parent?   // Nullable relations to specific user types
   studio    Studio?
   instructor Instructor?
 }
 
-enum UserRole {
+enum UserType {
   PARENT
   STUDIO
   INSTRUCTOR
@@ -29,6 +29,8 @@ model Parent {
   user     User      @relation(fields: [userId], references: [id])
   userId   Int       @unique // relation scalar field, Foreign key to User
   dancers  Dancer[]
+  firstName String
+  lastName String
   // classes  DanceClass[]
   // ... other specific fields
 }

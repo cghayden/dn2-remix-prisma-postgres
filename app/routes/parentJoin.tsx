@@ -6,8 +6,9 @@ import type {
 import { json, redirect } from '@remix-run/node'
 import { Form, Link, useActionData, useSearchParams } from '@remix-run/react'
 import { useEffect, useRef } from 'react'
+import { createParent } from '~/models/parent.server'
 
-import { createUser, getUserByEmail } from '~/models/user.server'
+import { getUserByEmail } from '~/models/user.server'
 import { createUserSession, getUserId } from '~/session.server'
 import { safeRedirect, validateEmail } from '~/utils'
 
@@ -21,12 +22,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData()
   const email = formData.get('email')
   const firstName = formData.get('firstName')
+  const lastName = formData.get('lastName')
   const password = formData.get('password')
+  const type = 'PARENT'
   const redirectTo = safeRedirect(formData.get('redirectTo'), '/')
 
   const errors = {
     email: null,
     firstName: null,
+    lastName: null,
     password: null,
   }
 
@@ -47,6 +51,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (typeof firstName !== 'string' || firstName.length === 0) {
     return json({
       errors: { ...errors, firstName: 'First Name is required' },
+      status: 400,
+    })
+  }
+  if (typeof lastName !== 'string' || lastName.length === 0) {
+    return json({
+      errors: { ...errors, lastName: 'Last Name is required' },
       status: 400,
     })
   }
@@ -71,25 +81,28 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     )
   }
 
-  const user = await createUser(email, password, firstName)
+  const user = await createParent(email, password, type, firstName, lastName)
+  console.log('user', user)
 
   return createUserSession({
     redirectTo,
     remember: false,
     request,
     userId: user.id,
+    type: user.type,
   })
 }
 
 export const meta: MetaFunction = () => [{ title: 'Sign Up' }]
 
-export default function Join() {
+export default function ParentJoin() {
   const [searchParams] = useSearchParams()
   const redirectTo = searchParams.get('redirectTo') ?? undefined
   const actionData = useActionData<typeof action>()
   console.log('actionData', actionData)
   const emailRef = useRef<HTMLInputElement>(null)
   const firstNameRef = useRef<HTMLInputElement>(null)
+  const lastNameRef = useRef<HTMLInputElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -98,6 +111,9 @@ export default function Join() {
     }
     if (actionData?.errors?.firstName) {
       firstNameRef.current?.focus()
+    }
+    if (actionData?.errors?.lastName) {
+      lastNameRef.current?.focus()
     } else if (actionData?.errors?.password) {
       passwordRef.current?.focus()
     }
@@ -108,6 +124,7 @@ export default function Join() {
       <div className='mx-auto w-full max-w-md px-8'>
         <Form method='post' className='space-y-6'>
           <div>
+            {/* parent Form */}
             <label
               htmlFor='email'
               className='block text-sm font-medium text-gray-700'
@@ -155,8 +172,35 @@ export default function Join() {
                 className='w-full rounded border border-gray-500 px-2 py-1 text-lg'
               />
               {actionData?.errors?.firstName ? (
-                <div className='pt-1 text-red-700' id='email-error'>
+                <div className='pt-1 text-red-700' id='firstName-error'>
                   {actionData.errors.firstName}
+                </div>
+              ) : null}
+            </div>
+          </div>
+          <div>
+            <label
+              htmlFor='lastName'
+              className='block text-sm font-medium text-gray-700'
+            >
+              Last Name{' '}
+            </label>
+            <div className='mt-1'>
+              <input
+                ref={lastNameRef}
+                id='lastName'
+                required
+                autoFocus={true}
+                name='lastName'
+                type='text'
+                autoComplete='lastName'
+                aria-invalid={actionData?.errors?.lastName ? true : undefined}
+                aria-describedby='lastName-error'
+                className='w-full rounded border border-gray-500 px-2 py-1 text-lg'
+              />
+              {actionData?.errors?.lastName ? (
+                <div className='pt-1 text-red-700' id='lastName-error'>
+                  {actionData.errors.lastName}
                 </div>
               ) : null}
             </div>
@@ -187,16 +231,7 @@ export default function Join() {
               ) : null}
             </div>
           </div>
-          <label>
-            <input type='radio' name='userType' value='parent' required />{' '}
-            Parent
-          </label>
-
-          <label>
-            <input type='radio' name='userType' value='studio' required />{' '}
-            Studio
-          </label>
-
+          {/* end parent form */}
           <input type='hidden' name='redirectTo' value={redirectTo} />
           <button
             type='submit'

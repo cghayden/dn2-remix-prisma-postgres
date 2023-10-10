@@ -16,14 +16,14 @@ export async function getUserByEmail(email: User['email']) {
 export async function createUser(
   email: User['email'],
   password: User['password'],
-  firstName: User['firstName']
+  type: User['type']
 ) {
   const hashedPassword = await bcrypt.hash(password, 10)
 
   return prisma.user.create({
     data: {
       email,
-      firstName,
+      type,
       password: hashedPassword,
     },
   })
@@ -54,15 +54,4 @@ export async function verifyLogin(
   const { password: _password, ...userWithoutPassword } = userWithPassword
 
   return userWithoutPassword
-}
-
-export const getOtherUsers = async (userId: string) => {
-  return prisma.user.findMany({
-    where: {
-      id: { not: userId },
-    },
-    orderBy: {
-      firstName: 'asc',
-    },
-  })
 }

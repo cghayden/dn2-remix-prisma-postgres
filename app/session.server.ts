@@ -66,11 +66,13 @@ export async function requireUserId(
 export async function createUserSession({
   request,
   userId,
+  type,
   remember,
   redirectTo,
 }: {
   request: Request
   userId: number
+  type: string
   remember: boolean
   redirectTo: string
 }) {
