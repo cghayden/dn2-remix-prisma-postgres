@@ -2,9 +2,10 @@
 
 import { redirect } from '@remix-run/node'
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import { requireUserId } from '~/session.server'
+import { requireUser } from '~/session.server'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  await requireUserId(request)
-  return redirect('/parent')
+  const user = await requireUser(request)
+
+  return redirect(`/${user.type.toLowerCase()}`)
 }

@@ -47,7 +47,10 @@ export async function requireUser(request: Request) {
 
   const user = await getUserById(userId)
   if (user) return user
-
+  if (!user) {
+    // const searchParams = new URLSearchParams([['redirectTo', redirectTo]])
+    throw redirect(`/welcome`)
+  }
   throw await logout(request)
 }
 
