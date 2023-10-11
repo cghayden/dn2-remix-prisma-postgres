@@ -2,6 +2,21 @@ import type { User, Studio } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
 import { prisma } from '~/db.server'
+import { requireUserId } from '~/session.server'
+import { getUserById } from './user.server'
+import { redirect } from '@remix-run/node'
+
+export async function requireStudio(request: Request) {
+  // check for UserId - if none, no one is logged in, redirect to /welcome
+  const userId = await requireUserId(request)
+
+  // get User, check user type for 'PARENT'
+  const user = await getUserById(userId)
+  if (!user || user?.type !== 'STUDIO') {
+    throw redirect(`/`)
+  }
+  return userId
+}
 
 export async function createStudio(
   email: User['email'],

@@ -1,29 +1,14 @@
-import { Outlet, useLoaderData } from '@remix-run/react'
-import { requireUserId } from '~/session.server'
+import { Outlet } from '@remix-run/react'
 import { type LoaderFunctionArgs } from '@remix-run/node'
 import Header from '~/components/parents/Header'
 // import Sidebar from '~/components/parents/Sidebar'
-import { prisma } from '~/db.server'
+// import { prisma } from '~/db.server'
+import { requireStudio } from '~/models/studio.server'
 
-// type UserNavData = {
-//   dancers: Dancer['id' | 'firstName']
-// }
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const userId = await requireUserId(request)
-  const parentNavData = prisma.parent.findUnique({
-    where: {
-      userId: userId,
-    },
-    select: {
-      dancers: {
-        select: {
-          firstName: true,
-          id: true,
-        },
-      },
-    },
-  })
-  return parentNavData
+  const studioId = await requireStudio(request)
+
+  return studioId
 }
 
 export default function StudioLayout() {
@@ -32,7 +17,7 @@ export default function StudioLayout() {
     <div className='min-h-screen flex flex-col'>
       <Header />
       <div className='flex h-full flex-1'>
-        {/* <Sidebar parentNavData={studioNavData} /> */}
+        {/* <Sidebar /> */}
         <main className='w-full'>
           <Outlet />
         </main>

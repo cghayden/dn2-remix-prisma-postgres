@@ -1,15 +1,16 @@
 import { Outlet, useLoaderData } from '@remix-run/react'
-import { requireUserId } from '~/session.server'
 import { type LoaderFunctionArgs } from '@remix-run/node'
 import Header from '~/components/parents/Header'
 import Sidebar from '~/components/parents/Sidebar'
 import { prisma } from '~/db.server'
+import { requireParent } from '~/models/parent.server'
 
 // type UserNavData = {
 //   dancers: Dancer['id' | 'firstName']
 // }
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const userId = await requireUserId(request)
+  // check for userId(logged in user) and 'PARENT' type, return id if so
+  const userId = await requireParent(request)
   const parentNavData = prisma.parent.findUnique({
     where: {
       userId: userId,

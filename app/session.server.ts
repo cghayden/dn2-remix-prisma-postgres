@@ -42,6 +42,7 @@ export async function getUser(request: Request) {
   throw await logout(request)
 }
 
+// requireUser > (requireUserId(userId or redirect) > getUserId(userID off Session))
 export async function requireUser(request: Request) {
   const userId = await requireUserId(request)
 
