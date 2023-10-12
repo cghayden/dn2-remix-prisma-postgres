@@ -29,7 +29,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 function ParentLayout() {
   const parentNavData = useLoaderData<typeof loader>()
-  console.log('parentNavData', parentNavData)
   return (
     <div className='min-h-screen flex flex-col'>
       <Header />

@@ -39,7 +39,7 @@ model Dancer {
   id          Int         @id @default(autoincrement())
   firstName   String
   lastName    String
-  birthdate   DateTime
+  birthdate   DateTime?
   parent      Parent      @relation(fields: [parentId], references: [id])
   parentId    Int
   enrollments Enrollment[]

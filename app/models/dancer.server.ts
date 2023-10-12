@@ -12,7 +12,7 @@ export async function createDancer(
       lastName,
       parent: {
         connect: {
-          id: userId,
+          userId: userId,
         },
       },
     },
@@ -37,11 +37,11 @@ export async function getDancersName(userId: User['id']) {
   //     parentId: userId,
   //   },
   // })
-  const userWithDancers = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { dancers: { select: { firstName: true, id: true } } },
+  const dancersNames = await prisma.dancer.findMany({
+    where: { parentId: userId },
+    select: { firstName: true, id: true },
   })
-  return userWithDancers?.dancers ?? []
+  return dancersNames
 }
 
 export const getDancer = async (dancerId: Dancer['id']) => {
