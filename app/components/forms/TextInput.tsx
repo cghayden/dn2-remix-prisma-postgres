@@ -1,7 +1,7 @@
 export type TextInputProps = {
   label: string
   name: string
-  ref: React.RefObject<HTMLInputElement>
+  refProp: React.RefObject<HTMLInputElement>
   required: boolean
   validationError: string | null | undefined
   ariaInvalid: boolean | undefined
@@ -10,7 +10,7 @@ export type TextInputProps = {
 export function TextInput({
   label,
   name,
-  ref,
+  refProp,
   required,
   validationError,
   ariaInvalid,
@@ -22,7 +22,7 @@ export function TextInput({
       </label>
       <div className='mt-1'>
         <input
-          ref={ref}
+          ref={refProp}
           id={name}
           required={required}
           autoFocus={true}
