@@ -1,10 +1,10 @@
 import { useLocation } from '@remix-run/react'
 import { useEffect, useState } from 'react'
 import MenuSvg from '../icons/MenuSvg'
-import MobileNav from '../parents/MobileNav'
+import StudioMobileNav from './StudioMobileNav'
 // TODO - make this a reusable component for parent/studio/etc.
 
-export default function Header() {
+export default function StudioHeader() {
   const [showMobileNav, toggleShowMobileNav] = useState(false)
   const { pathname } = useLocation()
 
@@ -25,7 +25,7 @@ export default function Header() {
       >
         <MenuSvg />
       </button>
-      <MobileNav
+      <StudioMobileNav
         showMobileNav={showMobileNav}
         toggleShowMobileNav={toggleShowMobileNav}
       />

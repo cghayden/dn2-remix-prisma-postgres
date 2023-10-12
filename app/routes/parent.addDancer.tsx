@@ -2,7 +2,7 @@ import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Form, useActionData } from '@remix-run/react'
 import { useEffect, useRef } from 'react'
-import { createDancer } from '~/models/dancer.server'
+import { createParentDancer } from '~/models/dancer.server'
 
 import { requireUserId } from '~/session.server'
 
@@ -40,7 +40,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   // dont allow parent to create a dancer with the same name?
 
-  await createDancer(firstName, lastName, userId)
+  await createParentDancer(firstName, lastName, userId)
   return redirect('/parent')
 }
 

@@ -1,7 +1,7 @@
 import { Outlet, useLoaderData } from '@remix-run/react'
 import { type LoaderFunctionArgs } from '@remix-run/node'
 import Header from '~/components/parents/Header'
-import Sidebar from '~/components/parents/Sidebar'
+// import Sidebar from '~/components/parents/Sidebar'
 import { prisma } from '~/db.server'
 import { requireParent } from '~/models/parent.server'
 
@@ -11,7 +11,7 @@ import { requireParent } from '~/models/parent.server'
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   // check for userId(logged in user) and 'PARENT' type, return id if so
   const userId = await requireParent(request)
-  const parentNavData = prisma.parent.findUnique({
+  const parentNavData = await prisma.parent.findUnique({
     where: {
       userId: userId,
     },
@@ -28,12 +28,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 function ParentLayout() {
-  const parentNavData = useLoaderData<typeof loader>()
+  // const parentNavData = useLoaderData<typeof loader>()
   return (
     <div className='min-h-screen flex flex-col'>
       <Header />
       <div className='flex h-full flex-1'>
-        <Sidebar parentNavData={parentNavData} />
+        {/* <Sidebar parentNavData={parentNavData} /> */}
         <main className='w-full'>
           <Outlet />
         </main>

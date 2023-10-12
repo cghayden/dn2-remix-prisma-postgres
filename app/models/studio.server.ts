@@ -26,7 +26,7 @@ export async function createStudio(
 ) {
   const hashedPassword = await bcrypt.hash(password, 10)
 
-  return prisma.user.create({
+  return await prisma.user.create({
     data: {
       email,
       type,
@@ -38,4 +38,16 @@ export async function createStudio(
       },
     },
   })
+}
+
+export async function getFullStudio(userId: User['id']) {
+  const studio = prisma.studio.findUnique({
+    where: {
+      userId: userId,
+    },
+    include: {
+      danceLevels: true,
+    },
+  })
+  return studio
 }

@@ -1,7 +1,7 @@
 import type { Dancer, User } from '@prisma/client'
 import { prisma } from '~/db.server'
 
-export async function createDancer(
+export async function createParentDancer(
   firstName: Dancer['firstName'],
   lastName: Dancer['lastName'],
   userId: User['id']

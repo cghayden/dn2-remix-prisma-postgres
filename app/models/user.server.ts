@@ -6,11 +6,11 @@ import { prisma } from '~/db.server'
 export type { User } from '@prisma/client'
 
 export async function getUserById(id: User['id']) {
-  return prisma.user.findUnique({ where: { id } })
+  return await prisma.user.findUnique({ where: { id } })
 }
 
 export async function getUserByEmail(email: User['email']) {
-  return prisma.user.findUnique({ where: { email } })
+  return await prisma.user.findUnique({ where: { email } })
 }
 
 export async function createUser(
@@ -20,7 +20,7 @@ export async function createUser(
 ) {
   const hashedPassword = await bcrypt.hash(password, 10)
 
-  return prisma.user.create({
+  return await prisma.user.create({
     data: {
       email,
       type,
@@ -30,7 +30,7 @@ export async function createUser(
 }
 
 export async function deleteUserByEmail(email: User['email']) {
-  return prisma.user.delete({ where: { email } })
+  return await prisma.user.delete({ where: { email } })
 }
 
 export async function verifyLogin(
