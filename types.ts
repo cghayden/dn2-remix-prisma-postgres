@@ -5,3 +5,13 @@ import type { Dancer } from '@prisma/client'
 export type ParentNavData = {
   dancers: Pick<Dancer, 'firstName' | 'id'>[]
 }
+
+export type Errors = {
+  [key: string]: string | null
+}
+
+export type ActionResponse = {
+  errors: Errors | null
+  success?: boolean | null
+  status: number
+}

@@ -69,3 +69,65 @@ export function useUser(): User {
 export function validateEmail(email: unknown): email is string {
   return typeof email === 'string' && email.length > 3 && email.includes('@')
 }
+
+export function validateString(str: unknown): str is string {
+  return typeof str === 'string' && str.length > 0
+}
+
+export type ValidatedObject = Record<string, string>
+
+// export function validateForm(inputs: Record<string, unknown>) {
+//   const errors: Record<string, string> = {}
+//   for (const [key, value] of Object.entries(inputs)) {
+//     if (key === 'email') {
+//       if (typeof value !== 'string' || value.length < 3 || !key.includes('@')) {
+//         errors[key] = `${key} is invalid`
+//         continue
+//       }
+//     }
+//     if (key === 'password') {
+//       if (typeof value !== 'string' || value.length < 8) {
+//         errors[key] = `${key} is invalid`
+//         continue
+//       }
+//     }
+//     if (typeof value !== 'string' || value.length < 1) {
+//       errors[key] = `${key} is required and must be a string`
+//     }
+//   }
+//   return Object.values(errors).length ? errors : null
+// }
+type FormInput = {
+  [key: string]: unknown
+}
+
+export function validateForm(inputs: FormInput) {
+  const errors: Record<string, string> = {}
+
+  for (const [key, value] of Object.entries(inputs)) {
+    if (typeof value !== 'string') {
+      errors[key] = `${key} is required and must be a string`
+      continue
+    }
+
+    switch (key) {
+      case 'email':
+        if (value.length < 3 || !value.includes('@')) {
+          errors[key] = `${key} is invalid`
+        }
+        break
+      case 'password':
+        if (value.length < 8) {
+          errors[key] = `${key} is invalid`
+        }
+        break
+      default:
+        if (value.length < 1) {
+          errors[key] = `${key} is required and must be a string`
+        }
+        break
+    }
+  }
+
+  return errors
+}

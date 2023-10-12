@@ -8,16 +8,16 @@ generator client {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  password  String    // Hashed password
-  role      UserRole  // Enum to identify user role
-  parent    Parent?   // Nullable relations to specific user types
-  studio    Studio?
+  id         Int         @id @default(autoincrement())
+  email      String      @unique
+  password   String // Hashed password
+  type       UserType // Enum to identify user role
+  parent     Parent? // Nullable relations to specific user types
+  studio     Studio?
   instructor Instructor?
 }
 
-enum UserRole {
+enum UserType {
   PARENT
   STUDIO
   INSTRUCTOR
@@ -25,40 +25,45 @@ enum UserRole {
 }
 
 model Parent {
-  id       Int       @id @default(autoincrement())
-  user     User      @relation(fields: [userId], references: [id])
-  userId   Int       @unique // relation scalar field, Foreign key to User
-  dancers  Dancer[]
+  id           Int          @id @default(autoincrement())
+  user         User         @relation(fields: [userId], references: [id])
+  userId       Int          @unique // relation scalar field, Foreign key to User
+  dancers      Dancer[]
+  firstName    String
+  lastName     String
+  danceClasses DanceClass[]
   // classes  DanceClass[]
   // ... other specific fields
 }
 
 model Dancer {
-  id          Int         @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   firstName   String
   lastName    String
-  birthdate   DateTime
-  parent      Parent      @relation(fields: [parentId], references: [id])
+  birthdate   DateTime?
+  parent      Parent       @relation(fields: [parentId], references: [id])
   parentId    Int
   enrollments Enrollment[]
   studios     Studio[]
 }
 
 model Studio {
-  id            Int            @id @default(autoincrement())
-  user          User           @relation(fields: [userId], references: [id])
-  userId        Int            @unique // relation scalar field, Foreign key to User
-  danceClasses  DanceClass[]
-  instructors   Instructor[]
-  dancers       Dancer[]
-  enrollments   Enrollment[]
-  }
+  id           Int          @id @default(autoincrement())
+  user         User         @relation(fields: [userId], references: [id])
+  userId       Int          @unique // relation scalar field, Foreign key to User
+  name         String
+  danceClasses DanceClass[]
+  instructors  Instructor[]
+  dancers      Dancer[]
+  enrollments  Enrollment[]
+  danceLevels  DanceLevel[]
+}
 
 model Instructor {
-  id       Int      @id @default(autoincrement())
-  user     User     @relation(fields: [userId], references: [id])
-  userId   Int      @unique // Foreign key to User
-  studios  Studio[] // Many-to-many relationship with Studio
+  id      Int      @id @default(autoincrement())
+  user    User     @relation(fields: [userId], references: [id])
+  userId  Int      @unique // Foreign key to User
+  studios Studio[] // Many-to-many relationship with Studio
 }
 
 // EXPLICIT StudioInstructor model: would allow for metadata on the studio to instructor relationship, i.e. who created to instrucor role at a studio or added/subtracted permissions of an instructor at a studio 
@@ -71,44 +76,59 @@ model Instructor {
 // }
 
 model Enrollment {
-  id          Int         @id @default(autoincrement())
-  dancer      Dancer      @relation(fields: [dancerId], references: [id])
-  dancerId    Int
-  class       DanceClass  @relation(fields: [classId], references: [id])
-  classId     Int
-  studio      Studio      @relation(fields: [studioId], references: [id])
-  studioId    Int         
-  requested   DateTime?   @default(now())
-  approved    DateTime?   @default(now())
+  id        Int        @id @default(autoincrement())
+  dancer    Dancer     @relation(fields: [dancerId], references: [id])
+  dancerId  Int
+  class     DanceClass @relation(fields: [classId], references: [id])
+  classId   Int
+  studio    Studio     @relation(fields: [studioId], references: [id])
+  studioId  Int
+  requested DateTime?  @default(now())
+  approved  DateTime?  @default(now())
 }
 
 model DanceClass {
+  id              Int          @id @default(autoincrement())
+  name            String
+  performanceName String?
+  styleOfDance    String?
+  shoes           String?
+  tights          String?
+  notes           String?
+  song            String?
+  instructor      String?
+  studio          Studio?      @relation(fields: [studioId], references: [id])
+  studioId        Int?
+  parent          Parent?      @relation(fields: [parentId], references: [id])
+  parentId        Int?
+  enrollments     Enrollment[]
+  schedules       Schedule[]
+  competitive     Boolean
+  recreational    Boolean
+  recital         Boolean
+  level           DanceLevel?  @relation(fields: [levelId], references: [id])
+  levelId         Int?
+}
+
+model DanceLevel {
   id           Int          @id @default(autoincrement())
-  name         String
-  style        String?
-  shoes        String?
-  tights       String?
-  notes        String?
-  song         String?
-  instructor   String?
+  name         String // e.g. 'beginner', 'senior', or any custom name
+  description  String?
   studio       Studio       @relation(fields: [studioId], references: [id])
   studioId     Int
-  enrollments  Enrollment[]
-  schedules    Schedule[]
+  danceClasses DanceClass[] // Assuming you go with 'DanceRoutine' for the name, adjust if necessary
 }
 
 model Schedule {
-  id         Int         @id @default(autoincrement())
-  class      DanceClass @relation(fields: [classId], references: [id])
-  classId    Int
-  startTime  DateTime
-  endTime    DateTime
-  dayOfWeek  String      @default("Monday")
+  id        Int        @id @default(autoincrement())
+  class     DanceClass @relation(fields: [classId], references: [id])
+  classId   Int
+  startTime DateTime
+  endTime   DateTime
+  dayOfWeek String     @default("Monday")
 }
 
-
 // notes:
-
 
 // Creating a separate `Schedule` model can bring several benefits compared to having `startTime`, `endTime`, and `dayOfWeek` fields directly on the `DanceClass` model. Here are some considerations:
 
@@ -138,8 +158,6 @@ model Schedule {
 //    - With a `Schedule` model, you can clearly define the relationship between a dance class and its schedule(s), which can be more intuitive and self-explanatory for others (or future-you) working on the project.
 
 // These are general benefits and the actual impact may vary based on the specific requirements and scale of your application.
-
-
 
 // Creating a separate `Enrollment` model as a junction table between `DanceClass` and `Dancer` models offers several advantages over directly connecting `Dancer` to `DanceClass` with an array field. Here are some reasons why this approach is better:
 

@@ -42,12 +42,16 @@ export async function getUser(request: Request) {
   throw await logout(request)
 }
 
+// requireUser > (requireUserId(userId or redirect) > getUserId(userID off Session))
 export async function requireUser(request: Request) {
   const userId = await requireUserId(request)
 
   const user = await getUserById(userId)
   if (user) return user
-
+  if (!user) {
+    // const searchParams = new URLSearchParams([['redirectTo', redirectTo]])
+    throw redirect(`/welcome`)
+  }
   throw await logout(request)
 }
 
@@ -66,11 +70,13 @@ export async function requireUserId(
 export async function createUserSession({
   request,
   userId,
+  type,
   remember,
   redirectTo,
 }: {
   request: Request
   userId: number
+  type: string
   remember: boolean
   redirectTo: string
 }) {
