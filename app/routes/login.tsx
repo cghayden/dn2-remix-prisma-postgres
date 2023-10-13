@@ -50,7 +50,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     redirectTo: `/${user.type.toLowerCase()}`,
     remember: remember === 'on' ? true : false,
     request,
-    userId: user.id,
+    userId: user.userId,
     type: user.type,
   })
 }

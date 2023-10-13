@@ -33,6 +33,9 @@ export default function MobileNav({
             <Link to='addDanceClass'>Add a Dance Class</Link>
           </li>
           <li className='py-2'>
+            <Link to='configuration'>Configuration</Link>
+          </li>
+          <li className='py-2'>
             <LogoutForm />
           </li>
         </ul>

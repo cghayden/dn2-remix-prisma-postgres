@@ -4,10 +4,10 @@ import {
 } from '@remix-run/node'
 import { Form, useLoaderData } from '@remix-run/react'
 import { useRef } from 'react'
-import { getUserId } from '~/session.server'
+// import { getUserId } from '~/session.server'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const userId = await getUserId(request)
+  // const userId = await getUserId(request)
   // get available levels from loader to populate select
   return { levels: [] }
 }

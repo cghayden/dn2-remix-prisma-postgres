@@ -82,13 +82,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   const user = await createParent(email, password, type, firstName, lastName)
-  console.log('user', user)
 
   return createUserSession({
     redirectTo,
     remember: false,
     request,
-    userId: user.id,
+    userId: user.userId,
     type: user.type,
   })
 }

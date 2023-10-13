@@ -8,7 +8,7 @@ generator client {
 }
 
 model User {
-  id         Int         @id @default(autoincrement())
+  userId     String      @id @default(uuid()) // UUID type
   email      String      @unique
   password   String // Hashed password
   type       UserType // Enum to identify user role
@@ -25,32 +25,28 @@ enum UserType {
 }
 
 model Parent {
-  id           Int          @id @default(autoincrement())
-  user         User         @relation(fields: [userId], references: [id])
-  userId       Int          @unique // relation scalar field, Foreign key to User
+  userId       String       @id // UUID type, primary key and foreign key to User
+  user         User         @relation(fields: [userId], references: [userId])
   dancers      Dancer[]
   firstName    String
   lastName     String
   danceClasses DanceClass[]
-  // classes  DanceClass[]
-  // ... other specific fields
 }
 
 model Dancer {
-  id          Int          @id @default(autoincrement())
+  id          String       @id @default(uuid())
   firstName   String
   lastName    String
   birthdate   DateTime?
-  parent      Parent       @relation(fields: [parentId], references: [id])
-  parentId    Int
+  parent      Parent       @relation(fields: [parentId], references: [userId])
+  parentId    String
   enrollments Enrollment[]
   studios     Studio[]
 }
 
 model Studio {
-  id           Int          @id @default(autoincrement())
-  user         User         @relation(fields: [userId], references: [id])
-  userId       Int          @unique // relation scalar field, Foreign key to User
+  userId       String       @id // UUID type, primary key and foreign key to User
+  user         User         @relation(fields: [userId], references: [userId])
   name         String
   danceClasses DanceClass[]
   instructors  Instructor[]
@@ -60,35 +56,25 @@ model Studio {
 }
 
 model Instructor {
-  id      Int      @id @default(autoincrement())
-  user    User     @relation(fields: [userId], references: [id])
-  userId  Int      @unique // Foreign key to User
+  userId  String   @id // UUID type, primary key and foreign key to User
+  user    User     @relation(fields: [userId], references: [userId])
   studios Studio[] // Many-to-many relationship with Studio
 }
 
-// EXPLICIT StudioInstructor model: would allow for metadata on the studio to instructor relationship, i.e. who created to instrucor role at a studio or added/subtracted permissions of an instructor at a studio 
-// model StudioInstructor {
-//   studioId     Int
-//   instructorId Int
-//   studio       Studio    @relation(fields: [studioId], references: [id])
-//   instructor   Instructor @relation(fields: [instructorId], references: [id])
-//   @@id([studioId, instructorId])
-// }
-
 model Enrollment {
-  id        Int        @id @default(autoincrement())
+  id        String     @id @default(uuid())
   dancer    Dancer     @relation(fields: [dancerId], references: [id])
-  dancerId  Int
+  dancerId  String
   class     DanceClass @relation(fields: [classId], references: [id])
-  classId   Int
-  studio    Studio     @relation(fields: [studioId], references: [id])
-  studioId  Int
+  classId   String
+  studio    Studio     @relation(fields: [studioId], references: [userId])
+  studioId  String
   requested DateTime?  @default(now())
   approved  DateTime?  @default(now())
 }
 
 model DanceClass {
-  id              Int          @id @default(autoincrement())
+  id              String       @id @default(uuid())
   name            String
   performanceName String?
   styleOfDance    String?
@@ -97,38 +83,47 @@ model DanceClass {
   notes           String?
   song            String?
   instructor      String?
-  studio          Studio?      @relation(fields: [studioId], references: [id])
-  studioId        Int?
-  parent          Parent?      @relation(fields: [parentId], references: [id])
-  parentId        Int?
+  studio          Studio?      @relation(fields: [studioId], references: [userId])
+  studioId        String?
+  parent          Parent?      @relation(fields: [parentId], references: [userId])
+  parentId        String?
   enrollments     Enrollment[]
   schedules       Schedule[]
   competitive     Boolean
   recreational    Boolean
   recital         Boolean
   level           DanceLevel?  @relation(fields: [levelId], references: [id])
-  levelId         Int?
+  levelId         String?
 }
 
 model DanceLevel {
-  id           Int          @id @default(autoincrement())
+  id           String       @id @default(uuid())
   name         String // e.g. 'beginner', 'senior', or any custom name
   description  String?
-  studio       Studio       @relation(fields: [studioId], references: [id])
-  studioId     Int
-  danceClasses DanceClass[] // Assuming you go with 'DanceRoutine' for the name, adjust if necessary
+  studio       Studio       @relation(fields: [studioId], references: [userId])
+  studioId     String
+  danceClasses DanceClass[]
 }
 
 model Schedule {
-  id        Int        @id @default(autoincrement())
+  id        String     @id @default(uuid())
   class     DanceClass @relation(fields: [classId], references: [id])
-  classId   Int
+  classId   String
   startTime DateTime
   endTime   DateTime
-  dayOfWeek String     @default("Monday")
+  dayOfWeek String
 }
 
 // notes:
+
+// EXPLICIT StudioInstructor model: would allow for metadata on the studio to instructor relationship, i.e. who created to instrucor role at a studio or added/subtracted permissions of an instructor at a studio 
+// model StudioInstructor {
+//   studioId     Int
+//   instructorId Int
+//   studio       Studio    @relation(fields: [studioId], references: [userId])
+//   instructor   Instructor @relation(fields: [instructorId], references: [userId])
+//   @@id([studioId, instructorId])
+// }
 
 // Creating a separate `Schedule` model can bring several benefits compared to having `startTime`, `endTime`, and `dayOfWeek` fields directly on the `DanceClass` model. Here are some considerations:
 

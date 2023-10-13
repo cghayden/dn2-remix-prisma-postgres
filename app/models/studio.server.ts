@@ -40,13 +40,21 @@ export async function createStudio(
   })
 }
 
-export async function getFullStudio(userId: User['id']) {
+export async function getFullStudio(userId: User['userId']) {
   const studio = prisma.studio.findUnique({
     where: {
-      userId: userId,
+      userId,
     },
     include: {
       danceLevels: true,
+    },
+  })
+  return studio
+}
+export async function getDanceLevels(userId: User['userId']) {
+  const studio = prisma.danceLevel.findMany({
+    where: {
+      studioId: userId,
     },
   })
   return studio

@@ -26,7 +26,7 @@ export async function getSession(request: Request) {
 
 export async function getUserId(
   request: Request
-): Promise<User['id'] | undefined> {
+): Promise<User['userId'] | undefined> {
   const session = await getSession(request)
   const userId = session.get(USER_SESSION_KEY)
   return userId
@@ -75,7 +75,7 @@ export async function createUserSession({
   redirectTo,
 }: {
   request: Request
-  userId: number
+  userId: string
   type: string
   remember: boolean
   redirectTo: string
