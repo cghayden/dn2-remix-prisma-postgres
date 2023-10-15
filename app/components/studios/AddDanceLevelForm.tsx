@@ -5,7 +5,6 @@ import { TextInput } from '../forms/TextInput'
 
 export default function DanceLevelsForm() {
   const fetcher = useFetcher<ActionResponse>()
-  console.log('fetcher', fetcher)
   const actionData = fetcher.data
   const newLevelRef = useRef<HTMLInputElement>(null)
   const descriptionRef = useRef<HTMLInputElement>(null)
@@ -25,10 +24,12 @@ export default function DanceLevelsForm() {
   }, [actionData])
   return (
     <div>
+      <h2>Add a new Level</h2>
       <fetcher.Form
+        id='addForm'
         ref={formRef}
         method='post'
-        action='updateDanceLevels'
+        action='ResourceAddDanceLevel'
         className='space-y-6'
       >
         <TextInput
@@ -50,6 +51,7 @@ export default function DanceLevelsForm() {
 
         <button
           type='submit'
+          form='addForm'
           className='w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400'
         >
           Add Level

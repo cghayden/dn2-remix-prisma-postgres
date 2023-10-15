@@ -1,10 +1,12 @@
 export type TextInputProps = {
-  label: string
+  label: string | null
   name: string
-  refProp: React.RefObject<HTMLInputElement>
-  required: boolean
-  validationError: string | null | undefined
-  ariaInvalid: boolean | undefined
+  refProp?: React.RefObject<HTMLInputElement>
+  required?: boolean
+  validationError?: string | null | undefined
+  ariaInvalid?: boolean | undefined
+  defaultValue?: string
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export function TextInput({
@@ -14,13 +16,20 @@ export function TextInput({
   required,
   validationError,
   ariaInvalid,
+  defaultValue,
+  onChange,
 }: TextInputProps) {
   return (
-    <div>
-      <label htmlFor={name} className='block text-sm font-medium text-gray-700'>
-        {label}
-      </label>
-      <div className='mt-1'>
+    <>
+      {label && (
+        <label
+          htmlFor={name}
+          className='block text-sm font-medium text-gray-700 mb-1'
+        >
+          {label}
+        </label>
+      )}
+      <div>
         <input
           ref={refProp}
           id={name}
@@ -31,7 +40,9 @@ export function TextInput({
           autoComplete={name}
           aria-invalid={ariaInvalid}
           aria-describedby={`${name}-error`}
-          className='w-full rounded border border-gray-500 px-2 py-1 text-lg'
+          defaultValue={defaultValue}
+          onChange={onChange}
+          className='w-full rounded border border-gray-500 px-2 py-1 text-lg focus:ring-2 focus:ring-blue-300'
         />
         {validationError ? (
           <div className='pt-1 text-red-700' id={`${name}-error`}>
@@ -39,6 +50,6 @@ export function TextInput({
           </div>
         ) : null}
       </div>
-    </div>
+    </>
   )
 }

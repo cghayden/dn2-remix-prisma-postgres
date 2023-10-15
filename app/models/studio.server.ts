@@ -1,4 +1,4 @@
-import type { User, Studio } from '@prisma/client'
+import type { User, Studio, DanceLevel } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
 import { prisma } from '~/db.server'
@@ -51,6 +51,7 @@ export async function getFullStudio(userId: User['userId']) {
   })
   return studio
 }
+
 export async function getDanceLevels(userId: User['userId']) {
   const studio = prisma.danceLevel.findMany({
     where: {
@@ -58,4 +59,20 @@ export async function getDanceLevels(userId: User['userId']) {
     },
   })
   return studio
+}
+
+export async function updateDanceLevel(
+  levelId: DanceLevel['id'],
+  newName: DanceLevel['name']
+  // description: DanceLevel['description']
+) {
+  await prisma.danceLevel.update({
+    where: {
+      id: levelId,
+    },
+    data: {
+      name: newName,
+      // description,
+    },
+  })
 }

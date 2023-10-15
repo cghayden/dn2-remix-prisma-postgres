@@ -3,8 +3,6 @@ import type { ActionResponse, Errors } from 'types'
 import { prisma } from '~/db.server'
 import { requireUserId } from '~/session.server'
 
-// export type InputFields = 'newLevel' | 'description'
-
 export const action = async ({
   request,
 }: ActionFunctionArgs): Promise<ActionResponse> => {
@@ -25,9 +23,9 @@ export const action = async ({
     }
   }
 
-  if (typeof description !== 'string' || description.length === 0) {
+  if (typeof description !== 'string') {
     return {
-      errors: { ...errors, description: 'a description is required' },
+      errors: { ...errors, description: 'description must be a string' },
       status: 400,
     }
   }

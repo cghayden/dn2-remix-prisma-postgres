@@ -1,6 +1,7 @@
-import { json, type LoaderFunctionArgs } from '@remix-run/node'
+import { type LoaderFunctionArgs, json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-import DanceLevelsConfig from '~/components/studios/DanceLevelsConfig'
+import AddDanceLevelForm from '~/components/studios/AddDanceLevelForm'
+import EditDanceLevels from '~/components/studios/EditDanceLevels'
 import { getDanceLevels } from '~/models/studio.server'
 import { requireUserId } from '~/session.server'
 
@@ -13,13 +14,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return json(danceLevels)
 }
 
-export default function Configuration() {
+export default function EditAddDanceLevels() {
   const danceLevels = useLoaderData<typeof loader>()
-
   return (
-    <div className='flex min-h-screen flex-col'>
-      <h1>Studio Settings and Configuration</h1>
-      <DanceLevelsConfig danceLevels={danceLevels} />
+    <div className='p-4'>
+      <h2>Edit Levels or Add a New Level</h2>
+      <EditDanceLevels danceLevels={danceLevels} />
+      <AddDanceLevelForm />
     </div>
   )
 }

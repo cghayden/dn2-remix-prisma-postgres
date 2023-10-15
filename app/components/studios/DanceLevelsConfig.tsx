@@ -1,22 +1,19 @@
 import { type DanceLevel } from '@prisma/client'
-import DanceLevelsForm from './AddDanceLevelsForm'
-import { useState } from 'react'
 import EditIcon from '../icons/EditIcon'
+import { Link } from '@remix-run/react'
 
 export default function DanceLevelsConfig({
   danceLevels,
 }: {
   danceLevels: DanceLevel[]
 }) {
-  const [showForm, setShowForm] = useState(false)
-
   return (
     <div className='mx-auto w-full max-w-md px-8'>
       <div className='flex'>
         <h3 className='text-lg'>Competitive and Skill Levels</h3>
-        <button className='ml-auto' onClick={() => setShowForm(!showForm)}>
+        <Link to={'../editOrAddLevels'} className='ml-auto'>
           <EditIcon />
-        </button>
+        </Link>
       </div>
       {!danceLevels?.length ? (
         <p>No dance levels found</p>
@@ -27,7 +24,6 @@ export default function DanceLevelsConfig({
           ))}
         </ul>
       )}
-      {showForm && <DanceLevelsForm />}{' '}
     </div>
   )
 }

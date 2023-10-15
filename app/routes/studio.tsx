@@ -1,9 +1,10 @@
-import { Outlet } from '@remix-run/react'
+import { Outlet, useRouteError } from '@remix-run/react'
 import { type LoaderFunctionArgs } from '@remix-run/node'
 import StudioHeader from '~/components/studios/StudioHeader'
 // import Sidebar from '~/components/parents/Sidebar'
 // import { prisma } from '~/db.server'
 import { requireStudio } from '~/models/studio.server'
+import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const studioId = await requireStudio(request)
@@ -25,4 +26,9 @@ export default function StudioLayout() {
       <footer>Footer</footer>
     </div>
   )
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError()
+  return <ErrorContainer error={error} />
 }

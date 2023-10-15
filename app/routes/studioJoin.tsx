@@ -111,7 +111,6 @@ export default function ParentJoin() {
       <div className='mx-auto w-full max-w-md px-8'>
         <Form method='post' className='space-y-6'>
           <div>
-            {/* parent Form */}
             <label
               htmlFor='email'
               className='block text-sm font-medium text-gray-700'
@@ -191,7 +190,6 @@ export default function ParentJoin() {
               ) : null}
             </div>
           </div>
-          {/* end parent form */}
           <input type='hidden' name='redirectTo' value={redirectTo} />
           <button
             type='submit'
