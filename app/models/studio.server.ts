@@ -1,4 +1,4 @@
-import type { User, Studio, DanceLevel } from '@prisma/client'
+import type { User, Studio, DanceLevel, DanceClass } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
 import { prisma } from '~/db.server'
@@ -57,6 +57,9 @@ export async function getDanceLevels(userId: User['userId']) {
     where: {
       studioId: userId,
     },
+    orderBy: {
+      name: 'asc',
+    },
   })
   return studio
 }
@@ -73,6 +76,33 @@ export async function updateDanceLevel(
     data: {
       name: newName,
       // description,
+    },
+  })
+}
+
+export async function createStudioDance({
+  name,
+  performanceName,
+  competitive,
+  recreational,
+  recital,
+  studioId,
+}: {
+  name: DanceClass['name']
+  performanceName: DanceClass['performanceName']
+  competitive: DanceClass['competitive']
+  recreational: DanceClass['recreational']
+  recital: DanceClass['recital']
+  studioId: DanceClass['studioId']
+}) {
+  await prisma.danceClass.create({
+    data: {
+      name,
+      performanceName,
+      competitive,
+      recreational,
+      recital,
+      studioId,
     },
   })
 }

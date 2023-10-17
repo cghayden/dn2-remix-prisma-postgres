@@ -56,9 +56,10 @@ model Studio {
 }
 
 model Instructor {
-  userId  String   @id // UUID type, primary key and foreign key to User
-  user    User     @relation(fields: [userId], references: [userId])
-  studios Studio[] // Many-to-many relationship with Studio
+  userId     String       @id // UUID type, primary key and foreign key to User
+  user       User         @relation(fields: [userId], references: [userId])
+  studios    Studio[] // Many-to-many relationship with Studio
+  danceClass DanceClass[]
 }
 
 model Enrollment {
@@ -82,9 +83,10 @@ model DanceClass {
   tights          String?
   notes           String?
   song            String?
-  instructor      String?
   studio          Studio?      @relation(fields: [studioId], references: [userId])
   studioId        String?
+  instructor      Instructor?  @relation(fields: [instructorId], references: [userId])
+  instructorId    String?
   parent          Parent?      @relation(fields: [parentId], references: [userId])
   parentId        String?
   enrollments     Enrollment[]
