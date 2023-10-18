@@ -16,7 +16,7 @@ export default function StudioHeader() {
     <header className='bg-gray-100 flex items-center p-4'>
       <div>Dancernotes</div>
       <button
-        className='md:hidden grid place-items-center ml-auto'
+        className=' grid place-items-center ml-auto'
         type='button'
         aria-label='show navigation menu'
         onClick={() => {

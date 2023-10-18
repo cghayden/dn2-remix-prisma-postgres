@@ -94,8 +94,8 @@ model DanceClass {
   competitive     Boolean
   recreational    Boolean
   recital         Boolean
-  level           DanceLevel?  @relation(fields: [levelId], references: [id])
-  levelId         String?
+  level           DanceLevel   @relation(fields: [levelId], references: [id])
+  levelId         String
 }
 
 model DanceLevel {

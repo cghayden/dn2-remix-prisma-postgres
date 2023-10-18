@@ -46,7 +46,14 @@ export async function getFullStudio(userId: User['userId']) {
       userId,
     },
     include: {
-      danceClasses: true,
+      danceClasses: {
+        select: {
+          id: true,
+          level: {
+            select: { name: true },
+          },
+        },
+      },
     },
   })
   return studio
@@ -87,6 +94,7 @@ export async function createStudioDance({
   recreational,
   recital,
   studioId,
+  levelId,
 }: {
   name: DanceClass['name']
   performanceName: DanceClass['performanceName']
@@ -94,6 +102,7 @@ export async function createStudioDance({
   recreational: DanceClass['recreational']
   recital: DanceClass['recital']
   studioId: DanceClass['studioId']
+  levelId: DanceClass['levelId']
 }) {
   await prisma.danceClass.create({
     data: {
@@ -103,6 +112,7 @@ export async function createStudioDance({
       recreational,
       recital,
       studioId,
+      levelId,
     },
   })
 }

@@ -15,6 +15,7 @@ import { ComposeTextInput } from '~/components/forms/TextInput'
 const schema = z.object({
   name: z.string({ required_error: 'Name is required' }),
   performanceName: z.string().min(3).optional(),
+  danceLevelId: z.string(),
   // recital: z.boolean(),
   // compOrRec: z.union([z.literal("competitive"), z.literal("recreational")])
 })
@@ -23,6 +24,8 @@ export async function action({ request }: ActionFunctionArgs) {
   const userId = await getUserId(request)
   if (!userId) throw new Error('you must be logged in to create a dance')
   const formData = await request.formData()
+  const danceLevelId = formData.get('danceLevelId')
+  console.log('danceLevelId', danceLevelId)
   const submission = parse(formData, { schema })
 
   if (submission.intent !== 'submit' || !submission.value) {
@@ -36,6 +39,7 @@ export async function action({ request }: ActionFunctionArgs) {
     recital: true,
     recreational: true,
     studioId: userId,
+    levelId: submission.value.danceLevelId,
   }).catch((err) => {
     throw new Error(err.message)
   })
@@ -62,16 +66,16 @@ export default function AddDanceClass() {
 
   // The `useForm` hook will return everything you need to setup a form
   // including the error and config of each field
-  const [form, { name, performanceName }] = useForm({
+  const [form, { name, performanceName, danceLevelId }] = useForm({
     // The last submission will be used to report the error and
     // served as the default value and initial error of the form
     // for progressive enhancement
     lastSubmission,
     // run validation logic on client (if slow connection)
-    shouldValidate: 'onBlur',
-    onValidate({ formData }) {
-      return parse(formData, { schema })
-    },
+    // shouldValidate: 'onBlur',
+    // onValidate({ formData }) {
+    //   return parse(formData, { schema })
+    // },
   })
 
   return (
@@ -89,6 +93,32 @@ export default function AddDanceClass() {
             label={'Performance Name'}
             error={performanceName.error}
           />
+          <div className='text-sm mt-2 ml-2'>
+            <label
+              className='block text-sm text-gray-600 mb-1'
+              htmlFor={'danceLevel'}
+            >
+              Dance Level / Age Level
+            </label>
+            <select
+              // required={true}
+              name='danceLevelId'
+              id='danceLevel'
+              className='w-full border rounded bg-gray-50 border-gray-300 text-gray-800 px-2 py-1 focus:ring-2 focus:ring-blue-300 pt-[5px] pb-[5px]'
+            >
+              <option value='12'>-- Choose a Dance Level --</option>
+              {danceLevels.map((level) => (
+                <option key={level.id} value={level.id}>
+                  {level.name}
+                </option>
+              ))}
+            </select>
+            {danceLevelId.error ? (
+              <div className='pt-1 text-red-700' id={`${danceLevelId}-error`}>
+                {danceLevelId.error}
+              </div>
+            ) : null}
+          </div>
           {/* <label htmlFor="recital">
           Recital: <input id="recital" type="checkbox" name="recital" defaultChecked={false} value="true"/>
                 </label> */}
