@@ -77,7 +77,7 @@ export default function AddDanceClass() {
   return (
     <div>
       <Form method='post' {...form.props} className='form_default roun'>
-        <div className='mt-[-8px]'>
+        <div className='input_section_wrapper'>
           <ComposeTextInput
             name='name'
             label={'Name'}

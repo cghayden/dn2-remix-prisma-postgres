@@ -72,7 +72,7 @@ export function ComposeTextInput({
   return (
     <div className='text-sm mt-2 ml-2'>
       {label && (
-        <label htmlFor={name} className='block text-sm text-gray-700 '>
+        <label htmlFor={name} className='block text-sm text-gray-600 mb-1'>
           {label}
         </label>
       )}
@@ -86,7 +86,7 @@ export function ComposeTextInput({
           aria-invalid={error ? 'true' : undefined}
           aria-describedby={error ? `${name}-error` : undefined}
           defaultValue={defaultValue}
-          className='w-full rounded border border-gray-500 px-2 py-1 focus:ring-2 focus:ring-blue-300'
+          className='w-full rounded border bg-gray-50 border-gray-300 text-gray-800 px-2 py-1 focus:ring-2 focus:ring-blue-300'
         />
         {error ? (
           <div className='pt-1 text-red-700' id={`${name}-error`}>
