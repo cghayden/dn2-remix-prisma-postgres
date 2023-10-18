@@ -46,7 +46,7 @@ export async function getFullStudio(userId: User['userId']) {
       userId,
     },
     include: {
-      danceLevels: true,
+      danceClasses: true,
     },
   })
   return studio

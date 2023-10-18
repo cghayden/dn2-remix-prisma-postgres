@@ -1,0 +1,8 @@
+.form_default {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  font-family: 'Inter', Roboto;
+  width: 600px;
+  margin: auto;
+}

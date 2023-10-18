@@ -10,6 +10,7 @@ import { getUserId } from '~/session.server'
 import { z } from 'zod'
 import { useForm } from '@conform-to/react'
 import { parse } from '@conform-to/zod'
+import { ComposeTextInput } from '~/components/forms/TextInput'
 
 const schema = z.object({
   name: z.string({ required_error: 'Name is required' }),
@@ -75,84 +76,44 @@ export default function AddDanceClass() {
 
   return (
     <div>
-      <Form method='post' {...form.props}>
-        <label
-          htmlFor={'name'}
-          className='block text-sm font-medium text-gray-700 mb-1'
-        >
-          Name
-        </label>
-        <div>
-          <input
-            id={'name'}
-            type='text'
-            name={'name'}
+      <Form method='post' {...form.props} className='form_default roun'>
+        <div className='mt-[-8px]'>
+          <ComposeTextInput
+            name='name'
+            label={'Name'}
+            error={name.error}
             required={true}
-            autoFocus={true}
-            aria-invalid={!name?.errors?.length || undefined}
-            aria-describedby={name?.errors?.length ? 'name-error' : undefined}
-            className='w-full rounded border border-gray-500 px-2 py-1 text-lg focus:ring-2 focus:ring-blue-300'
           />
-          {name.error ? (
-            <div className='pt-1 text-red-700' id={`${'name'}-error`}>
-              {name.error}
-            </div>
-          ) : null}
-        </div>
-
-        <div>
-          <label
-            htmlFor={'performanceName'}
-            className='block text-sm font-medium text-gray-700 mb-1'
+          <ComposeTextInput
+            name='performanceName'
+            label={'Performance Name'}
+            error={performanceName.error}
+          />
+          {/* <label htmlFor="recital">
+          Recital: <input id="recital" type="checkbox" name="recital" defaultChecked={false} value="true"/>
+                </label> */}
+          {/* <p>
+                 Is this dance Recreational or Competitive?:
+                 {conform.collection(recOrComp, {
+          type:'radio',
+          options: ['recreational', 'competitive']
+                 })
+                 .map((props, index) => (
+          <div key={index}>
+            <label>{props.value}</label>
+          </div>
+                 ))
+                 
+                 }
+                </p> */}
+          {/* <input name={'userId'} value={userId} type='hidden' /> */}
+          <button
+            type='submit'
+            className=' rounded bg-blue-500 mt-4 ml-2 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400'
           >
-            Performance Name
-          </label>
-          <input
-            id={'performanceName'}
-            type='text'
-            name={'performanceName'}
-            autoFocus={true}
-            aria-invalid={!performanceName?.errors?.length || undefined}
-            aria-describedby={
-              performanceName?.errors?.length ? 'name-error' : undefined
-            }
-            className='w-full rounded border border-gray-500 px-2 py-1 text-lg focus:ring-2 focus:ring-blue-300'
-          />
-          {performanceName.error ? (
-            <div
-              className='pt-1 text-red-700'
-              id={`${'nperformanceNameame'}-error`}
-            >
-              {performanceName.error}
-            </div>
-          ) : null}
+            Create Class
+          </button>
         </div>
-
-        {/* <label htmlFor="recital">
-        Recital: <input id="recital" type="checkbox" name="recital" defaultChecked={false} value="true"/>
-      </label> */}
-        {/* <p>
-       Is this dance Recreational or Competitive?:
-       {conform.collection(recOrComp, {
-        type:'radio',
-        options: ['recreational', 'competitive']
-       })
-       .map((props, index) => (
-        <div key={index}>
-          <label>{props.value}</label>
-        </div>
-       ))
-       
-       }
-      </p> */}
-        {/* <input name={'userId'} value={userId} type='hidden' /> */}
-
-        <button
-          type='submit'
-          className='w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400'
-        >
-          Create Class
-        </button>
       </Form>
     </div>
   )

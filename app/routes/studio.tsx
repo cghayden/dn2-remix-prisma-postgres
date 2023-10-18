@@ -19,7 +19,7 @@ export default function StudioLayout() {
       <StudioHeader />
       <div className='flex h-full flex-1'>
         {/* <Sidebar /> */}
-        <main className='w-full'>
+        <main className='w-full px-6'>
           <Outlet />
         </main>
       </div>
