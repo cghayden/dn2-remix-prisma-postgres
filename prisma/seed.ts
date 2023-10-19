@@ -44,7 +44,7 @@ const seedData = {
         },
         // ... similarly define other classes
       ],
-      danceLevels: [
+      ageLevels: [
         { id: 'level1', name: 'jazz', description: 'Jazz Level' },
         { id: 'level2', name: 'hip hop', description: 'Hip Hop Level' },
         { id: 'level3', name: 'lyric', description: 'Lyric Level' },

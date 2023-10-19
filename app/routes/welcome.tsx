@@ -6,7 +6,7 @@ import { useState } from 'react'
 
 export const meta: MetaFunction = () => [{ title: 'Dancer Notes' }]
 
-export default function Index() {
+export default function Welcome() {
   const [showUserTypeChoice, toggleShowUserTypeChoice] = useState(false)
   // const user = useOptionalUser()
   return (

@@ -22,10 +22,7 @@ export function TextInput({
   return (
     <>
       {label && (
-        <label
-          htmlFor={name}
-          className='block text-sm font-medium text-gray-700 mb-1'
-        >
+        <label htmlFor={name} className='block text-sm text-gray-600 mb-1'>
           {label}
         </label>
       )}
@@ -34,7 +31,6 @@ export function TextInput({
           ref={refProp}
           id={name}
           required={required}
-          autoFocus={true}
           name={name}
           type='text'
           autoComplete={name}
@@ -42,7 +38,7 @@ export function TextInput({
           aria-describedby={`${name}-error`}
           defaultValue={defaultValue}
           onChange={onChange}
-          className='w-full rounded border border-gray-500 px-2 py-1 focus:ring-2 focus:ring-blue-300'
+          className='w-full rounded border bg-gray-50 border-gray-300 text-gray-800 px-2 py-1 focus:ring-2 focus:ring-blue-300'
         />
         {validationError ? (
           <div className='pt-1 text-red-700' id={`${name}-error`}>

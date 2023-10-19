@@ -18,7 +18,7 @@ export const action = async ({
 
   if (typeof newLevel !== 'string' || newLevel.length === 0) {
     return {
-      errors: { ...errors, newLevel: 'a level is required' },
+      errors: { ...errors, newLevel: 'a ageLevel is required' },
       status: 400,
     }
   }
@@ -30,7 +30,7 @@ export const action = async ({
     }
   }
 
-  await prisma.danceLevel.create({
+  await prisma.ageLevel.create({
     data: {
       name: newLevel,
       description,

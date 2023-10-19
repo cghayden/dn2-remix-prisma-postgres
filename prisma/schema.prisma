@@ -21,7 +21,11 @@ enum UserType {
   PARENT
   STUDIO
   INSTRUCTOR
-  // ... more roles as needed
+}
+
+enum CompetitiveLevel {
+  RECREATIONAL
+  COMPETITIVE
 }
 
 model Parent {
@@ -52,11 +56,12 @@ model Studio {
   instructors  Instructor[]
   dancers      Dancer[]
   enrollments  Enrollment[]
-  danceLevels  DanceLevel[]
+  ageLevels    AgeLevel[]
+  skillLevels  SkillLevel[] //studio defined skill levels. (e.g. recreational, company, rising star, excel, etc.)
 }
 
 model Instructor {
-  userId     String       @id // UUID type, primary key and foreign key to User
+  userId     String       @id // ID type, primary key and foreign key to User
   user       User         @relation(fields: [userId], references: [userId])
   studios    Studio[] // Many-to-many relationship with Studio
   danceClass DanceClass[]
@@ -83,6 +88,8 @@ model DanceClass {
   tights          String?
   notes           String?
   song            String?
+  competitions    Boolean?
+  recital         Boolean
   studio          Studio?      @relation(fields: [studioId], references: [userId])
   studioId        String?
   instructor      Instructor?  @relation(fields: [instructorId], references: [userId])
@@ -91,14 +98,22 @@ model DanceClass {
   parentId        String?
   enrollments     Enrollment[]
   schedules       Schedule[]
-  competitive     Boolean
-  recreational    Boolean
-  recital         Boolean
-  level           DanceLevel   @relation(fields: [levelId], references: [id])
-  levelId         String
+  ageLevel        AgeLevel     @relation(fields: [ageLevelId], references: [id])
+  ageLevelId      String
+  skillLevel      SkillLevel   @relation(fields: [skillLevelId], references: [id])
+  skillLevelId    String
 }
 
-model DanceLevel {
+model SkillLevel {
+  id           String       @id @default(uuid())
+  name         String // e.g. 'recreational', 'company', 'excel' or any custom skill level defined by studio
+  description  String?
+  studio       Studio       @relation(fields: [studioId], references: [userId])
+  studioId     String
+  danceClasses DanceClass[]
+}
+
+model AgeLevel {
   id           String       @id @default(uuid())
   name         String // e.g. 'beginner', 'senior', or any custom name
   description  String?

@@ -3,7 +3,6 @@
   padding: 1rem;
   border-radius: 0.375rem;
   font-family: 'Inter', Roboto;
-  width: 600px;
   margin: auto;
   color: dimgray;
 }
@@ -12,6 +11,23 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+.input_with_inline_button .input {
+  margin: 0;
+}
+
+.label_input_wrap_for_stacked {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.input_button_as_row {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
 }
 
 .form_default button[type='submit'] {

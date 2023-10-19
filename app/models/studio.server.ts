@@ -1,4 +1,10 @@
-import type { User, Studio, DanceLevel, DanceClass } from '@prisma/client'
+import type {
+  User,
+  Studio,
+  AgeLevel,
+  DanceClass,
+  SkillLevel,
+} from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
 import { prisma } from '~/db.server'
@@ -49,7 +55,8 @@ export async function getFullStudio(userId: User['userId']) {
       danceClasses: {
         select: {
           id: true,
-          level: {
+          name: true,
+          ageLevel: {
             select: { name: true },
           },
         },
@@ -59,8 +66,8 @@ export async function getFullStudio(userId: User['userId']) {
   return studio
 }
 
-export async function getDanceLevels(userId: User['userId']) {
-  const studio = prisma.danceLevel.findMany({
+export async function getAgeLevels(userId: User['userId']) {
+  const studio = prisma.ageLevel.findMany({
     where: {
       studioId: userId,
     },
@@ -71,12 +78,25 @@ export async function getDanceLevels(userId: User['userId']) {
   return studio
 }
 
-export async function updateDanceLevel(
-  levelId: DanceLevel['id'],
-  newName: DanceLevel['name']
-  // description: DanceLevel['description']
+export async function getStudioConfig(userId: User['userId']) {
+  const studio = prisma.studio.findUnique({
+    where: {
+      userId,
+    },
+    select: {
+      ageLevels: true,
+      skillLevels: true,
+    },
+  })
+  return studio
+}
+
+export async function updateAgeLevel(
+  levelId: AgeLevel['id'],
+  newName: AgeLevel['name']
+  // description: AgeLevel['description']
 ) {
-  await prisma.danceLevel.update({
+  await prisma.ageLevel.update({
     where: {
       id: levelId,
     },
@@ -86,33 +106,48 @@ export async function updateDanceLevel(
     },
   })
 }
+export async function updateSkillLevel(
+  levelId: SkillLevel['id'],
+  newName: SkillLevel['name'],
+  description: SkillLevel['description']
+) {
+  await prisma.skillLevel.update({
+    where: {
+      id: levelId,
+    },
+    data: {
+      name: newName,
+      description,
+    },
+  })
+}
 
 export async function createStudioDance({
   name,
   performanceName,
-  competitive,
-  recreational,
+  competitions,
   recital,
   studioId,
-  levelId,
+  ageLevelId,
+  skillLevelId,
 }: {
   name: DanceClass['name']
   performanceName: DanceClass['performanceName']
-  competitive: DanceClass['competitive']
-  recreational: DanceClass['recreational']
+  competitions: DanceClass['competitions']
   recital: DanceClass['recital']
   studioId: DanceClass['studioId']
-  levelId: DanceClass['levelId']
+  ageLevelId: DanceClass['ageLevelId']
+  skillLevelId: DanceClass['skillLevelId']
 }) {
   await prisma.danceClass.create({
     data: {
       name,
       performanceName,
-      competitive,
-      recreational,
-      recital,
       studioId,
-      levelId,
+      ageLevelId,
+      competitions,
+      recital,
+      skillLevelId,
     },
   })
 }
