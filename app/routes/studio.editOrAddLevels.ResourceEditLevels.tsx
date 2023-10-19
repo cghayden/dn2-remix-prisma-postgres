@@ -1,12 +1,10 @@
-import { type ActionFunctionArgs } from '@remix-run/node'
+import { json, type ActionFunctionArgs } from '@remix-run/node'
 import { updateAgeLevel } from '~/models/studio.server'
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData()
   const ageLevelId = formData.get('ageLevelId')
   const newLevelName = formData.get('newLevelName')
-  console.log('newLevelName', newLevelName)
-  console.log('ageLevelId', ageLevelId)
 
   const errors = {
     newLevel: null,
@@ -31,5 +29,5 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     throw new Error(err.message)
   })
 
-  return { success: true, errors: null, status: 200 }
+  return json({ success: true })
 }

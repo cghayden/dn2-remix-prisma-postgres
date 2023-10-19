@@ -108,8 +108,8 @@ export async function updateAgeLevel(
 }
 export async function updateSkillLevel(
   levelId: SkillLevel['id'],
-  newName: SkillLevel['name'],
-  description: SkillLevel['description']
+  newName: SkillLevel['name']
+  // description: SkillLevel['description']
 ) {
   await prisma.skillLevel.update({
     where: {
@@ -117,7 +117,7 @@ export async function updateSkillLevel(
     },
     data: {
       name: newName,
-      description,
+      // description,
     },
   })
 }
