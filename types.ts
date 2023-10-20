@@ -1,4 +1,4 @@
-import type { Dancer } from '@prisma/client'
+import type { AgeLevel, Dancer, SkillLevel } from '@prisma/client'
 
 // export type DancerNameId = Pick<Dancer, 'firstName' | 'id'>
 
@@ -14,4 +14,5 @@ export type ActionResponse = {
   errors: Errors | null
   success?: boolean | null
   status: number
+  prismaReturn: SkillLevel | AgeLevel
 }

@@ -24,7 +24,7 @@ export default function AgeLevelsForm() {
   }, [actionData])
   return (
     <div className='w-[350px] p-4'>
-      <h2 className='text-center'>Add a New Skill Level</h2>
+      <h2 className='text-center'>Add a New Level</h2>
       <fetcher.Form
         id='addSkillForm'
         ref={formRef}

@@ -1,9 +1,8 @@
-import { type LoaderFunctionArgs, json } from '@remix-run/node'
+import { type LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-import AddAgeLevelForm from '~/components/studios/AddAgeLevelForm'
+import AddLevelForm from '~/components/studios/AddLevelForm'
 import AddSkillLevelForm from '~/components/studios/AddSkillLevelForm'
-import EditAgeLevels from '~/components/studios/EditAgeLevels'
-import EditSkillLevels from '~/components/studios/EditSkillLevels'
+import { LevelEditableList } from '~/components/studios/LevelEditableList'
 import { getStudioConfig } from '~/models/studio.server'
 import { requireUserId } from '~/session.server'
 
@@ -13,27 +12,49 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   if (!config) {
     throw new Error('Oh no! studio config could not be loaded')
   }
-  return json({ config })
+  return config
+  // return { config: json({ config }), nojson: config }
 }
 
 export default function EditAddAgeLevels() {
-  const { config } = useLoaderData<typeof loader>()
+  const config = useLoaderData<typeof loader>()
+
   return (
     <div className='p-4'>
-      <h1>Edit or Add to Skill or Age Levels</h1>
+      <h1 className='text-center text-lg font-semibold'>
+        Edit or Add Age or Skill Levels
+      </h1>
 
       <div className='flex flex-wrap justify-center gap-10 bg-white p-4'>
-        <div>
-          <EditAgeLevels ageLevels={config.ageLevels} />
+        <div className='w-[350px] p-4'>
+          <h2 className='text-center'>Age Levels</h2>
+          <div className='p-2 flex flex-col gap-1'>
+            {config.ageLevels.map((level) => (
+              <LevelEditableList
+                level={level}
+                levelType='ageLevel'
+                key={level.id}
+              />
+            ))}
+          </div>
         </div>
-        <AddAgeLevelForm />
+        <AddLevelForm levelType='ageLevel' />
       </div>
 
       <div className='flex flex-wrap justify-center gap-10 bg-white p-4'>
-        <div>
-          <EditSkillLevels skillLevels={config.skillLevels} />
+        <div className='w-[350px] p-4'>
+          <h2 className='text-center'>Skill Levels</h2>
+          <div className='p-2 flex flex-col gap-1'>
+            {config.skillLevels.map((level) => (
+              <LevelEditableList
+                level={level}
+                levelType='skillLevel'
+                key={level.id}
+              />
+            ))}
+          </div>
         </div>
-        <AddSkillLevelForm />
+        <AddLevelForm levelType='skillLevel' />
       </div>
     </div>
   )

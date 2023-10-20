@@ -1,17 +1,18 @@
 import { json, type ActionFunctionArgs } from '@remix-run/node'
-import { updateAgeLevel } from '~/models/studio.server'
+import { updateAgeLevel, updateSkillLevel } from '~/models/studio.server'
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData()
-  const ageLevelId = formData.get('ageLevelId')
+  const levelId = formData.get('levelId')
   const newLevelName = formData.get('newLevelName')
+  const levelType = formData.get('levelType')
 
   const errors = {
     newLevel: null,
     description: null,
   }
 
-  if (typeof ageLevelId !== 'string') {
+  if (typeof levelId !== 'string') {
     return {
       errors: { ...errors, newLevel: 'ageLevel id was not provided' },
       status: 400,
@@ -25,9 +26,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
   }
 
-  await updateAgeLevel(ageLevelId, newLevelName).catch((err) => {
-    throw new Error(err.message)
-  })
+  // name, description, id
+  // variable - ageLevel or skillLevel
+  if (levelType === 'skillLevel') {
+    await updateSkillLevel(levelId, newLevelName).catch((err) => {
+      throw new Error(err.message)
+    })
+  }
+
+  if (levelType === 'ageLevel') {
+    await updateAgeLevel(levelId, newLevelName)
+  }
 
   return json({ success: true })
 }

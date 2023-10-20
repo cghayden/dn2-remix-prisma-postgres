@@ -1,4 +1,4 @@
-import { type AgeLevel } from '@prisma/client'
+import { type AgeLevel, type SkillLevel } from '@prisma/client'
 import { useFetcher } from '@remix-run/react'
 import { TextInput } from '../forms/TextInput'
 import { useEffect, useState } from 'react'
@@ -7,9 +7,16 @@ type FetcherData = {
   success: boolean
 }
 
-export function AgeLevelEditableList({ ageLevel }: { ageLevel: AgeLevel }) {
+type LevelEditableListProps = {
+  level: AgeLevel | SkillLevel
+  levelType: 'skillLevel' | 'ageLevel'
+}
+
+export function LevelEditableList({
+  level,
+  levelType,
+}: LevelEditableListProps) {
   const fetcher = useFetcher<FetcherData>()
-  console.log('fetcher', fetcher)
   let success = fetcher?.data?.success
   let isSaving = fetcher.state === 'submitting'
   let fetcherState = fetcher.state
@@ -24,18 +31,19 @@ export function AgeLevelEditableList({ ageLevel }: { ageLevel: AgeLevel }) {
     <>
       {showForm ? (
         <fetcher.Form
-          key={ageLevel.id}
-          id={ageLevel.id}
+          key={level.id}
+          id={level.id}
           method='post'
           action='ResourceEditLevels'
           className=''
         >
-          <input name={'ageLevelId'} value={ageLevel.id} type='hidden' />
+          <input name={'levelId'} value={level.id} type='hidden' />
+          <input name={'levelType'} value={levelType} type='hidden' />
           <div className='input_button_as_row'>
             <TextInput
               label={null}
               name='newLevelName'
-              defaultValue={ageLevel.name}
+              defaultValue={level.name}
               onChange={() => toggleShowSaveButton(true)}
             />
             <div className='ml-auto'>
@@ -44,8 +52,7 @@ export function AgeLevelEditableList({ ageLevel }: { ageLevel: AgeLevel }) {
                   <button
                     type='submit'
                     disabled={isSaving}
-                    // onClick={() => toggleShowForm(false)}
-                    form={ageLevel.id}
+                    form={level.id}
                     className='text-sm rounded bg-blue-500  text-white hover:bg-blue-600 focus:bg-blue-400  transition duration-150 ease-in-out ml-auto px-2 py-[2px] '
                   >
                     Save
@@ -70,7 +77,7 @@ export function AgeLevelEditableList({ ageLevel }: { ageLevel: AgeLevel }) {
             Edit
           </button>
 
-          <p className='ml-4'>{ageLevel.name}</p>
+          <p className='ml-4'>{level.name}</p>
         </div>
       )}
     </>

@@ -3,11 +3,10 @@ import type { ActionResponse, Errors } from 'types'
 import { prisma } from '~/db.server'
 import { requireUserId } from '~/session.server'
 
-export const action = async ({
-  request,
-}: ActionFunctionArgs): Promise<ActionResponse> => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const userId = await requireUserId(request)
   const formData = await request.formData()
+  const levelType = formData.get('levelType')
   const newLevel = formData.get('newLevel')
   const description = formData.get('description')
 
@@ -30,17 +29,34 @@ export const action = async ({
     }
   }
 
-  await prisma.ageLevel.create({
-    data: {
-      name: newLevel,
-      description,
-      studio: {
-        connect: {
-          userId,
+  if (levelType === 'ageLevel') {
+    const prismaReturn = await prisma.ageLevel.create({
+      data: {
+        name: newLevel,
+        description,
+        studio: {
+          connect: {
+            userId,
+          },
         },
       },
-    },
-  })
+    })
+    return { success: true, errors: null, status: 200, prismaReturn }
+  }
 
-  return { success: true, errors: null, status: 200 }
+  if (levelType === 'skillLevel') {
+    const prismaReturn = await prisma.skillLevel.create({
+      data: {
+        name: newLevel,
+        description,
+        studio: {
+          connect: {
+            userId,
+          },
+        },
+      },
+    })
+    return { success: true, errors: null, status: 200, prismaReturn }
+  }
+  return { success: false, errors: null, status: 200, prismaReturn: null }
 }
