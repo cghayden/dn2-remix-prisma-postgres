@@ -1,7 +1,6 @@
-import { json, type LoaderFunctionArgs } from '@remix-run/node'
+import { type LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-import AgeLevelsList from '~/components/studios/AgeLevelsList'
-import SkillLevelsList from '~/components/studios/SkillLevelsList'
+import { LevelList } from '~/components/studios/LevelList'
 import { getStudioConfig } from '~/models/studio.server'
 import { requireUserId } from '~/session.server'
 
@@ -11,17 +10,17 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   if (!configData) {
     throw new Error('Oh no! dance ageLevels could not be loaded')
   }
-  return json({ configData })
+  return configData
 }
 
 export default function Configuration() {
-  const { configData } = useLoaderData<typeof loader>()
+  const { ageLevels, skillLevels } = useLoaderData<typeof loader>()
 
   return (
-    <div className='flex min-h-screen flex-col'>
+    <div className='flex min-h-screen flex-col gap-5'>
       <h1>Studio Settings and Configuration</h1>
-      <AgeLevelsList ageLevels={configData.ageLevels} />
-      <SkillLevelsList skillLevels={configData.skillLevels} />
+      <LevelList levels={ageLevels} levelType='ageLevels' />
+      <LevelList levels={skillLevels} levelType='skillLevels' />
     </div>
   )
 }
