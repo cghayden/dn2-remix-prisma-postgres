@@ -93,8 +93,8 @@ export async function getStudioConfig(userId: User['userId']) {
 
 export async function updateAgeLevel(
   levelId: AgeLevel['id'],
-  newName: AgeLevel['name']
-  // description: AgeLevel['description']
+  newName: AgeLevel['name'],
+  levelDescription: AgeLevel['description']
 ) {
   await prisma.ageLevel.update({
     where: {
@@ -102,14 +102,14 @@ export async function updateAgeLevel(
     },
     data: {
       name: newName,
-      // description,
+      description: levelDescription,
     },
   })
 }
 export async function updateSkillLevel(
   levelId: SkillLevel['id'],
-  newName: SkillLevel['name']
-  // description: SkillLevel['description']
+  newName: SkillLevel['name'],
+  levelDescription: SkillLevel['description']
 ) {
   await prisma.skillLevel.update({
     where: {
@@ -117,7 +117,7 @@ export async function updateSkillLevel(
     },
     data: {
       name: newName,
-      // description,
+      description: levelDescription,
     },
   })
 }

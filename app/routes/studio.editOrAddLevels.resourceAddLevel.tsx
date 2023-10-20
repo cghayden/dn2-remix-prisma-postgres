@@ -1,5 +1,5 @@
 import { type ActionFunctionArgs } from '@remix-run/node' // or cloudflare/deno
-import type { ActionResponse, Errors } from 'types'
+import type { Errors } from 'types'
 import { prisma } from '~/db.server'
 import { requireUserId } from '~/session.server'
 

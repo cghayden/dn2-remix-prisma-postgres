@@ -1,4 +1,4 @@
-import { useLocation } from '@remix-run/react'
+import { Link, useLocation } from '@remix-run/react'
 import { useEffect, useState } from 'react'
 import MenuSvg from '../icons/MenuSvg'
 import StudioMobileNav from './StudioMobileNav'
@@ -14,7 +14,7 @@ export default function StudioHeader() {
 
   return (
     <header className='bg-gray-100 flex items-center p-4'>
-      <div>Dancernotes</div>
+      <Link to='/studio'>Dancernotes</Link>
       <button
         className=' grid place-items-center ml-auto'
         type='button'

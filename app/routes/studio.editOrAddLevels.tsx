@@ -1,7 +1,6 @@
 import { type LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import AddLevelForm from '~/components/studios/AddLevelForm'
-import AddSkillLevelForm from '~/components/studios/AddSkillLevelForm'
 import { LevelEditableList } from '~/components/studios/LevelEditableList'
 import { getStudioConfig } from '~/models/studio.server'
 import { requireUserId } from '~/session.server'
@@ -20,15 +19,15 @@ export default function EditAddAgeLevels() {
   const config = useLoaderData<typeof loader>()
 
   return (
-    <div className='p-4'>
+    <div className='p-4 flex flex-col gap-20'>
       <h1 className='text-center text-lg font-semibold'>
         Edit or Add Age or Skill Levels
       </h1>
 
-      <div className='flex flex-wrap justify-center gap-10 bg-white p-4'>
+      <div className='flex flex-wrap justify-center gap-10 bg-white p-4 rounded-md'>
         <div className='w-[350px] p-4'>
           <h2 className='text-center'>Age Levels</h2>
-          <div className='p-2 flex flex-col gap-1'>
+          <div className='p-2 flex flex-col gap-1 divide-y-2'>
             {config.ageLevels.map((level) => (
               <LevelEditableList
                 level={level}
@@ -41,10 +40,10 @@ export default function EditAddAgeLevels() {
         <AddLevelForm levelType='ageLevel' />
       </div>
 
-      <div className='flex flex-wrap justify-center gap-10 bg-white p-4'>
+      <div className='flex flex-wrap justify-center gap-10 bg-white p-4 rounded-md'>
         <div className='w-[350px] p-4'>
           <h2 className='text-center'>Skill Levels</h2>
-          <div className='p-2 flex flex-col gap-1'>
+          <div className='p-2 flex flex-col gap-1 divide-y-2'>
             {config.skillLevels.map((level) => (
               <LevelEditableList
                 level={level}

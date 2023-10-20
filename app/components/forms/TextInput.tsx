@@ -21,12 +21,12 @@ export function TextInput({
 }: TextInputProps) {
   return (
     <>
-      {label && (
-        <label htmlFor={name} className='block text-sm text-gray-600 mb-1'>
-          {label}
-        </label>
-      )}
-      <div>
+      <div className='mb-2'>
+        {label && (
+          <label htmlFor={name} className='block text-xs text-gray-600 mb-1'>
+            {label}
+          </label>
+        )}
         <input
           ref={refProp}
           id={name}
@@ -38,7 +38,7 @@ export function TextInput({
           aria-describedby={`${name}-error`}
           defaultValue={defaultValue}
           onChange={onChange}
-          className='w-full rounded border bg-gray-50 border-gray-300 text-gray-800 px-2 py-1 focus:ring-2 focus:ring-blue-300'
+          className='w-full rounded border bg-gray-50 border-gray-300 text-gray-800 px-2 py-1 focus:ring-2 focus:ring-blue-300 leading-3'
         />
         {validationError ? (
           <div className='pt-1 text-red-700' id={`${name}-error`}>
