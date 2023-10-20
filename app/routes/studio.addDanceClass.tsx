@@ -19,6 +19,8 @@ const schema = z.object({
   competitions: z.boolean(),
   recital: z.boolean(),
   skillLevelId: z.string(),
+  tights: z.string().optional(),
+  shoes: z.string().optional(),
 })
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -40,6 +42,8 @@ export async function action({ request }: ActionFunctionArgs) {
     competitions: submission.value.competitions,
     recital: submission.value.recital,
     skillLevelId: submission.value.skillLevelId,
+    tights: submission.value.tights ?? null,
+    shoes: submission.value.shoes ?? null,
   }).catch((err) => {
     throw new Error(err.message)
   })
@@ -64,7 +68,16 @@ export default function AddDanceClass() {
   // including the error and config of each field
   const [
     form,
-    { name, performanceName, ageLevelId, skillLevelId, competitions, recital },
+    {
+      name,
+      performanceName,
+      ageLevelId,
+      skillLevelId,
+      competitions,
+      recital,
+      shoes,
+      tights,
+    },
   ] = useForm({
     // The last submission will be used to report the error and
     // served as the default value and initial error of the form
@@ -94,6 +107,7 @@ export default function AddDanceClass() {
               name='performanceName'
               label={'Performance Name'}
               error={performanceName.error}
+              required={false}
             />
           </div>
           <div className='label_input_wrap_for_stacked'>
@@ -163,6 +177,22 @@ export default function AddDanceClass() {
             </label>
           </div>
           <div>{recital.error}</div>
+          <div className='label_input_wrap_for_stacked'>
+            <ComposeTextInput
+              name='tights'
+              label={'Tights'}
+              error={tights.error}
+              required={false}
+            />
+          </div>
+          <div className='label_input_wrap_for_stacked'>
+            <ComposeTextInput
+              name='shoes'
+              label={'Shoes'}
+              error={shoes.error}
+              required={false}
+            />
+          </div>
           <button
             type='submit'
             className=' rounded bg-blue-500 mt-4 ml-2 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400'
