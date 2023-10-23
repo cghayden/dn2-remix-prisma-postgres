@@ -11,7 +11,7 @@ export function LevelList({ levels, levelType }: LevelListProps) {
   const heading = levelType === 'ageLevels' ? 'Age' : 'Skill'
   return (
     <div className='mx-auto w-full max-w-md bg-white'>
-      <div className=' grid grid-cols-1 relative bg-cyan-600 text-white py-1 px-2'>
+      <div className=' grid grid-cols-1 relative bg-indigo-800 text-white py-1 px-2'>
         <h3 className='text-lg text-center place-self-center row-start-1 row-end-1'>
           {heading} Levels
         </h3>

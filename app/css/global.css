@@ -1,3 +1,14 @@
+/* @import 'variables.css' */
+
+:root {
+  --header_height: 3.5rem;
+}
+
+body {
+  font-family: 'Inter', 'Open Sans', 'Roboto', -apple-system;
+  font-size: 0.875rem;
+}
+
 .form_default {
   background-color: #fff;
   padding: 1rem;
@@ -33,4 +44,30 @@
 .form_default button[type='submit'] {
   width: 60%;
   margin: 1.5rem auto 0;
+}
+
+.header {
+  background-color: #292524;
+  display: flex;
+  justify-items: center;
+  padding: 1rem;
+  color: white;
+  height: var(--header_height);
+}
+
+.nav_frame_custom {
+  top: var(--header_height);
+  height: calc(100% - var(--header_height));
+  z-index: 100;
+  /* desktop */
+  /* top-0 h-full */
+  @media (min-width: 767px) {
+    /* top: var(--header_height); */
+    /* height: calc(100%-var(--header_height)); */
+    z-index: 1;
+  }
+}
+
+.nav_custom {
+  width: calc(100vw - 4rem);
 }

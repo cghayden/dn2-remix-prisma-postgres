@@ -30,6 +30,10 @@ export default function App() {
           href='https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Red+Hat+Display&family=Red+Hat+Text:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap'
           rel='stylesheet'
         ></link> */}
+        <link
+          href='https://fonts.googleapis.com/css?family=family=Inter:wght@450;550;650;700|Open+Sans|Montserrat|Source+Sans+Pro:400,600|Roboto:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap'
+          rel='stylesheet'
+        />
         <Meta />
         <Links />
       </head>

@@ -13,18 +13,20 @@ export default function StudioHeader() {
   }, [pathname])
 
   return (
-    <header className='bg-gray-100 flex items-center p-4'>
-      <Link to='/studio'>Dancernotes</Link>
+    <header className='header'>
       <button
-        className=' grid place-items-center ml-auto'
+        className=' grid place-items-center md:hidden'
         type='button'
         aria-label='show navigation menu'
         onClick={() => {
-          toggleShowMobileNav(true)
+          toggleShowMobileNav((showMobileNav) => !showMobileNav)
         }}
       >
         <MenuSvg />
       </button>
+      <Link to='/studio' className='hidden md:block'>
+        Dancernotes
+      </Link>
       <StudioMobileNav
         showMobileNav={showMobileNav}
         toggleShowMobileNav={toggleShowMobileNav}
