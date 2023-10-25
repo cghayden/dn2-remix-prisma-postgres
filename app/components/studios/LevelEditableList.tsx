@@ -20,78 +20,73 @@ export function LevelEditableList({
   let success = fetcher?.data?.success
   let isSaving = fetcher.state === 'submitting'
   let fetcherState = fetcher.state
-  const [showForm, toggleShowForm] = useState(false)
+  // const [showForm, toggleShowForm] = useState(false)
   const [showSaveButton, toggleShowSaveButton] = useState(false)
 
   useEffect(() => {
-    if (fetcherState === 'idle' && success) toggleShowForm(false)
+    if (fetcherState === 'idle' && success) toggleShowSaveButton(false)
   }, [success, fetcherState])
 
   return (
-    <>
-      {showForm ? (
-        <fetcher.Form
-          key={level.id}
-          id={level.id}
-          method='post'
-          action='ResourceEditLevels'
-          className=''
-        >
-          <input name={'levelId'} value={level.id} type='hidden' />
-          <input name={'levelType'} value={levelType} type='hidden' />
-          <div className='input_button_as_row'>
-            <div className='text-sm pt-2'>
-              <TextInput
-                label={'Name'}
-                name='newLevelName'
-                defaultValue={level.name}
-                onChange={() => toggleShowSaveButton(true)}
-              />
-              <TextInput
-                label={'Description'}
-                name='levelDescription'
-                defaultValue={level.description ?? ''}
-                onChange={() => toggleShowSaveButton(true)}
-              />
-            </div>
-            <div className='ml-auto'>
-              <div className='flex gap-1'>
-                {showSaveButton && (
-                  <button
-                    type='submit'
-                    disabled={isSaving}
-                    form={level.id}
-                    className='text-sm rounded bg-blue-500  text-white hover:bg-blue-600 focus:bg-blue-400  transition duration-150 ease-in-out ml-auto px-2 py-[2px] '
-                  >
-                    Save
-                  </button>
-                )}
-                <button
-                  className=' text-sm bg-red-600 text-white rounded transition px-2 py-[2px] duration-150 ease-in-out'
-                  onClick={() => toggleShowForm(false)}
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        </fetcher.Form>
-      ) : (
-        <>
-          <div className='flex items-center  py-1'>
+    <fetcher.Form
+      key={level.id}
+      id={level.id}
+      method='post'
+      action='/studio/ResourceEditLevels'
+      className=''
+    >
+      <input name={'levelId'} value={level.id} type='hidden' />
+      <input name={'levelType'} value={levelType} type='hidden' />
+      <div className='input_button_as_row'>
+        <TextInput
+          label={'Name'}
+          name='newLevelName'
+          defaultValue={level.name}
+          onChange={() => toggleShowSaveButton(true)}
+        />
+        <TextInput
+          label={'Description'}
+          name='levelDescription'
+          defaultValue={level.description ?? ''}
+          onChange={() => toggleShowSaveButton(true)}
+        />
+        <div className='ml-auto'>
+          <div className='flex gap-1'>
+            {showSaveButton && (
+              <button
+                type='submit'
+                disabled={isSaving}
+                form={level.id}
+                className='text-sm rounded bg-blue-500  text-white hover:bg-blue-600 focus:bg-blue-400  transition duration-150 ease-in-out ml-auto px-2 py-[2px] '
+              >
+                Save
+              </button>
+            )}
             <button
-              onClick={() => toggleShowForm(true)}
-              className='text-xs rounded bg-blue-500  text-white hover:bg-blue-600 focus:bg-blue-400  transition duration-150 ease-in-out px-2 h-5'
+              type='button'
+              className=' text-sm bg-red-600 text-white rounded transition px-2 py-[2px] duration-150 ease-in-out'
+              onClick={() => toggleShowSaveButton(false)}
             >
-              Edit
+              Cancel
             </button>
-            <div className='text-sm'>
-              <p className='ml-4'>{level.name}</p>
-              <p className='ml-4 text-xs'>{level.description}</p>
-            </div>
           </div>
-        </>
-      )}
-    </>
+        </div>
+      </div>
+    </fetcher.Form>
   )
 }
+
+// <>
+//           <div className='flex items-center  py-1'>
+//             <button
+//               onClick={() => toggleShowForm(true)}
+//               className='text-xs rounded bg-blue-500  text-white hover:bg-blue-600 focus:bg-blue-400  transition duration-150 ease-in-out px-2 h-5'
+//             >
+//               Edit
+//             </button>
+//             <div className='text-sm'>
+//               <p className='ml-4'>{level.name}</p>
+//               <p className='ml-4 text-xs'>{level.description}</p>
+//             </div>
+//           </div>
+//         </>

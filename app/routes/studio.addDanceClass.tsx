@@ -11,6 +11,7 @@ import { z } from 'zod'
 import { conform, useForm } from '@conform-to/react'
 import { parse } from '@conform-to/zod'
 import { ComposeTextInput } from '~/components/forms/TextInput'
+import { PageHeader } from '~/components/styledComponents/PageHeader'
 
 const schema = z.object({
   name: z.string({ required_error: 'Name is required' }),
@@ -91,10 +92,11 @@ export default function AddDanceClass() {
   })
 
   return (
-    <div>
+    <>
+      <PageHeader headerText='Add A New Dance' />
       <Form method='post' {...form.props} className='form_default'>
         <div className='input_section_wrapper'>
-          <div className='label_input_wrap_for_stacked'>
+          <div className='input_item'>
             <ComposeTextInput
               name='name'
               label={'Name'}
@@ -102,7 +104,7 @@ export default function AddDanceClass() {
               required={true}
             />
           </div>
-          <div className='label_input_wrap_for_stacked'>
+          <div className='input_item'>
             <ComposeTextInput
               name='performanceName'
               label={'Performance Name'}
@@ -110,7 +112,7 @@ export default function AddDanceClass() {
               required={false}
             />
           </div>
-          <div className='label_input_wrap_for_stacked'>
+          <div className='input_item'>
             <label
               className='block text-sm text-gray-600 mb-1'
               htmlFor={'ageLevel'}
@@ -136,7 +138,7 @@ export default function AddDanceClass() {
               </div>
             ) : null}
           </div>
-          <div className='label_input_wrap_for_stacked'>
+          <div className='input_item'>
             <label
               className='block text-sm text-gray-600 mb-1'
               htmlFor={'skillLevel'}
@@ -163,21 +165,21 @@ export default function AddDanceClass() {
             ) : null}
           </div>
 
-          <div className='label_input_wrap_for_stacked'>
+          <div className='input_item'>
             <label className='flex gap-4'>
               <input {...conform.input(competitions, { type: 'checkbox' })} />
               <span>This Dance will compete in competitions</span>
             </label>
           </div>
 
-          <div className='label_input_wrap_for_stacked'>
+          <div className='input_item'>
             <label className='flex gap-4'>
               <input {...conform.input(recital, { type: 'checkbox' })} />
               <span>Recital: Yes, this dance will be in the recital</span>
             </label>
           </div>
           <div>{recital.error}</div>
-          <div className='label_input_wrap_for_stacked'>
+          <div className='input_item'>
             <ComposeTextInput
               name='tights'
               label={'Tights'}
@@ -185,7 +187,7 @@ export default function AddDanceClass() {
               required={false}
             />
           </div>
-          <div className='label_input_wrap_for_stacked'>
+          <div className='input_item'>
             <ComposeTextInput
               name='shoes'
               label={'Shoes'}
@@ -201,6 +203,6 @@ export default function AddDanceClass() {
           </button>
         </div>
       </Form>
-    </div>
+    </>
   )
 }

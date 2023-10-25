@@ -10,6 +10,7 @@ import {
 import styles from './tailwind.css'
 import cssGlobals from './css/global.css'
 import '@fontsource/inter/400.css'
+import { NavigationProvider } from './components/context/NavContext'
 // Supports weights 100-900
 // import '@fontsource-variable/inter'
 
@@ -37,12 +38,16 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className='bg-gray-100 '>
-        <Outlet />
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
-      </body>
+      <NavigationProvider>
+        <body className='bg-gray-150 h-min-[100%] font-Inter text-[13px] h-full'>
+          <div className='min-h-screen flex flex-col'>
+            <Outlet />
+            <ScrollRestoration />
+            <Scripts />
+            <LiveReload />
+          </div>
+        </body>
+      </NavigationProvider>
     </html>
   )
 }

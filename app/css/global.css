@@ -2,13 +2,11 @@
 
 :root {
   --header_height: 3.5rem;
+  --nav_width_desktop: 15rem;
 }
-
 body {
-  font-family: 'Inter', 'Open Sans', 'Roboto', -apple-system;
-  font-size: 0.875rem;
+  color: #303030;
 }
-
 .form_default {
   background-color: #fff;
   padding: 1rem;
@@ -16,6 +14,7 @@ body {
   font-family: 'Inter', Roboto;
   margin: auto;
   color: dimgray;
+  max-width: 700px;
 }
 
 .input_section_wrapper {
@@ -28,7 +27,7 @@ body {
   margin: 0;
 }
 
-.label_input_wrap_for_stacked {
+.input_item {
   font-size: 0.875rem;
   line-height: 1.25rem;
   margin-top: 0.5rem;
@@ -38,7 +37,8 @@ body {
 .input_button_as_row {
   display: flex;
   align-items: center;
-  font-size: 0.875rem;
+  gap: 1rem;
+  /* font-size: 0.875rem; */
 }
 
 .form_default button[type='submit'] {
@@ -53,21 +53,44 @@ body {
   padding: 1rem;
   color: white;
   height: var(--header_height);
+  width: 100%;
+  position: fixed;
+  top: 0;
 }
 
 .nav_frame_custom {
   top: var(--header_height);
   height: calc(100% - var(--header_height));
   z-index: 100;
-  /* desktop */
-  /* top-0 h-full */
+
   @media (min-width: 767px) {
-    /* top: var(--header_height); */
-    /* height: calc(100%-var(--header_height)); */
     z-index: 1;
+    transform: translateX(0);
+    /* max-width: 15rem; */
   }
 }
 
 .nav_custom {
   width: calc(100vw - 4rem);
+  max-width: 22.5rem;
+  min-width: 15rem;
+
+  @media (min-width: 767px) {
+    z-index: 1;
+    transform: translateX(0);
+    width: 15rem;
+  }
+}
+
+.main_custom {
+  padding-top: var(--header_height);
+  /* background-color: burlywood; */
+  width: 100%;
+  display: flex;
+  flex: 1 1 0%;
+  align-items: stretch;
+
+  @media (min-width: 767px) {
+    padding-left: var(--nav_width_desktop);
+  }
 }

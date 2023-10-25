@@ -1,5 +1,6 @@
 import { redirect, type LoaderFunctionArgs, json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
+import { PageHeader } from '~/components/styledComponents/PageHeader'
 import { getFullStudio } from '~/models/studio.server'
 import { getUserId } from '~/session.server'
 
@@ -14,11 +15,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function StudioIndex() {
   const { studio } = useLoaderData<typeof loader>()
-  console.log('studio', studio)
   return (
-    <div>
-      <h1 className='text-center text-lg p-4'>Studio Index</h1>
-      <div className='flex justify-center'>
+    <>
+      <PageHeader headerText='Studio Home' />
+      <div className='pageContent flex justify-center'>
         <ul className='p-4'>
           {studio?.danceClasses.map((danceClass) => (
             <li key={danceClass.id} className='py-2'>
@@ -27,6 +27,6 @@ export default function StudioIndex() {
           ))}
         </ul>
       </div>
-    </div>
+    </>
   )
 }

@@ -1,16 +1,25 @@
-import { Link, useLocation } from '@remix-run/react'
-import { useEffect, useState } from 'react'
+import { Link } from '@remix-run/react'
 import MenuSvg from '../icons/MenuSvg'
-import StudioMobileNav from './StudioMobileNav'
+import { useNavContext } from '../context/NavContext'
 // TODO - make this a reusable component for parent/studio/etc.
 
-export default function StudioHeader() {
-  const [showMobileNav, toggleShowMobileNav] = useState(false)
-  const { pathname } = useLocation()
+export type HeaderProps = {
+  userType: string
+  links: NavLink[]
+}
 
-  useEffect(() => {
-    toggleShowMobileNav(false) // Close the navigation panel anytime pathname changes
-  }, [pathname])
+export type NavLink = {
+  label: string
+  url: string
+}
+
+export default function StudioHeader() {
+  const { toggleShowNav } = useNavContext()
+
+  // Close the navigation panel anytime pathname changes
+  // useEffect(() => {
+  //   toggleShowNav()
+  // }, [pathname, toggleShowNav])
 
   return (
     <header className='header'>
@@ -19,7 +28,7 @@ export default function StudioHeader() {
         type='button'
         aria-label='show navigation menu'
         onClick={() => {
-          toggleShowMobileNav((showMobileNav) => !showMobileNav)
+          toggleShowNav()
         }}
       >
         <MenuSvg />
@@ -27,10 +36,6 @@ export default function StudioHeader() {
       <Link to='/studio' className='hidden md:block'>
         Dancernotes
       </Link>
-      <StudioMobileNav
-        showMobileNav={showMobileNav}
-        toggleShowMobileNav={toggleShowMobileNav}
-      />
     </header>
   )
 }

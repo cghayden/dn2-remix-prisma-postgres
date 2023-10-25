@@ -16,3 +16,8 @@ export type ActionResponse = {
   status: number
   prismaReturn: SkillLevel | AgeLevel
 }
+
+export type NavLink = {
+  label: string
+  url: string
+}

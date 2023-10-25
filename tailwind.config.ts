@@ -5,7 +5,15 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        Inter: ['Inter', 'sans-serif'],
+        Inter: ['Inter', 'Roboto', 'sans-serif'],
+      },
+      colors: {
+        gray: {
+          150: '#EBECF0',
+        },
+        slate: {
+          150: '#E7ECF3',
+        },
       },
     },
   },

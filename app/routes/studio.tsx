@@ -1,30 +1,36 @@
 import { Outlet, useRouteError } from '@remix-run/react'
 import { type LoaderFunctionArgs } from '@remix-run/node'
 import StudioHeader from '~/components/studios/StudioHeader'
-// import Sidebar from '~/components/parents/Sidebar'
-// import { prisma } from '~/db.server'
 import { requireStudio } from '~/models/studio.server'
 import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
+import Nav from '~/components/Nav'
+import type { NavLink } from 'types'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const studioId = await requireStudio(request)
-
-  return studioId
+  const studioUser = await requireStudio(request)
+  return studioUser
 }
 
 export default function StudioLayout() {
-  // const studioNavData = useLoaderData<typeof loader>()
+  // const studioUser = useLoaderData<typeof loader>()
+
+  const studioLinks: NavLink[] = [
+    { label: 'Home', url: '/studio' },
+    { label: 'Create a New Dance', url: '/studio/addDanceClass' },
+    { label: 'Configuration', url: '/studio/settings' },
+    { label: 'Age Levels', url: '/studio/ageLevels' },
+  ]
   return (
-    <div className='min-h-screen flex flex-col'>
+    <>
       <StudioHeader />
-      <div className='flex h-full flex-1'>
-        {/* <Sidebar /> */}
-        <main className='w-full px-6'>
+      <Nav links={studioLinks} />
+      <main className='main_custom'>
+        <div className='px-6 flex-1'>
           <Outlet />
-        </main>
-      </div>
+        </div>
+      </main>
       <footer>Footer</footer>
-    </div>
+    </>
   )
 }
 

@@ -17,11 +17,12 @@ export async function requireStudio(request: Request) {
   const userId = await requireUserId(request)
 
   // get User, check user type for 'PARENT'
-  const user = await getUserById(userId)
-  if (!user || user?.type !== 'STUDIO') {
+  const userWithPassword = await getUserById(userId)
+  if (!userWithPassword || userWithPassword?.type !== 'STUDIO') {
     throw redirect(`/`)
   }
-  return userId
+  const { password: _password, ...userWithoutPassword } = userWithPassword
+  return userWithoutPassword
 }
 
 export async function createStudio(

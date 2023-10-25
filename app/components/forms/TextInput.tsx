@@ -66,7 +66,7 @@ export function ComposeTextInput({
   error,
 }: ComposeTextInputProps) {
   return (
-    <div className='text-sm mt-2 ml-2'>
+    <>
       {label && (
         <label htmlFor={name} className='block text-sm text-gray-600 mb-1'>
           {label}
@@ -89,6 +89,6 @@ export function ComposeTextInput({
           {error}
         </div>
       ) : null}
-    </div>
+    </>
   )
 }
