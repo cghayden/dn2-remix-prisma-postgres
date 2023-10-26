@@ -13,6 +13,7 @@ import { validateEmail } from '~/utils'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await getUserId(request)
+  console.log('userId', userId)
   if (userId) return redirect('/')
   return json({})
 }
@@ -50,7 +51,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     redirectTo: `/${user.type.toLowerCase()}`,
     remember: remember === 'on' ? true : false,
     request,
-    userId: user.id,
+    userId: user.userId,
     type: user.type,
   })
 }
@@ -154,7 +155,7 @@ export default function LoginPage() {
               <Link
                 className='text-blue-500 underline'
                 to={{
-                  pathname: '/join',
+                  pathname: '/welcome',
                   search: searchParams.toString(),
                 }}
               >

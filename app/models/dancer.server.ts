@@ -4,7 +4,7 @@ import { prisma } from '~/db.server'
 export async function createParentDancer(
   firstName: Dancer['firstName'],
   lastName: Dancer['lastName'],
-  userId: User['id']
+  userId: User['userId']
 ) {
   return await prisma.dancer.create({
     data: {
@@ -31,7 +31,7 @@ export async function updateDancer(
   })
 }
 
-export async function getDancersName(userId: User['id']) {
+export async function getDancersName(userId: User['userId']) {
   // return await prisma.dancer.findMany({
   //   where: {
   //     parentId: userId,

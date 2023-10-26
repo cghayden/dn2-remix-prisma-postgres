@@ -26,7 +26,7 @@ export async function getSession(request: Request) {
 
 export async function getUserId(
   request: Request
-): Promise<User['id'] | undefined> {
+): Promise<User['userId'] | undefined> {
   const session = await getSession(request)
   const userId = session.get(USER_SESSION_KEY)
   return userId
@@ -45,12 +45,14 @@ export async function getUser(request: Request) {
 // requireUser > (requireUserId(userId or redirect) > getUserId(userID off Session))
 export async function requireUser(request: Request) {
   const userId = await requireUserId(request)
+  console.log('userId from require user', userId)
+  // no userId redirects to welcome
 
   const user = await getUserById(userId)
   if (user) return user
   if (!user) {
-    // const searchParams = new URLSearchParams([['redirectTo', redirectTo]])
-    throw redirect(`/welcome`)
+    // the userId returned from session is not valid -- clear any stale cookies(db may have been reset in development)
+    logout(request)
   }
   throw await logout(request)
 }
@@ -75,7 +77,7 @@ export async function createUserSession({
   redirectTo,
 }: {
   request: Request
-  userId: number
+  userId: string
   type: string
   remember: boolean
   redirectTo: string
@@ -95,7 +97,7 @@ export async function createUserSession({
 
 export async function logout(request: Request) {
   const session = await getSession(request)
-  return redirect('/', {
+  return redirect('/welcome', {
     headers: {
       'Set-Cookie': await sessionStorage.destroySession(session),
     },

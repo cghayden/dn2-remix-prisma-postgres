@@ -1,0 +1,32 @@
+.nav_container {
+  /* base*/
+  position: fixed;
+  left: 0;
+  display: flex;
+
+  /* z-index to stay on top of gray overlay */
+  z-index: 100;
+  /* background: tailwind gray? */
+
+  /* only mobile */
+  height: 100%;
+
+  /* CLOSED */
+  display: none;
+
+  /* OPEN */
+
+  /* desktop */
+  @media (min-width: 767px) {
+    top: var(--header_height);
+    height: calc(100%-var(--header_height));
+    z-index: 1;
+  }
+}
+
+.nav {
+  flex: 1 1 auto;
+  max-width: 100%;
+  align-items: stretch;
+  overflow: auto;
+}
