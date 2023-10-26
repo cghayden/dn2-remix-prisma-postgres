@@ -1,36 +1,20 @@
 import type { AgeLevel, SkillLevel } from '@prisma/client'
-import { Link } from '@remix-run/react'
-import EditIcon from '../icons/EditIcon'
-
-type LevelListProps = {
-  levels: SkillLevel[] | AgeLevel[]
-  levelType: 'skillLevels' | 'ageLevels'
-}
-
-export function LevelList({ levels, levelType }: LevelListProps) {
-  const heading = levelType === 'ageLevels' ? 'Age' : 'Skill'
+export const LevelList = ({
+  levels,
+}: {
+  levels: AgeLevel[] | SkillLevel[]
+}) => {
   return (
-    <div className='mx-auto w-full max-w-md bg-white'>
-      <div className=' grid grid-cols-1 relative bg-indigo-800 text-white py-1 px-2'>
-        <h3 className='text-lg text-center place-self-center row-start-1 row-end-1'>
-          {heading} Levels
-        </h3>
-        <Link
-          to={'../editOrAddLevels'}
-          className='place-self-end row-start-1 row-end-1'
+    <>
+      {levels.map((level) => (
+        <div
+          key={level.id}
+          className='grid grid-cols-2 items-center border-b-2 last:border-b-0'
         >
-          <EditIcon />
-        </Link>
-      </div>
-      {!levels?.length ? (
-        <p>No age levels found</p>
-      ) : (
-        <ul className='grid grid-cols-2 gap-2 p-4'>
-          {levels?.map((level) => (
-            <li key={level.id}>{level.name}</li>
-          ))}
-        </ul>
-      )}
-    </div>
+          <p className='px-4 py-2 text-sm font-semibold'>{level.name}</p>
+          <p className='px-4 py-2 text-xs'>{level.description}</p>
+        </div>
+      ))}
+    </>
   )
 }

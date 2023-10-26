@@ -27,6 +27,20 @@ body {
   margin: 0;
 }
 
+.levels_edit {
+  display: grid;
+  grid-template-columns: 1fr 1fr 80px;
+  align-items: center;
+}
+
+.levels_edit div:not(:last-child) {
+  margin-left: 10px;
+}
+
+.levels_edit div:last-of-type {
+  text-align: center;
+}
+
 .input_item {
   font-size: 0.875rem;
   line-height: 1.25rem;
@@ -38,7 +52,12 @@ body {
   display: flex;
   align-items: center;
   gap: 1rem;
+  padding-left: 4px;
+  padding-right: 4px;
   /* font-size: 0.875rem; */
+}
+.input_button_as_row div {
+  flex-grow: 1;
 }
 
 .form_default button[type='submit'] {

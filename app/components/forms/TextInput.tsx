@@ -7,6 +7,7 @@ export type TextInputProps = {
   ariaInvalid?: boolean | undefined
   defaultValue?: string
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  classProps?: string
 }
 
 export function TextInput({
@@ -18,10 +19,11 @@ export function TextInput({
   ariaInvalid,
   defaultValue,
   onChange,
+  classProps,
 }: TextInputProps) {
   return (
     <>
-      <div className='mb-2'>
+      <div className={`mb-2 mt-2`}>
         {label && (
           <label htmlFor={name} className='block text-xs text-gray-600 mb-1'>
             {label}

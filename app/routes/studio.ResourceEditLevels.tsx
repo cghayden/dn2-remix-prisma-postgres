@@ -1,7 +1,12 @@
 import { json, type ActionFunctionArgs } from '@remix-run/node'
-import { updateAgeLevel, updateSkillLevel } from '~/models/studio.server'
+import {
+  upsertSkillLevel,
+  upsertAgeLevel,
+  getUserIdAsStudio,
+} from '~/models/studio.server'
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  const userId = await getUserIdAsStudio(request)
   const formData = await request.formData()
   const levelId = formData.get('levelId')
   const newLevelName = formData.get('newLevelName')
@@ -36,15 +41,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   // name, description, id
   // variable - ageLevel or skillLevel
   if (levelType === 'skillLevel') {
-    await updateSkillLevel(levelId, newLevelName, levelDescription).catch(
-      (err) => {
-        throw new Error(err.message)
-      }
-    )
+    await upsertSkillLevel(userId, levelId, newLevelName, levelDescription)
   }
 
   if (levelType === 'ageLevel') {
-    await updateAgeLevel(levelId, newLevelName, levelDescription)
+    await upsertAgeLevel(userId, levelId, newLevelName, levelDescription)
   }
 
   return json({ success: true })

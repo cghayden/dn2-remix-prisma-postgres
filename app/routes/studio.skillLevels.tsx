@@ -5,32 +5,33 @@ import { UpsertLevelForm } from '~/components/studios/UpsertLevelForm'
 import { LevelList } from '~/components/studios/LevelList'
 import { ContentContainer } from '~/components/styledComponents/ContentContainer'
 import { PageHeader } from '~/components/styledComponents/PageHeader'
-import { getAgeLevels } from '~/models/studio.server'
+import { getSkillLevels } from '~/models/studio.server'
 import { requireUserId } from '~/session.server'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request)
-  const ageLevels = await getAgeLevels(userId)
-  if (!ageLevels) {
-    throw new Error('Oh no! ageLevels could not be loaded')
+  const skillLevels = await getSkillLevels(userId)
+  if (!skillLevels) {
+    throw new Error('Oh no! skillLevels could not be loaded')
   }
-  return ageLevels
+  return skillLevels
 }
-export default function AgeLevelsPage() {
+
+export default function SkillLevelsPage() {
   const formRef = useRef<HTMLFormElement>(null)
   const levels = useLoaderData<typeof loader>()
   const [editMode, toggleEditMode] = useState(false)
   return (
     <div>
       <div>
-        <PageHeader headerText='Age Levels' />
+        <PageHeader headerText='Skill Levels' />
       </div>
       <div className='text-right mb-2 pr-4'>
         <button
           className='text-white bg-gray-700 p-2 rounded-md '
           onClick={() => toggleEditMode(!editMode)}
         >
-          {editMode ? 'Cancel' : 'Edit / Add New Age Level'}
+          {editMode ? 'Cancel' : 'Edit / Add New Skill Level'}
         </button>
       </div>
       <ContentContainer>
@@ -46,14 +47,16 @@ export default function AgeLevelsPage() {
               <UpsertLevelForm
                 key={level.id}
                 level={level}
-                levelType='ageLevel'
+                levelType='skillLevel'
               />
             ))}
           </>
         ) : (
           <LevelList levels={levels} />
         )}
-        {editMode && <UpsertLevelForm formRef={formRef} levelType='ageLevel' />}
+        {editMode && (
+          <UpsertLevelForm formRef={formRef} levelType='skillLevel' />
+        )}
       </ContentContainer>
     </div>
   )

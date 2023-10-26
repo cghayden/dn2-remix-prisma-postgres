@@ -16,13 +16,18 @@ export async function requireStudio(request: Request) {
   // check for UserId - if none, no one is logged in, redirect to /welcome
   const userId = await requireUserId(request)
 
-  // get User, check user type for 'PARENT'
+  // get User, check user type for 'STUDIO'
   const userWithPassword = await getUserById(userId)
   if (!userWithPassword || userWithPassword?.type !== 'STUDIO') {
     throw redirect(`/`)
   }
   const { password: _password, ...userWithoutPassword } = userWithPassword
   return userWithoutPassword
+}
+
+export async function getUserIdAsStudio(request: Request) {
+  const user = await requireStudio(request)
+  return user.userId
 }
 
 export async function createStudio(
@@ -78,6 +83,17 @@ export async function getAgeLevels(userId: User['userId']) {
   })
   return studio
 }
+export async function getSkillLevels(userId: User['userId']) {
+  const studio = prisma.skillLevel.findMany({
+    where: {
+      studioId: userId,
+    },
+    orderBy: {
+      name: 'asc',
+    },
+  })
+  return studio
+}
 
 export async function getStudioConfig(userId: User['userId']) {
   const studio = prisma.studio.findUnique({
@@ -107,18 +123,53 @@ export async function updateAgeLevel(
     },
   })
 }
-export async function updateSkillLevel(
-  levelId: SkillLevel['id'],
+export async function upsertSkillLevel(
+  userId: Studio['userId'],
+  levelId: SkillLevel['id'] | 'new',
   newName: SkillLevel['name'],
   levelDescription: SkillLevel['description']
 ) {
-  await prisma.skillLevel.update({
+  await prisma.skillLevel.upsert({
     where: {
       id: levelId,
     },
-    data: {
+    update: {
       name: newName,
       description: levelDescription,
+    },
+    create: {
+      name: newName,
+      description: levelDescription,
+      studio: {
+        connect: {
+          userId,
+        },
+      },
+    },
+  })
+}
+export async function upsertAgeLevel(
+  userId: Studio['userId'],
+  levelId: AgeLevel['id'] | 'new',
+  newName: AgeLevel['name'],
+  levelDescription: AgeLevel['description']
+) {
+  await prisma.ageLevel.upsert({
+    where: {
+      id: levelId,
+    },
+    update: {
+      name: newName,
+      description: levelDescription,
+    },
+    create: {
+      name: newName,
+      description: levelDescription,
+      studio: {
+        connect: {
+          userId,
+        },
+      },
     },
   })
 }

@@ -50,14 +50,14 @@ export default function Nav({ links }: { links: NavLink[] }) {
 
         <div className='mt-auto pb-6'>
           <ul>
-            <li className='px-3'>
+            {/* <li className='px-3'>
               <Link
                 className='flex items-center my-2 pl-4 pr-2'
                 to='configuration'
               >
                 <span>Configuration</span>
               </Link>
-            </li>
+            </li> */}
             <li className='px-3'>
               <Form
                 className='flex items-center my-2 pl-4 pr-2'

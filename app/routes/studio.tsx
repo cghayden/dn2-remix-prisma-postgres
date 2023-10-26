@@ -17,8 +17,9 @@ export default function StudioLayout() {
   const studioLinks: NavLink[] = [
     { label: 'Home', url: '/studio' },
     { label: 'Create a New Dance', url: '/studio/addDanceClass' },
-    { label: 'Configuration', url: '/studio/settings' },
+    // { label: 'Configuration', url: '/studio/settings' },
     { label: 'Age Levels', url: '/studio/ageLevels' },
+    { label: 'Skill Levels', url: '/studio/skillLevels' },
   ]
   return (
     <>
