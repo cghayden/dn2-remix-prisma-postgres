@@ -12,6 +12,13 @@ import type { NavLink } from 'types'
 
 export default function Nav({ links }: { links: NavLink[] }) {
   const { showNav, toggleShowNav } = useNavContext()
+  const settingsLinks = links.filter(
+    (link) => link.url.slice(1, 9) === 'settings'
+  )
+  const contentLinks = links.filter(
+    (link) => link.url.slice(1, 9) !== 'settings'
+  )
+
   return (
     <div
       className={`nav_frame_custom bg-gray-200 text-gray-900 fixed  left-0  z-20 transition-all flex items-stretch
@@ -31,7 +38,26 @@ export default function Nav({ links }: { links: NavLink[] }) {
         </div> */}
         <div>
           <ul>
-            {links.map((link) => (
+            {contentLinks.map((link) => (
+              <li key={link.label} className='px-3'>
+                <Link
+                  className='flex items-center my-2 pl-4 pr-2'
+                  to={`${link.url}`}
+                  onClick={() => {
+                    toggleShowNav()
+                  }}
+                >
+                  <span>{link.label}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className='mt-auto pb-6'>
+          <legend className=' pl-4 font-bold text-l'>Settings</legend>
+          <ul>
+            {settingsLinks.map((link) => (
               <li key={link.label} className='px-3'>
                 <Link
                   className='flex items-center my-2 pl-4 pr-2'
@@ -45,19 +71,6 @@ export default function Nav({ links }: { links: NavLink[] }) {
                 </Link>
               </li>
             ))}
-          </ul>
-        </div>
-
-        <div className='mt-auto pb-6'>
-          <ul>
-            {/* <li className='px-3'>
-              <Link
-                className='flex items-center my-2 pl-4 pr-2'
-                to='configuration'
-              >
-                <span>Configuration</span>
-              </Link>
-            </li> */}
             <li className='px-3'>
               <Form
                 className='flex items-center my-2 pl-4 pr-2'
