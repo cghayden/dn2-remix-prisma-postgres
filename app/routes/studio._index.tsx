@@ -1,5 +1,7 @@
 import { redirect, type LoaderFunctionArgs, json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
+import { DanceListing } from '~/components/studios/DanceListing'
+import { ContentContainer } from '~/components/styledComponents/ContentContainer'
 import { PageHeader } from '~/components/styledComponents/PageHeader'
 import { getFullStudio } from '~/models/studio.server'
 import { getUserId } from '~/session.server'
@@ -19,13 +21,16 @@ export default function StudioIndex() {
     <>
       <PageHeader headerText='Studio Home' />
       <div className='pageContent flex justify-center'>
-        <ul className='p-4'>
-          {studio?.danceClasses.map((danceClass) => (
-            <li key={danceClass.id} className='py-2'>
-              {danceClass.name}
-            </li>
-          ))}
-        </ul>
+        <ContentContainer>
+          <h2 className='text-xl text-center py-2'>Dance Classes</h2>
+          <ul className='p-4 w-72 h-72'>
+            {studio?.danceClasses.map((danceClass) => (
+              <li key={danceClass.id}>
+                <DanceListing danceClass={danceClass} />
+              </li>
+            ))}
+          </ul>
+        </ContentContainer>
       </div>
     </>
   )
