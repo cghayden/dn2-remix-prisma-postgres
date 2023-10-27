@@ -13,7 +13,7 @@ export default function Welcome() {
     <main className='relative min-h-screen sm:flex sm:items-center sm:justify-center'>
       <div className='relative sm:pb-16'>
         <div className='mx-auto max-w-7xl sm:px-6 lg:px-8'>
-          <div className='h-screen w-screen relative shadow-xl sm:overflow-hidden sm:w-5/6'>
+          <div className='h-screen w-screen relative shadow-xl sm:overflow-hidden'>
             <div className='absolute inset-0'>
               <img
                 className='h-full w-full object-cover'
