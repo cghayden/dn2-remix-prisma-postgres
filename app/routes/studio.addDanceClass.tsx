@@ -43,8 +43,8 @@ export async function action({ request }: ActionFunctionArgs) {
     competitions: submission.value.competitions,
     recital: submission.value.recital,
     skillLevelId: submission.value.skillLevelId,
-    tights: submission.value.tights ?? null,
-    shoes: submission.value.shoes ?? null,
+    // tights: submission.value.tights ?? null,
+    // shoes: submission.value.shoes ?? null,
   }).catch((err) => {
     throw new Error(err.message)
   })

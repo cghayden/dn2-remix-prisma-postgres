@@ -12,12 +12,8 @@ import type { NavLink } from 'types'
 
 export default function Nav({ links }: { links: NavLink[] }) {
   const { showNav, toggleShowNav } = useNavContext()
-  const settingsLinks = links.filter(
-    (link) => link.url.slice(1, 9) === 'settings'
-  )
-  const contentLinks = links.filter(
-    (link) => link.url.slice(1, 9) !== 'settings'
-  )
+  const settingsLinks = links.filter((link) => link.url.startsWith('settings'))
+  const contentLinks = links.filter((link) => !link.url.startsWith('settings'))
 
   return (
     <div

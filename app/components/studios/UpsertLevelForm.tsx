@@ -35,7 +35,7 @@ export function UpsertLevelForm({
     <fetcher.Form
       id={level?.id ?? 'newLevel'}
       method='post'
-      action='/studio/ResourceEditLevels'
+      action='../settings/ResourceEditLevels'
       className=''
       ref={formRef}
     >
