@@ -5,78 +5,55 @@ import type {
 } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Form, Link, useActionData, useSearchParams } from '@remix-run/react'
-import { useEffect, useRef } from 'react'
+import { z } from 'zod'
+
+import { useForm } from '@conform-to/react'
+import { ComposeTextInput } from '~/components/forms/TextInput'
 import { createStudio } from '~/models/studio.server'
 
 import { getUserByEmail } from '~/models/user.server'
 import { createUserSession, getUserId } from '~/session.server'
-import { safeRedirect, validateEmail } from '~/utils'
+import { safeRedirect } from '~/utils'
+import { parse } from '@conform-to/zod'
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const userId = await getUserId(request)
-  if (userId) return redirect('/')
-  return json({})
-}
+export const meta: MetaFunction = () => [{ title: 'Sign Up' }]
+
+const studioJoinSchema = z.object({
+  name: z
+    .string({ required_error: 'Studio Name is required' })
+    .min(3, { message: 'Studio Name Must Be At Least 3 Characters' }),
+  email: z.string().email({ message: 'Invalid email address' }),
+  password: z
+    .string()
+    .min(8, { message: 'Password Must Be At Least 8 Characters' }),
+})
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const formData = await request.formData()
-  const email = formData.get('email')
-  const name = formData.get('name')
-  const password = formData.get('password')
   const type = 'STUDIO'
+  const formData = await request.formData()
+  const submission = parse(formData, { schema: studioJoinSchema })
   const redirectTo = safeRedirect(formData.get('redirectTo'), '/')
 
-  const errors = {
-    email: null,
-    name: null,
-    password: null,
+  if (submission.intent !== 'submit' || !submission.value) {
+    return json(submission)
   }
-
-  if (!validateEmail(email)) {
-    return json(
-      { errors: { ...errors, email: 'Email is invalid' } },
-      { status: 400 }
-    )
-  }
-
-  if (typeof password !== 'string' || password.length === 0) {
-    return json(
-      { errors: { ...errors, password: 'Password is required' } },
-      { status: 400 }
-    )
-  }
-
-  if (typeof name !== 'string' || name.length === 0) {
-    return json({
-      errors: { ...errors, name: 'Studio Name Name is required' },
-      status: 400,
-    })
-  }
-
-  if (password.length < 8) {
-    return json(
-      {
-        errors: {
-          ...errors,
-          password: 'Password must be at least 8 characters',
-        },
-      },
-      { status: 400 }
-    )
-  }
+  const { name, email, password } = submission.value
 
   const existingUser = await getUserByEmail(email)
   if (existingUser) {
-    return json(
-      { errors: { ...errors, email: 'A user already exists with this email' } },
-      { status: 400 }
-    )
+    return json({
+      ...submission,
+      error: {
+        ...submission.error,
+        email: ['A user already exists with this email'],
+      },
+    })
   }
 
   const user = await createStudio(email, password, type, name)
   console.log('user', user)
 
-  return createUserSession({
+  return await createUserSession({
     redirectTo,
     remember: false,
     request,
@@ -85,27 +62,27 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   })
 }
 
-export const meta: MetaFunction = () => [{ title: 'Sign Up' }]
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const userId = await getUserId(request)
+  if (userId) return redirect('/')
+  return json({})
+}
 
 export default function ParentJoin() {
   const [searchParams] = useSearchParams()
-  const redirectTo = searchParams.get('redirectTo') ?? undefined
-  const actionData = useActionData<typeof action>()
-  const emailRef = useRef<HTMLInputElement>(null)
-  const nameRef = useRef<HTMLInputElement>(null)
-  const passwordRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    if (actionData?.errors?.email) {
-      emailRef.current?.focus()
-    }
-    if (actionData?.errors?.name) {
-      nameRef.current?.focus()
-    } else if (actionData?.errors?.password) {
-      passwordRef.current?.focus()
-    }
-  }, [actionData])
+  const lastSubmission = useActionData<typeof action>()
+  console.log('lastSubmission', lastSubmission)
 
+  const [form, { name, email, password }] = useForm({
+    // The last submission will be used to report the error and serves as the default value and initial error of the form for progressive enhancement
+    lastSubmission,
+    // run validation logic on client (if slow connection)
+    // shouldValidate: 'onBlur',
+    // onValidate({ formData }) {
+    //   return parse(formData, { schema })
+    // },
+  })
   return (
     <div className='flex min-h-screen flex-col justify-center'>
       <div className='grid place items-center'>
@@ -114,88 +91,36 @@ export default function ParentJoin() {
         </h1>
 
         <div className='mx-auto w-full max-w-md px-8'>
-          <Form method='post' className='space-y-6'>
-            <div>
-              <label
-                htmlFor='email'
-                className='block text-sm font-medium text-gray-700'
-              >
-                Email address
-              </label>
-              <div className='mt-1'>
-                <input
-                  ref={emailRef}
-                  id='email'
-                  required
-                  autoFocus={true}
-                  name='email'
-                  type='email'
-                  autoComplete='email'
-                  aria-invalid={actionData?.errors?.email ? true : undefined}
-                  aria-describedby='email-error'
-                  className='w-full rounded border border-gray-500 px-2 py-1 text-lg'
-                />
-                {actionData?.errors?.email ? (
-                  <div className='pt-1 text-red-700' id='email-error'>
-                    {actionData.errors.email}
-                  </div>
-                ) : null}
-              </div>
-            </div>
-            <div>
-              <label
-                htmlFor='name'
-                className='block text-sm font-medium text-gray-700'
-              >
-                Studio Name
-              </label>
-              <div className='mt-1'>
-                <input
-                  ref={nameRef}
-                  id='name'
-                  required
-                  autoFocus={true}
+          <Form method='post' {...form.props} className='form_default'>
+            <div className='input_section_wrapper'>
+              <div className='input_item'>
+                <ComposeTextInput
                   name='name'
-                  type='text'
-                  autoComplete='name'
-                  aria-invalid={actionData?.errors?.name ? true : undefined}
-                  aria-describedby='name-error'
-                  className='w-full rounded border border-gray-500 px-2 py-1 text-lg'
+                  label={'Name'}
+                  error={name.error}
+                  required={true}
                 />
-                {actionData?.errors?.name ? (
-                  <div className='pt-1 text-red-700' id='name-error'>
-                    {actionData.errors.name}
-                  </div>
-                ) : null}
               </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor='password'
-                className='block text-sm font-medium text-gray-700'
-              >
-                Password
-              </label>
-              <div className='mt-1'>
-                <input
-                  id='password'
-                  ref={passwordRef}
+              <div className='input_item'>
+                <ComposeTextInput
+                  name='email'
+                  label={'Email'}
+                  error={email.error}
+                  required={true}
+                  type='email'
+                />
+              </div>
+              <div className='input_item'>
+                <ComposeTextInput
                   name='password'
+                  label={'Password'}
+                  error={password.error}
+                  required={true}
                   type='password'
-                  autoComplete='new-password'
-                  aria-invalid={actionData?.errors?.password ? true : undefined}
-                  aria-describedby='password-error'
-                  className='w-full rounded border border-gray-500 px-2 py-1 text-lg'
                 />
-                {actionData?.errors?.password ? (
-                  <div className='pt-1 text-red-700' id='password-error'>
-                    {actionData.errors.password}
-                  </div>
-                ) : null}
               </div>
             </div>
-            <input type='hidden' name='redirectTo' value={redirectTo} />
+            <input type='hidden' name='redirectTo' value={'/studio'} />
             <button
               type='submit'
               className='w-full rounded bg-gray-700 px-4 py-2 text-white hover:bg-gray-600 focus:bg-gray-500'

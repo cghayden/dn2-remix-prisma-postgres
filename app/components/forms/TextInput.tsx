@@ -8,6 +8,7 @@ export type TextInputProps = {
   defaultValue?: string
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   classProps?: string
+  type: string
 }
 
 export function TextInput({
@@ -20,6 +21,7 @@ export function TextInput({
   validationError,
   onChange,
   classProps,
+  type = 'text',
 }: TextInputProps) {
   return (
     <>
@@ -34,7 +36,7 @@ export function TextInput({
           id={name}
           required={required}
           name={name}
-          type='text'
+          type={type}
           autoComplete={name}
           aria-invalid={ariaInvalid}
           aria-describedby={`${name}-error`}
@@ -58,6 +60,7 @@ export type ComposeTextInputProps = {
   required?: boolean
   defaultValue?: string
   error: string | undefined
+  type?: string
 }
 
 export function ComposeTextInput({
@@ -66,6 +69,7 @@ export function ComposeTextInput({
   required,
   defaultValue,
   error,
+  type = 'text',
 }: ComposeTextInputProps) {
   return (
     <>
@@ -79,7 +83,7 @@ export function ComposeTextInput({
         id={name}
         required={required}
         name={name}
-        type='text'
+        type={type}
         autoComplete={name}
         aria-invalid={error ? 'true' : undefined}
         aria-describedby={error ? `${name}-error` : undefined}
