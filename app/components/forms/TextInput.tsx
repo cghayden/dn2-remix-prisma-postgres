@@ -13,11 +13,11 @@ export type TextInputProps = {
 export function TextInput({
   label,
   name,
-  refProp,
   required,
-  validationError,
-  ariaInvalid,
   defaultValue,
+  refProp,
+  ariaInvalid,
+  validationError,
   onChange,
   classProps,
 }: TextInputProps) {

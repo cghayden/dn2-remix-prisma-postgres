@@ -2,11 +2,11 @@ import { json, type ActionFunctionArgs } from '@remix-run/node'
 import {
   upsertSkillLevel,
   upsertAgeLevel,
-  getUserIdAsStudio,
+  requireStudioUserId,
 } from '~/models/studio.server'
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const userId = await getUserIdAsStudio(request)
+  const userId = await requireStudioUserId(request)
   const formData = await request.formData()
   const levelId = formData.get('levelId')
   const newLevelName = formData.get('newLevelName')

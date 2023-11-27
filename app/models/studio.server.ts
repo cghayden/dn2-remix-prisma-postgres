@@ -14,8 +14,9 @@ import { requireUserId } from '~/session.server'
 import { getUserById } from './user.server'
 import { redirect } from '@remix-run/node'
 
+// return logged in studio without password
 export async function requireStudio(request: Request) {
-  // check for UserId - if none, no one is logged in, redirect to /welcome
+  // check for UserId on session - if none, no one is logged in, redirect to /welcome
   const userId = await requireUserId(request)
 
   // get User, check user type for 'STUDIO'
@@ -27,9 +28,10 @@ export async function requireStudio(request: Request) {
   return userWithoutPassword
 }
 
-export async function getUserIdAsStudio(request: Request) {
-  const user = await requireStudio(request)
-  return user.userId
+// return logged in Studio UserId
+export async function requireStudioUserId(request: Request) {
+  const studio = await requireStudio(request)
+  return studio.userId
 }
 
 export async function createStudio(

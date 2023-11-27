@@ -5,7 +5,11 @@ import {
   redirect,
 } from '@remix-run/node'
 import { Form, useActionData, useLoaderData } from '@remix-run/react'
-import { createStudioDance, getStudioConfig } from '~/models/studio.server'
+import {
+  createStudioDance,
+  getStudioConfig,
+  requireStudioUserId,
+} from '~/models/studio.server'
 import { getUserId } from '~/session.server'
 import { z } from 'zod'
 import { conform, useForm } from '@conform-to/react'
@@ -13,7 +17,7 @@ import { parse } from '@conform-to/zod'
 import { ComposeTextInput } from '~/components/forms/TextInput'
 import { PageHeader } from '~/components/styledComponents/PageHeader'
 
-const schema = z.object({
+const danceSchema = z.object({
   name: z.string({ required_error: 'Name is required' }),
   performanceName: z.string().min(3).optional(),
   ageLevelId: z.string(),
@@ -25,26 +29,36 @@ const schema = z.object({
 })
 
 export async function action({ request }: ActionFunctionArgs) {
-  const userId = await getUserId(request)
-  if (!userId) throw new Error('you must be logged in to create a dance')
+  const studioId = await requireStudioUserId(request)
   const formData = await request.formData()
-  const submission = parse(formData, { schema })
+  const submission = parse(formData, { schema: danceSchema })
   console.log('submission', submission)
 
   if (submission.intent !== 'submit' || !submission.value) {
     return json(submission)
   }
 
+  const {
+    name,
+    performanceName,
+    ageLevelId,
+    competitions,
+    recital,
+    skillLevelId,
+    tights,
+    shoes,
+  } = submission.value
+
   await createStudioDance({
-    name: submission.value.name,
-    performanceName: submission.value.performanceName || null,
-    studioId: userId,
-    ageLevelId: submission.value.ageLevelId,
-    competitions: submission.value.competitions,
-    recital: submission.value.recital,
-    skillLevelId: submission.value.skillLevelId,
-    // tights: submission.value.tights ?? null,
-    // shoes: submission.value.shoes ?? null,
+    name,
+    performanceName: performanceName || null,
+    studioId,
+    ageLevelId,
+    competitions,
+    recital,
+    skillLevelId,
+    // tights,
+    // shoes,
   }).catch((err) => {
     throw new Error(err.message)
   })
@@ -65,8 +79,7 @@ export default function AddDanceClass() {
   const lastSubmission = useActionData<typeof action>()
   console.log('lastSubmission', lastSubmission)
 
-  // The `useForm` hook will return everything you need to setup a form
-  // including the error and config of each field
+  // The `useForm` hook will return everything you need to setup a form including the error and config of each field
   const [
     form,
     {
@@ -80,9 +93,7 @@ export default function AddDanceClass() {
       tights,
     },
   ] = useForm({
-    // The last submission will be used to report the error and
-    // served as the default value and initial error of the form
-    // for progressive enhancement
+    // The last submission will be used to report the error and serves as the default value and initial error of the form for progressive enhancement
     lastSubmission,
     // run validation logic on client (if slow connection)
     // shouldValidate: 'onBlur',
