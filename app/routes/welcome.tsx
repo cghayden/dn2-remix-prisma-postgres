@@ -10,60 +10,56 @@ export default function Welcome() {
   const [showUserTypeChoice, toggleShowUserTypeChoice] = useState(false)
   // const user = useOptionalUser()
   return (
-    <main className='relative min-h-screen sm:flex sm:items-center sm:justify-center'>
-      <div className='relative sm:pb-16'>
-        <div className='mx-auto max-w-7xl sm:px-6 lg:px-8'>
-          <div className='h-screen w-screen relative shadow-xl sm:overflow-hidden'>
-            <div className='absolute inset-0'>
-              <img
-                className='h-full w-full object-cover'
-                src={stageLights}
-                alt='stage lights'
-              />
-              <div className='absolute inset-0 bg-[color:rgba(27,167,254,0.4)] mix-blend-multiply' />
-            </div>
-            <div className='grid place-items-center h-full'>
-              <div className='relative'>
-                <h1 className=' text-center text-5xl font-extrabold tracking-tight sm:text-6xl'>
-                  <span className='block uppercase text-gray-300 drop-shadow-md'>
-                    Dancer Notes
-                  </span>
-                </h1>
-                <div className='mx-auto mt-10 max-w-sm sm:flex sm:max-w-none sm:justify-center'>
-                  <div className='space-y-4 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5 sm:space-y-0'>
-                    {showUserTypeChoice ? (
-                      <>
-                        <Link
-                          to='/parentJoin'
-                          className='flex items-center justify-center rounded-md border border-transparent bg-gray-200 px-4 py-3 text-base font-medium text-gray-800 shadow-sm hover:bg-blue-50 sm:px-8'
-                        >
-                          Parent Signup
-                        </Link>
-                        <Link
-                          to='/studioJoin'
-                          className='flex items-center justify-center rounded-md border border-transparent bg-gray-200 px-4 py-3 text-base font-medium text-gray-700-700 shadow-sm hover:bg-blue-50 sm:px-8'
-                        >
-                          Studio Signup
-                        </Link>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          onClick={() => toggleShowUserTypeChoice(true)}
-                          className='flex items-center justify-center rounded-md border w-full border-transparent bg-gray-200 px-4 py-3 text-base font-medium text-gray-700 shadow-sm hover:bg-blue-50 sm:px-8'
-                        >
-                          Sign up
-                        </button>
-                        <Link
-                          to='/login'
-                          className=' flex items-center justify-center bg-transparent px-4 py-3 rounded-md  font-medium text-gray-200 text-2xl'
-                        >
-                          Log In
-                        </Link>
-                      </>
-                    )}
-                  </div>
-                </div>
+    <main>
+      <div className='h-screen w-screen'>
+        <div className='absolute inset-0'>
+          <img
+            className='h-full w-full object-cover'
+            src={stageLights}
+            alt='stage lights'
+          />
+          <div className='absolute inset-0 bg-[color:rgba(27,167,254,0.4)] mix-blend-multiply' />
+        </div>
+        <div className='grid place-items-center h-full'>
+          <div className='relative'>
+            <h1 className=' text-center text-5xl font-extrabold tracking-tight sm:text-6xl'>
+              <span className='block uppercase text-gray-300 drop-shadow-md'>
+                Dancer Notes
+              </span>
+            </h1>
+            <div className='mx-auto mt-10 max-w-sm sm:flex sm:max-w-none sm:justify-center'>
+              <div className='space-y-4 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5 sm:space-y-0'>
+                {showUserTypeChoice ? (
+                  <>
+                    <Link
+                      to='/parentJoin'
+                      className='flex items-center justify-center rounded-md border border-transparent bg-gray-200 px-4 py-3 text-base font-medium text-gray-800 shadow-sm hover:bg-blue-50 sm:px-8'
+                    >
+                      Parent Signup
+                    </Link>
+                    <Link
+                      to='/studioJoin'
+                      className='flex items-center justify-center rounded-md border border-transparent bg-gray-200 px-4 py-3 text-base font-medium text-gray-700-700 shadow-sm hover:bg-blue-50 sm:px-8'
+                    >
+                      Studio Signup
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => toggleShowUserTypeChoice(true)}
+                      className='flex items-center justify-center rounded-md border w-full border-transparent bg-gray-200 px-4 py-3 font-medium text-gray-700 shadow-sm hover:bg-blue-50 sm:px-8 text-xl'
+                    >
+                      Sign up
+                    </button>
+                    <Link
+                      to='/login'
+                      className=' flex items-center justify-center bg-transparent px-4 py-3 rounded-md  font-medium text-gray-200 text-xl'
+                    >
+                      Log In
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>

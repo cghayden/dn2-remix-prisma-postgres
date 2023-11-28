@@ -39,8 +39,8 @@ export default function App() {
         <Links />
       </head>
       <NavigationProvider>
-        <body className='bg-gray-150 h-min-[100%] font-Inter text-[13px] h-full'>
-          <div className='min-h-screen flex flex-col'>
+        <body className='bg-gray-150 font-Inter text-[13px]'>
+          <div className='min-h-screen'>
             <Outlet />
             <ScrollRestoration />
             <Scripts />

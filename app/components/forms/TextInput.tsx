@@ -76,7 +76,9 @@ export function ComposeTextInput({
       {label && (
         <label htmlFor={name} className='block text-sm text-gray-600 mb-1'>
           {label}
-          {required && <span className='text-xs text-red-800'>Required</span>}
+          {required && (
+            <span className='text-xs text-red-800'>{'  '}Required</span>
+          )}
         </label>
       )}
       <input

@@ -68,11 +68,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return json({})
 }
 
-export default function ParentJoin() {
+export default function StudioJoin() {
   const [searchParams] = useSearchParams()
 
   const lastSubmission = useActionData<typeof action>()
-  console.log('lastSubmission', lastSubmission)
 
   const [form, { name, email, password }] = useForm({
     // The last submission will be used to report the error and serves as the default value and initial error of the form for progressive enhancement
@@ -121,14 +120,15 @@ export default function ParentJoin() {
               </div>
             </div>
             <input type='hidden' name='redirectTo' value={'/studio'} />
-            <button
-              type='submit'
-              className='w-full rounded bg-gray-700 px-4 py-2 text-white hover:bg-gray-600 focus:bg-gray-500'
-            >
-              Create Account
-            </button>
-            <div className='flex items-center justify-center'>
-              <div className='text-center text-sm text-gray-500'>
+
+            <div className='flex flex-col items-center justify-center'>
+              <button
+                type='submit'
+                className='w-full rounded bg-gray-700 px-4 py-2 text-white hover:bg-gray-600 focus:bg-gray-500'
+              >
+                Create Account
+              </button>
+              <div className='text-center text-sm text-gray-500 pt-3'>
                 Already have an account?{' '}
                 <Link
                   className='text-blue-500 underline'
