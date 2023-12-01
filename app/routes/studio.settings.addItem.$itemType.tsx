@@ -14,7 +14,7 @@ import { getUserId } from '~/session.server'
 import { z } from 'zod'
 import { conform, useForm } from '@conform-to/react'
 import { parse } from '@conform-to/zod'
-import { ComposeTextInput } from '~/components/forms/TextInput'
+import { TextInput } from '~/components/forms/TextInput'
 import { PageHeader } from '~/components/styledComponents/PageHeader'
 import type { DanceClass } from '@prisma/client'
 
@@ -102,7 +102,7 @@ export default function AddShoesOrTights() {
           <div className='input_item'>
             <input type='hidden' name='itemType' value={itemType} />
             <input type='hidden' name='itemId' value={'new'} />
-            <ComposeTextInput
+            <TextInput
               name='name'
               label={'Name'}
               error={name.error}
@@ -110,21 +110,17 @@ export default function AddShoesOrTights() {
             />
           </div>
           <div className='input_item'>
-            <ComposeTextInput
+            <TextInput
               name='description'
               label={'Description'}
               error={description.error}
             />
           </div>
           <div className='input_item'>
-            <ComposeTextInput name='url' label={'URL'} error={url.error} />
+            <TextInput name='url' label={'URL'} error={url.error} />
           </div>
           <div className='input_item'>
-            <ComposeTextInput
-              name='image'
-              label={'Image URL'}
-              error={image.error}
-            />
+            <TextInput name='image' label={'Image URL'} error={image.error} />
           </div>
           <fieldset>
             <legend>Select Dance Classes This Item Applies To</legend>

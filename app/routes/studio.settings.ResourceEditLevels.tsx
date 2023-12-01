@@ -4,42 +4,31 @@ import {
   upsertAgeLevel,
   requireStudioUserId,
 } from '~/models/studio.server'
+import { z } from 'zod'
+import { parse } from '@conform-to/zod'
+
+const levelSchema = z.object({
+  levelId: z.string(),
+  newLevelName: z
+    .string()
+    .min(2, { message: 'Level Name Must Be At Least 2 Characters' }),
+  levelDescription: z.string(),
+  levelType: z.string(),
+})
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const userId = await requireStudioUserId(request)
   const formData = await request.formData()
-  const levelId = formData.get('levelId')
-  const newLevelName = formData.get('newLevelName')
-  const levelDescription = formData.get('levelDescription')
-  const levelType = formData.get('levelType')
+  const submission = parse(formData, { schema: levelSchema })
+  console.log('levels submission', submission)
 
-  const errors = {
-    newLevel: null,
-    description: null,
+  if (submission.intent !== 'submit' || !submission.value) {
+    return json(submission)
   }
 
-  if (typeof levelId !== 'string') {
-    return {
-      errors: { ...errors, newLevel: 'ageLevel id was not provided' },
-      status: 400,
-    }
-  }
+  const { levelId, newLevelName, levelDescription, levelType } =
+    submission.value
 
-  if (typeof newLevelName !== 'string' || newLevelName.length === 0) {
-    return {
-      errors: { ...errors, description: 'Name must be a string' },
-      status: 400,
-    }
-  }
-  if (typeof levelDescription !== 'string') {
-    return {
-      errors: { ...errors, description: 'Description must be a string' },
-      status: 400,
-    }
-  }
-
-  // name, description, id
-  // variable - ageLevel or skillLevel
   if (levelType === 'skillLevel') {
     await upsertSkillLevel(userId, levelId, newLevelName, levelDescription)
   }
@@ -47,6 +36,5 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (levelType === 'ageLevel') {
     await upsertAgeLevel(userId, levelId, newLevelName, levelDescription)
   }
-
-  return json({ success: true })
+  return json(submission)
 }

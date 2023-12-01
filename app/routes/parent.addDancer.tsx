@@ -5,7 +5,7 @@ import { createParentDancer } from '~/models/dancer.server'
 import { z } from 'zod'
 import { useForm } from '@conform-to/react'
 import { parse } from '@conform-to/zod'
-import { ComposeTextInput } from '~/components/forms/TextInput'
+import { TextInput } from '~/components/forms/TextInput'
 import { requireParentUserId } from '~/models/parent.server'
 
 export const meta: MetaFunction = () => [{ title: 'Add a Dancer' }]
@@ -57,7 +57,7 @@ export default function AddDancer() {
         <Form method='post' {...form.props} className='form_default'>
           <div className='input_section_wrapper'>
             <div className='input_item'>
-              <ComposeTextInput
+              <TextInput
                 name='firstName'
                 label={'First Name'}
                 error={firstName.error}
@@ -65,7 +65,7 @@ export default function AddDancer() {
               />
             </div>
             <div className='input_item'>
-              <ComposeTextInput
+              <TextInput
                 name='lastName'
                 label={'First Name'}
                 error={lastName.error}

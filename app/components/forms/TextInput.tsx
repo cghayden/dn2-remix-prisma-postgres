@@ -7,51 +7,7 @@ export type TextInputProps = {
   ariaInvalid?: boolean | undefined
   defaultValue?: string
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
-  classProps?: string
-  type: string
-}
-
-export function TextInput({
-  label,
-  name,
-  required,
-  defaultValue,
-  refProp,
-  ariaInvalid,
-  validationError,
-  onChange,
-  classProps,
-  type = 'text',
-}: TextInputProps) {
-  return (
-    <>
-      <div className={`mb-2 mt-2`}>
-        {label && (
-          <label htmlFor={name} className='block text-xs text-gray-600 mb-1'>
-            {label}
-          </label>
-        )}
-        <input
-          ref={refProp}
-          id={name}
-          required={required}
-          name={name}
-          type={type}
-          autoComplete={name}
-          aria-invalid={ariaInvalid}
-          aria-describedby={`${name}-error`}
-          defaultValue={defaultValue}
-          onChange={onChange}
-          className='w-full rounded border bg-gray-50 border-gray-300 text-gray-800 px-2 py-1 focus:ring-2 focus:ring-blue-300 leading-3'
-        />
-        {validationError ? (
-          <div className='pt-1 text-red-700' id={`${name}-error`}>
-            {validationError}
-          </div>
-        ) : null}
-      </div>
-    </>
-  )
+  type?: string
 }
 
 export type ComposeTextInputProps = {
@@ -61,15 +17,17 @@ export type ComposeTextInputProps = {
   defaultValue?: string
   error: string | undefined
   type?: string
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-export function ComposeTextInput({
+export function TextInput({
   label,
   name,
   required,
   defaultValue,
   error,
   type = 'text',
+  onChange,
 }: ComposeTextInputProps) {
   return (
     <>
@@ -82,6 +40,7 @@ export function ComposeTextInput({
         </label>
       )}
       <input
+        onChange={onChange}
         id={name}
         required={required}
         name={name}
@@ -100,3 +59,46 @@ export function ComposeTextInput({
     </>
   )
 }
+
+// plain JSX text input, with manual validation
+// export function OldTextInput({
+//   label,
+//   name,
+//   required,
+//   defaultValue,
+//   refProp,
+//   ariaInvalid,
+//   validationError,
+//   onChange,
+//   type = 'text',
+// }: TextInputProps) {
+//   return (
+//     <>
+//       <div className={`mb-2 mt-2`}>
+//         {label && (
+//           <label htmlFor={name} className='block text-xs text-gray-600 mb-1'>
+//             {label}
+//           </label>
+//         )}
+//         <input
+//           ref={refProp}
+//           id={name}
+//           required={required}
+//           name={name}
+//           type={type}
+//           autoComplete={name}
+//           aria-invalid={ariaInvalid}
+//           aria-describedby={`${name}-error`}
+//           defaultValue={defaultValue}
+//           onChange={onChange}
+//           className='w-full rounded border bg-gray-50 border-gray-300 text-gray-800 px-2 py-1 focus:ring-2 focus:ring-blue-300 leading-3'
+//         />
+//         {validationError ? (
+//           <div className='pt-1 text-red-700' id={`${name}-error`}>
+//             {validationError}
+//           </div>
+//         ) : null}
+//       </div>
+//     </>
+//   )
+// }

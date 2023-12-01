@@ -14,7 +14,7 @@ import { getUserId } from '~/session.server'
 import { z } from 'zod'
 import { conform, useForm } from '@conform-to/react'
 import { parse } from '@conform-to/zod'
-import { ComposeTextInput } from '~/components/forms/TextInput'
+import { TextInput } from '~/components/forms/TextInput'
 import { PageHeader } from '~/components/styledComponents/PageHeader'
 
 const danceSchema = z.object({
@@ -108,7 +108,7 @@ export default function AddDanceClass() {
       <Form method='post' {...form.props} className='form_default'>
         <div className='input_section_wrapper'>
           <div className='input_item'>
-            <ComposeTextInput
+            <TextInput
               name='name'
               label={'Name'}
               error={name.error}
@@ -116,7 +116,7 @@ export default function AddDanceClass() {
             />
           </div>
           <div className='input_item'>
-            <ComposeTextInput
+            <TextInput
               name='performanceName'
               label={'Performance Name'}
               error={performanceName.error}
@@ -191,7 +191,7 @@ export default function AddDanceClass() {
           </div>
           <div>{recital.error}</div>
           <div className='input_item'>
-            <ComposeTextInput
+            <TextInput
               name='tights'
               label={'Tights'}
               error={tights.error}
@@ -199,7 +199,7 @@ export default function AddDanceClass() {
             />
           </div>
           <div className='input_item'>
-            <ComposeTextInput
+            <TextInput
               name='shoes'
               label={'Shoes'}
               error={shoes.error}

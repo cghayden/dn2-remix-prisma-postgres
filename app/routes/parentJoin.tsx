@@ -7,7 +7,7 @@ import { json, redirect } from '@remix-run/node'
 import { Form, Link, useActionData, useSearchParams } from '@remix-run/react'
 import { z } from 'zod'
 import { useForm } from '@conform-to/react'
-import { ComposeTextInput } from '~/components/forms/TextInput'
+import { TextInput } from '~/components/forms/TextInput'
 import { createParent } from '~/models/parent.server'
 import { getUserByEmail } from '~/models/user.server'
 import { createUserSession, getUserId } from '~/session.server'
@@ -91,7 +91,7 @@ export default function ParentJoin() {
           <Form method='post' {...form.props} className='form_default'>
             <div className='input_section_wrapper'>
               <div className='input_item'>
-                <ComposeTextInput
+                <TextInput
                   name='email'
                   label={'Email ( also used to login )'}
                   error={email.error}
@@ -100,7 +100,7 @@ export default function ParentJoin() {
                 />
               </div>
               <div className='input_item'>
-                <ComposeTextInput
+                <TextInput
                   name='firstName'
                   label={'First Name'}
                   error={firstName.error}
@@ -108,7 +108,7 @@ export default function ParentJoin() {
                 />
               </div>
               <div className='input_item'>
-                <ComposeTextInput
+                <TextInput
                   name='lastName'
                   label={'Last Name'}
                   error={lastName.error}
@@ -117,7 +117,7 @@ export default function ParentJoin() {
               </div>
 
               <div className='input_item'>
-                <ComposeTextInput
+                <TextInput
                   name='password'
                   label={'Password'}
                   error={password.error}

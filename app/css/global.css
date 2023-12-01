@@ -31,6 +31,8 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr 80px;
   align-items: center;
+  margin: 6px 0;
+  gap: 10px;
 }
 
 .levels_edit div:not(:last-child) {

@@ -8,7 +8,7 @@ import { Form, Link, useActionData, useSearchParams } from '@remix-run/react'
 import { z } from 'zod'
 
 import { useForm } from '@conform-to/react'
-import { ComposeTextInput } from '~/components/forms/TextInput'
+import { TextInput } from '~/components/forms/TextInput'
 import { createStudio } from '~/models/studio.server'
 
 import { getUserByEmail } from '~/models/user.server'
@@ -32,6 +32,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const type = 'STUDIO'
   const formData = await request.formData()
   const submission = parse(formData, { schema: studioJoinSchema })
+  console.log(' join submission', submission)
   const redirectTo = safeRedirect(formData.get('redirectTo'), '/')
 
   if (submission.intent !== 'submit' || !submission.value) {
@@ -72,6 +73,7 @@ export default function StudioJoin() {
   const [searchParams] = useSearchParams()
 
   const lastSubmission = useActionData<typeof action>()
+  console.log('lastSubmission', lastSubmission)
 
   const [form, { name, email, password }] = useForm({
     // The last submission will be used to report the error and serves as the default value and initial error of the form for progressive enhancement
@@ -82,6 +84,7 @@ export default function StudioJoin() {
     //   return parse(formData, { schema })
     // },
   })
+  console.log('name', name)
   return (
     <div className='flex min-h-screen flex-col justify-center'>
       <div className='grid place items-center'>
@@ -93,7 +96,7 @@ export default function StudioJoin() {
           <Form method='post' {...form.props} className='form_default'>
             <div className='input_section_wrapper'>
               <div className='input_item'>
-                <ComposeTextInput
+                <TextInput
                   name='name'
                   label={'Name'}
                   error={name.error}
@@ -101,7 +104,7 @@ export default function StudioJoin() {
                 />
               </div>
               <div className='input_item'>
-                <ComposeTextInput
+                <TextInput
                   name='email'
                   label={'Email'}
                   error={email.error}
@@ -110,7 +113,7 @@ export default function StudioJoin() {
                 />
               </div>
               <div className='input_item'>
-                <ComposeTextInput
+                <TextInput
                   name='password'
                   label={'Password'}
                   error={password.error}

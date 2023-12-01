@@ -34,7 +34,7 @@ export default function SkillLevelsPage() {
           {editMode ? 'Cancel' : 'Edit / Add New Skill Level'}
         </button>
       </div>
-      <ContentContainer>
+      <ContentContainer className='max-w-[800px]'>
         <thead className='block'>
           <tr className='bg-gray-200 py-1 grid grid-cols-2 justify-items-start rounded-t-md'>
             <th className='pl-2'>Name</th>
