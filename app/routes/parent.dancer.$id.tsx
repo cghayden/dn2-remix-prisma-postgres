@@ -1,5 +1,5 @@
 import { type LoaderFunctionArgs, json, redirect } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import { Form, useLoaderData } from '@remix-run/react'
 import { ContentContainer } from '~/components/styledComponents/ContentContainer'
 import { getDancer } from '~/models/dancer.server'
 
@@ -26,6 +26,18 @@ export default function DancerIndex() {
         <div className='p-8'>
           <p>{dancer.firstName}</p>
         </div>
+        {dancer.img ? (
+          <p>display image</p>
+        ) : (
+          <Form>
+            <div className='input_item'>
+              <div>
+                <label>Add an image for {dancer.firstName}</label>
+                <input type='file' accept='image/*' name='imgFile' />
+              </div>
+            </div>
+          </Form>
+        )}
       </ContentContainer>
     </>
   )

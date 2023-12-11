@@ -73,10 +73,10 @@ export default function AddDancer() {
                 required={true}
               />
             </div>
-            <div className='input_item'>
+            {/* <div className='input_item'>
               <label>Add an image</label>
               <input type='file' accept='image/*' name='imgFile' />
-            </div>
+            </div> */}
           </div>
           <button
             type='submit'
