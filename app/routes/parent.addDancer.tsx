@@ -72,6 +72,10 @@ export default function AddDancer() {
                 required={true}
               />
             </div>
+            <div className='input_item'>
+              <label>Add an image</label>
+              <input />
+            </div>
           </div>
           <button
             type='submit'

@@ -8,24 +8,25 @@ import type { NavLink } from 'types'
 // type UserNavData = {
 //   dancers: Dancer['id' | 'firstName']
 // }
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  // check for userId(logged in user) and 'PARENT' type, return id if so
-  const userId = await requireParentUserId(request)
-  const parentNavData = await prisma.parent.findUnique({
-    where: {
-      userId: userId,
-    },
-    select: {
-      dancers: {
-        select: {
-          firstName: true,
-          id: true,
-        },
-      },
-    },
-  })
-  return parentNavData
-}
+
+// export const loader = async ({ request }: LoaderFunctionArgs) => {
+//   // check for userId(logged in user) and 'PARENT' type, return id if so
+//   const userId = await requireParentUserId(request)
+//   const parentNavData = await prisma.parent.findUnique({
+//     where: {
+//       userId: userId,
+//     },
+//     select: {
+//       dancers: {
+//         select: {
+//           firstName: true,
+//           id: true,
+//         },
+//       },
+//     },
+//   })
+//   return parentNavData
+// }
 
 function ParentLayout() {
   // const parentNavData = useLoaderData<typeof loader>()
