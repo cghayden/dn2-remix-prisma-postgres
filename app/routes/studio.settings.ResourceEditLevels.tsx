@@ -12,7 +12,7 @@ const levelSchema = z.object({
   newLevelName: z
     .string()
     .min(2, { message: 'Level Name Must Be At Least 2 Characters' }),
-  levelDescription: z.string(),
+  levelDescription: z.string().optional(),
   levelType: z.string(),
 })
 

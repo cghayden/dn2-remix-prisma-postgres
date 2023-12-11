@@ -7,7 +7,8 @@ import { type action } from '../../routes/studio.settings.ResourceEditLevels'
 
 type LevelEditableListProps = {
   level?: AgeLevel | SkillLevel
-  levelType: 'skillLevel' | 'ageLevel'
+  // levelType: 'skillLevel' | 'ageLevel'
+  levelType: string
   formRef?: React.RefObject<HTMLFormElement>
 }
 
@@ -17,7 +18,8 @@ export function UpsertLevelForm({
   formRef,
 }: LevelEditableListProps) {
   const fetcher = useFetcher<typeof action>()
-  const lastSubmission = fetcher.data
+  console.log('fetcher', fetcher)
+  const lastSubmission = fetcher?.data
   console.log('lastSubmission', lastSubmission)
   let success = fetcher?.data
   let isSaving = fetcher.state === 'submitting'
@@ -31,10 +33,9 @@ export function UpsertLevelForm({
     }
   }, [success, fetcherState, formRef])
 
-  const [form, { newLevelName, levelDescription }] = useForm({
+  const [form] = useForm({
     lastSubmission,
   })
-  console.log('newLevelName', newLevelName)
 
   return (
     <fetcher.Form
@@ -53,16 +54,22 @@ export function UpsertLevelForm({
           name='newLevelName'
           defaultValue={level?.name ?? ''}
           onChange={() => toggleShowSaveButton(true)}
-          error={lastSubmission?.error?.newLevelName[0]}
-          // error={newLevelName.error}
+          error={
+            lastSubmission?.error?.newLevelName
+              ? lastSubmission?.error?.newLevelName[0]
+              : undefined
+          }
         />
         <TextInput
           label={''}
           name='levelDescription'
           defaultValue={level?.description ?? ''}
           onChange={() => toggleShowSaveButton(true)}
-          error={lastSubmission?.error?.levelDescription[0]}
-          // error={levelDescription.error}
+          error={
+            lastSubmission?.error?.levelDescription
+              ? lastSubmission?.error?.levelDescription[0]
+              : undefined
+          }
         />
         <div className='w-[80px]'>
           {showSaveButton && (

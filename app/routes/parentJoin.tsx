@@ -25,7 +25,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 const studioJoinSchema = z.object({
   firstName: z
     .string({ required_error: 'First Name is required' })
-    .min(3, { message: 'First Name Must Be At Least 2 Characters' }),
+    .min(2, { message: 'First Name Must Be At Least 2 Characters' }),
   lastName: z
     .string({ required_error: 'Last Name is required' })
     .min(3, { message: 'First Name Must Be At Least 2 Characters' }),

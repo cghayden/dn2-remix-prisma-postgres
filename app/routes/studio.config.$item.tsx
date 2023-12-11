@@ -1,36 +1,54 @@
-import { type LoaderFunctionArgs } from '@remix-run/node'
+import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { useRef, useState } from 'react'
 import { UpsertLevelForm } from '~/components/studios/UpsertLevelForm'
 import { LevelList } from '~/components/studios/LevelList'
 import { ContentContainer } from '~/components/styledComponents/ContentContainer'
 import { PageHeader } from '~/components/styledComponents/PageHeader'
-import { getAgeLevels } from '~/models/studio.server'
+import { getAgeLevels, getSkillLevels } from '~/models/studio.server'
 import { requireUserId } from '~/session.server'
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+// export async function loader({ request }: LoaderFunctionArgs) {
+//   const url = new URL(request.url);
+//   const  = url.searchParams.get("")
+
+//   return {}
+// }
+
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request)
-  const ageLevels = await getAgeLevels(userId)
-  if (!ageLevels) {
-    throw new Error('Oh no! ageLevels could not be loaded')
+  const item = params.item
+  console.log('item', item)
+  // item = "ageLevels" | "skillLevels" | "shoes" | "tights"
+  switch (item) {
+    case 'ageLevels': {
+      const data = await getAgeLevels(userId)
+      return json({ data, page: 'Age Levels', itemType: 'ageLevel' })
+    }
+    case 'skillLevels': {
+      const data = await getSkillLevels(userId)
+      return json({ data, page: 'Skill Levels', itemType: 'skillLevel' })
+    }
+    default:
+      throw new Error('no query provided')
   }
-  return ageLevels
 }
-export default function AgeLevelsPage() {
+
+export default function ItemListingPage() {
   const formRef = useRef<HTMLFormElement>(null)
-  const levels = useLoaderData<typeof loader>()
+  const { data, page, itemType } = useLoaderData<typeof loader>()
   const [editMode, toggleEditMode] = useState(false)
   return (
     <div>
       <div>
-        <PageHeader headerText='Age Levels' />
+        <PageHeader headerText={page} />
       </div>
       <div className='text-right mb-2 pr-4'>
         <button
           className='text-white bg-gray-700 p-2 rounded-md '
           onClick={() => toggleEditMode(!editMode)}
         >
-          {editMode ? 'Cancel' : 'Edit / Add New Age Level'}
+          {editMode ? 'Cancel' : `Edit / Add New ${page}`}
         </button>
       </div>
       <ContentContainer>
@@ -42,18 +60,19 @@ export default function AgeLevelsPage() {
         </thead>
         {editMode ? (
           <>
-            {levels.map((level) => (
+            {data.map((level) => (
               <UpsertLevelForm
                 key={level.id}
                 level={level}
-                levelType='ageLevel'
+                // levelType='ageLevel'
+                levelType={itemType}
               />
             ))}
           </>
         ) : (
-          <LevelList levels={levels} />
+          <LevelList levels={data} />
         )}
-        {editMode && <UpsertLevelForm formRef={formRef} levelType='ageLevel' />}
+        {editMode && <UpsertLevelForm formRef={formRef} levelType={itemType} />}
       </ContentContainer>
     </div>
   )
