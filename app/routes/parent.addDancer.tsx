@@ -32,8 +32,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const { firstName, lastName } = submission.value
 
   // dont allow parent to create a dancer with the same name?
-  await createParentDancer(firstName, lastName, userId)
-  return redirect('/parent')
+  const newDancer = await createParentDancer(firstName, lastName, userId)
+  console.log('newDancer', newDancer)
+  return redirect(`/parent/dancer/${newDancer.id}`)
 }
 
 export default function AddDancer() {
@@ -67,14 +68,14 @@ export default function AddDancer() {
             <div className='input_item'>
               <TextInput
                 name='lastName'
-                label={'First Name'}
+                label={'Last Name'}
                 error={lastName.error}
                 required={true}
               />
             </div>
             <div className='input_item'>
               <label>Add an image</label>
-              <input />
+              <input type='file' accept='image/*' name='imgFile' />
             </div>
           </div>
           <button
