@@ -1,20 +1,48 @@
-import { type LoaderFunctionArgs, json, redirect } from '@remix-run/node'
-import { Form, useLoaderData } from '@remix-run/react'
+import {
+  type LoaderFunctionArgs,
+  type ActionFunctionArgs,
+  type UploadHandler,
+} from '@remix-run/node'
+import {
+  json,
+  unstable_composeUploadHandlers as composeUploadHandlers,
+  unstable_createMemoryUploadHandler as createMemoryUploadHandler,
+  unstable_parseMultipartFormData as parseMultipartFormData,
+  redirect,
+} from '@remix-run/node'
+import {
+  Form,
+  Link,
+  Outlet,
+  useActionData,
+  useLoaderData,
+  useOutletContext,
+} from '@remix-run/react'
 import { ContentContainer } from '~/components/styledComponents/ContentContainer'
 import { getDancer } from '~/models/dancer.server'
-
-import { useForm } from '@conform-to/react'
-import { parse } from '@conform-to/zod'
-import { z } from 'zod'
+// import { myUploadHandler, s3UploadHandler } from '~/lib/s3UploadHandler.server'
+// import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+// import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { useState } from 'react'
+// import { formatUrl } from '@aws-sdk/util-format-url'
+import { s3UploadHandler } from '~/lib/s3UploadHandler.server'
 
-const schema = z.object({
-  imgFile: z.instanceof(File, { message: 'file is required' }),
-})
+export const action = async ({ request }: ActionFunctionArgs) => {
+  //get presigned url
+
+  //send url to front end
+
+  const uploadHandler: UploadHandler = composeUploadHandlers(
+    s3UploadHandler,
+    createMemoryUploadHandler()
+  )
+  const formData = await parseMultipartFormData(request, uploadHandler)
+  return json({ action: 'trial' })
+}
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const dancerId = params.id
-  console.log('dancerId', dancerId)
+
   if (!dancerId) {
     return redirect('/parent')
   }
@@ -22,36 +50,18 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   if (!dancer || !dancer.id) {
     return redirect('/parent')
   }
+
   return json({ dancer })
 }
 
+type ContextType = {
+  showForm: boolean
+  toggleShowForm: React.Dispatch<React.SetStateAction<boolean>>
+}
+
 export default function DancerIndex() {
+  const [showForm, toggleShowForm] = useState<boolean>(false)
   const { dancer } = useLoaderData<typeof loader>()
-  const [file, setFile] = useState(undefined)
-  console.log('file', file)
-
-  const [form, { imgFile }] = useForm({
-    onValidate({ formData }) {
-      return parse(formData, { schema })
-    },
-  })
-  console.log('imgFile from component', imgFile)
-
-  const onFileChange = (e) => {
-    console.log('file input change', e.target.files)
-    setFile(e.target.files[0])
-  }
-
-  const handleImageSave = (e: React.SyntheticEvent) => {
-    e.preventDefault()
-    console.log('e:', e)
-    const target = e.target as typeof e.target & {
-      imgFile: { value: string }
-    }
-    const imgFile = target.imgFile.value // typechecks!
-    console.log('imgFile in handle submit', imgFile)
-    // etc...
-  }
 
   return (
     <>
@@ -60,29 +70,25 @@ export default function DancerIndex() {
         <div className='p-8'>
           <p>{dancer.firstName}</p>
         </div>
-        {dancer.img ? (
-          <p>display image</p>
-        ) : (
-          <Form
-            encType='multipart/form-data'
-            {...form.props}
-            onSubmit={(e) => handleImageSave(e)}
-          >
-            <div className='input_item'>
-              <label className='block'>
-                Add an image for {dancer.firstName}
-              </label>
-              <input
-                type='file'
-                accept='image/*'
-                name='imgFile'
-                onChange={(e) => onFileChange(e)}
-              />
-              <button>Save Image</button>
-            </div>
-          </Form>
+        {!showForm && (
+          <div className='py-4 px-8'>
+            <Link
+              to={`addImage`}
+              className='btn btn-action'
+              onClick={() => toggleShowForm(true)}
+            >
+              Add Image
+            </Link>
+          </div>
         )}
+        <Outlet context={{ showForm, toggleShowForm } satisfies ContextType} />
       </ContentContainer>
     </>
   )
 }
+
+export function useFormState() {
+  return useOutletContext<ContextType>()
+}
+
+// If you're using TypeScript, we recommend the parent component provide a custom hook for accessing the context value. This makes it easier for consumers to get nice typings, control consumers, and know who's consuming the context value. Here's a more realistic example:

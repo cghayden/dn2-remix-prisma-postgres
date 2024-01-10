@@ -9,14 +9,14 @@ import {
 } from '@remix-run/react'
 import styles from './tailwind.css'
 import cssGlobals from './css/global.css'
+import buttons from './css/buttons.css'
 import '@fontsource/inter/400.css'
 import { NavigationProvider } from './components/context/NavContext'
-// Supports weights 100-900
-// import '@fontsource-variable/inter'
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: styles },
   { rel: 'stylesheet', href: cssGlobals },
+  { rel: 'stylesheet', href: buttons },
 ]
 
 export default function App() {

@@ -1,0 +1,17 @@
+.btn {
+  border-radius: 0.5rem;
+  padding: 8px 12px;
+  color: var(--tw-slate-50);
+}
+
+.btn-action {
+  background: var(--tw-indigo-500);
+}
+
+.btn-confirm {
+  background: var(--tw-cyan-600);
+}
+
+.btn-cancel {
+  background: var(--tw-rose-700);
+}

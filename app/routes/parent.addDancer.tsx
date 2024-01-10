@@ -33,7 +33,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   // dont allow parent to create a dancer with the same name?
   const newDancer = await createParentDancer(firstName, lastName, userId)
-  console.log('newDancer', newDancer)
   return redirect(`/parent/dancer/${newDancer.id}`)
 }
 
@@ -52,7 +51,7 @@ export default function AddDancer() {
   })
 
   return (
-    <div className='flex min-h-screen flex-col justify-center'>
+    <div className='flex min-h-screen flex-col'>
       <h3 className='py-8 text-lg text-center'>Add a New Dancer</h3>
       <div className='mx-auto w-full max-w-md px-8'>
         <Form method='post' {...form.props} className='form_default'>

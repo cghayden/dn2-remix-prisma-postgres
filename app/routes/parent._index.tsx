@@ -28,7 +28,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export default function ParentIndex() {
   const { parent } = useLoaderData<typeof loader>()
-  console.log('parent index data:', parent)
   if (!parent.dancers.length) {
     return (
       <div>
