@@ -23,7 +23,7 @@ import { getDancer } from '~/models/dancer.server'
 // import { myUploadHandler, s3UploadHandler } from '~/lib/s3UploadHandler.server'
 // import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 // import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 // import { formatUrl } from '@aws-sdk/util-format-url'
 import { s3UploadHandler } from '~/lib/s3UploadHandler.server'
 
@@ -62,6 +62,10 @@ type ContextType = {
 export default function DancerIndex() {
   const [showForm, toggleShowForm] = useState<boolean>(false)
   const { dancer } = useLoaderData<typeof loader>()
+
+  useEffect(() => {
+    toggleShowForm(false)
+  }, [])
 
   return (
     <>

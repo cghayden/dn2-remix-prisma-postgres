@@ -5,13 +5,24 @@
 }
 
 .btn-action {
-  background: var(--tw-indigo-500);
+  background-color: var(--tw-indigo-500);
+}
+
+.btn-action:disabled {
+  background-color: var(--tw-slate-300);
 }
 
 .btn-confirm {
-  background: var(--tw-cyan-600);
+  background-color: var(--tw-cyan-600);
+}
+
+.btn-confirm:disabled {
+  background-color: var(--tw-slate-300);
 }
 
 .btn-cancel {
-  background: var(--tw-rose-700);
+  background-color: var(--tw-rose-700);
+}
+.btn-cancel:disabled {
+  background-color: var(--tw-slate-300);
 }

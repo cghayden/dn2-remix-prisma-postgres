@@ -1,12 +1,14 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { json, redirect, type LoaderFunctionArgs } from '@remix-run/node'
-import { useLoaderData, useOutletContext } from '@remix-run/react'
+import { useLoaderData, useNavigate } from '@remix-run/react'
 import axios from 'axios'
 import { useState } from 'react'
 import { useFormState } from './parent.dancer.$id'
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
+  const dancerId = params.id
+
   const client = new S3Client({
     credentials: {
       accessKeyId: process.env.STORAGE_ACCESS_KEY!,
@@ -19,17 +21,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     client,
     new PutObjectCommand({
       Bucket: 'dancernotes',
-      Key: 'test123.jpeg',
+      Key: `${dancerId}.jpeg`,
       ContentType: 'image/jpeg',
     })
   )
-
-  // if (!presignedUrl) {
-  //   return json({
-  //     presignedUrl: null,
-  //     error: 'error establishing upload client',
-  //   })
-  // }
 
   if (!presignedUrl) return redirect('../')
 
@@ -37,9 +32,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 function ParentAddImage() {
+  const navigate = useNavigate()
+
   const { showForm, toggleShowForm } = useFormState()
   const { presignedUrl, error } = useLoaderData<typeof loader>()
+  console.log('presignedUrl', presignedUrl)
   const [file, setFile] = useState<File | null>()
+  const [submitting, setSubmitting] = useState(false)
 
   if (error || !presignedUrl) {
     return (
@@ -51,6 +50,7 @@ function ParentAddImage() {
   }
   const handleS3Upload = async (e: React.SyntheticEvent) => {
     e.preventDefault()
+    setSubmitting(true)
     // if(!file){
     //   return null
     // }
@@ -61,10 +61,16 @@ function ParentAddImage() {
             'Content-Type': file.type,
           },
         })
-        console.log('Upload successful', response)
+        console.log('Upload successful:', response)
+        setSubmitting(false)
+        toggleShowForm(false)
+        navigate('..', {
+          replace: true,
+        })
         // Handle successful upload response
       } catch (error) {
         console.error('Upload failed', error)
+        setSubmitting(false)
         // Handle upload error
       }
     }
@@ -74,29 +80,31 @@ function ParentAddImage() {
     <>
       {showForm ? (
         <form onSubmit={handleS3Upload} className='py-4 px-8'>
-          <div className='input_item'>
-            <input
-              type='file'
-              accept='image/jpeg'
-              name='img'
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (e.target.files) {
-                  setFile(e.target.files[0])
-                }
-              }}
-            />
-            <div className='pt-4'>
-              <button className='btn btn-confirm mr-4' type='submit'>
-                Save Image
-              </button>
-              <button
-                className='btn btn-cancel'
-                onClick={() => toggleShowForm(false)}
-              >
-                Cancel
-              </button>
+          <fieldset disabled={submitting}>
+            <div className='input_item'>
+              <input
+                type='file'
+                accept='image/jpeg'
+                name='img'
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (e.target.files) {
+                    setFile(e.target.files[0])
+                  }
+                }}
+              />
+              <div className='pt-4'>
+                <button className='btn btn-confirm mr-4' type='submit'>
+                  Save Image
+                </button>
+                <button
+                  className='btn btn-cancel'
+                  onClick={() => toggleShowForm(false)}
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
-          </div>
+          </fieldset>
         </form>
       ) : null}
     </>
