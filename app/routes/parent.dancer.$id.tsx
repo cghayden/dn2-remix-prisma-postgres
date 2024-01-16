@@ -50,6 +50,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   if (!dancer || !dancer.id) {
     return redirect('/parent')
   }
+  console.log('dancer', dancer)
 
   return json({ dancer })
 }
@@ -72,6 +73,12 @@ export default function DancerIndex() {
       <h1 className='text-xl font-bold py-4'>Dancer Page/Index</h1>
       <ContentContainer>
         <div className='p-8'>
+          <div className='w-36'>
+            <img
+              src={`https://dancernotes.s3.us-east-2.amazonaws.com/${dancer.imageFilename}`}
+              alt='dancerImage'
+            />
+          </div>
           <p>{dancer.firstName}</p>
         </div>
         {!showForm && (
