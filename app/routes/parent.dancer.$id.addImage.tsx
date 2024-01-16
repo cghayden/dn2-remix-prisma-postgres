@@ -1,7 +1,7 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { json, redirect, type LoaderFunctionArgs } from '@remix-run/node'
-import { useLoaderData, useNavigate, useSubmit } from '@remix-run/react'
+import { useLoaderData, useSubmit } from '@remix-run/react'
 import axios from 'axios'
 import { useState } from 'react'
 import { useFormState } from './parent.dancer.$id'
@@ -34,9 +34,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 }
 
 function ParentAddImage() {
-  // const navigate = useNavigate()
   const submit = useSubmit()
-
   const { showForm, toggleShowForm } = useFormState()
   const { presignedUrl, error, fileKey, dancerId } =
     useLoaderData<typeof loader>()
@@ -65,16 +63,16 @@ function ParentAddImage() {
             'Content-Type': file.type,
           },
         })
-        console.log('Upload successful:', response)
+        // TODO - set busy UI
         // setSubmitting(false)
         // toggleShowForm(false)
         // navigate('..', {
         //   replace: true,
         // })
+
         // Handle successful upload response: save and redirect, -> resource route
         const formData = new FormData()
         formData.append('fileKey', fileKey)
-        // formData.append('dancerId', dancerId)
         submit(formData, {
           method: 'post',
           action: `/parent/dancer/${dancerId}/resourceSaveImage`,
@@ -82,7 +80,7 @@ function ParentAddImage() {
       } catch (error) {
         console.error('Upload failed', error)
         setSubmitting(false)
-        // Handle upload error
+        // TODO Handle upload error
       }
     }
   }

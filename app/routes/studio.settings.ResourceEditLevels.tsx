@@ -20,7 +20,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const userId = await requireStudioUserId(request)
   const formData = await request.formData()
   const submission = parse(formData, { schema: levelSchema })
-  console.log('levels submission', submission)
 
   if (submission.intent !== 'submit' || !submission.value) {
     return json(submission)
@@ -28,6 +27,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const { levelId, newLevelName, levelDescription, levelType } =
     submission.value
+
+  //TODO handle missing levelDesription
 
   if (levelType === 'skillLevel') {
     await upsertSkillLevel(userId, levelId, newLevelName, levelDescription)

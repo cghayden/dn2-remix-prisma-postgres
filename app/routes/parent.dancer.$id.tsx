@@ -1,44 +1,9 @@
-import {
-  type LoaderFunctionArgs,
-  type ActionFunctionArgs,
-  type UploadHandler,
-} from '@remix-run/node'
-import {
-  json,
-  unstable_composeUploadHandlers as composeUploadHandlers,
-  unstable_createMemoryUploadHandler as createMemoryUploadHandler,
-  unstable_parseMultipartFormData as parseMultipartFormData,
-  redirect,
-} from '@remix-run/node'
-import {
-  Form,
-  Link,
-  Outlet,
-  useActionData,
-  useLoaderData,
-  useOutletContext,
-} from '@remix-run/react'
+import { type LoaderFunctionArgs } from '@remix-run/node'
+import { json, redirect } from '@remix-run/node'
+import { Link, Outlet, useLoaderData, useOutletContext } from '@remix-run/react'
 import { ContentContainer } from '~/components/styledComponents/ContentContainer'
 import { getDancer } from '~/models/dancer.server'
-// import { myUploadHandler, s3UploadHandler } from '~/lib/s3UploadHandler.server'
-// import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
-// import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { useEffect, useState } from 'react'
-// import { formatUrl } from '@aws-sdk/util-format-url'
-import { s3UploadHandler } from '~/lib/s3UploadHandler.server'
-
-export const action = async ({ request }: ActionFunctionArgs) => {
-  //get presigned url
-
-  //send url to front end
-
-  const uploadHandler: UploadHandler = composeUploadHandlers(
-    s3UploadHandler,
-    createMemoryUploadHandler()
-  )
-  const formData = await parseMultipartFormData(request, uploadHandler)
-  return json({ action: 'trial' })
-}
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const dancerId = params.id
@@ -50,8 +15,6 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   if (!dancer || !dancer.id) {
     return redirect('/parent')
   }
-  console.log('dancer', dancer)
-
   return json({ dancer })
 }
 
@@ -81,6 +44,7 @@ export default function DancerIndex() {
           </div>
           <p>{dancer.firstName}</p>
         </div>
+        {/* TODO move add image to update dancer page */}
         {!showForm && (
           <div className='py-4 px-8'>
             <Link
