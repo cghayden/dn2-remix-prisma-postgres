@@ -1,17 +1,10 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { json, redirect, type LoaderFunctionArgs } from '@remix-run/node'
-import { useLoaderData, useNavigate } from '@remix-run/react'
+import { useLoaderData, useNavigate, useSubmit } from '@remix-run/react'
 import axios from 'axios'
 import { useState } from 'react'
 import { useFormState } from './parent.dancer.$id'
-
-import type { ActionArgs } from '@remix-run/node'
-export async function action({ request, params }: ActionArgs) {
-  const dancerId = params.id
-
-  return {}
-}
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const dancerId = params.id
@@ -24,26 +17,29 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     region: process.env.STORAGE_REGION,
   })
 
+  const fileKey = `${dancerId}.jpeg`
+
   const presignedUrl = await getSignedUrl(
     client,
     new PutObjectCommand({
       Bucket: 'dancernotes',
-      Key: `${dancerId}.jpeg`,
+      Key: fileKey,
       ContentType: 'image/jpeg',
     })
   )
 
   if (!presignedUrl) return redirect('../')
 
-  return json({ presignedUrl, error: null })
+  return json({ presignedUrl, fileKey, dancerId, error: null })
 }
 
 function ParentAddImage() {
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
+  const submit = useSubmit()
 
   const { showForm, toggleShowForm } = useFormState()
-  const { presignedUrl, error } = useLoaderData<typeof loader>()
-  console.log('presignedUrl', presignedUrl)
+  const { presignedUrl, error, fileKey, dancerId } =
+    useLoaderData<typeof loader>()
   const [file, setFile] = useState<File | null>()
   const [submitting, setSubmitting] = useState(false)
 
@@ -55,6 +51,7 @@ function ParentAddImage() {
       </div>
     )
   }
+
   const handleS3Upload = async (e: React.SyntheticEvent) => {
     e.preventDefault()
     setSubmitting(true)
@@ -69,12 +66,19 @@ function ParentAddImage() {
           },
         })
         console.log('Upload successful:', response)
-        setSubmitting(false)
-        toggleShowForm(false)
-        navigate('..', {
-          replace: true,
+        // setSubmitting(false)
+        // toggleShowForm(false)
+        // navigate('..', {
+        //   replace: true,
+        // })
+        // Handle successful upload response: save and redirect, -> resource route
+        const formData = new FormData()
+        formData.append('fileKey', fileKey)
+        // formData.append('dancerId', dancerId)
+        submit(formData, {
+          method: 'post',
+          action: `/parent/dancer/${dancerId}/resourceSaveImage`,
         })
-        // Handle successful upload response
       } catch (error) {
         console.error('Upload failed', error)
         setSubmitting(false)
