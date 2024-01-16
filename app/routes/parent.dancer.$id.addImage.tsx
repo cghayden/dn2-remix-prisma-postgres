@@ -6,6 +6,13 @@ import axios from 'axios'
 import { useState } from 'react'
 import { useFormState } from './parent.dancer.$id'
 
+import type { ActionArgs } from '@remix-run/node'
+export async function action({ request, params }: ActionArgs) {
+  const dancerId = params.id
+
+  return {}
+}
+
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const dancerId = params.id
 

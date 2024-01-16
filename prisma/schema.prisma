@@ -39,14 +39,15 @@ model Parent {
 }
 
 model Dancer {
-  id          String       @id @default(uuid())
-  firstName   String
-  lastName    String
-  birthdate   DateTime?
-  parent      Parent       @relation(fields: [parentId], references: [userId])
-  parentId    String
-  enrollments Enrollment[]
-  studios     Studio[]
+  id            String       @id @default(uuid())
+  firstName     String
+  lastName      String
+  birthdate     DateTime?
+  parent        Parent       @relation(fields: [parentId], references: [userId])
+  parentId      String
+  enrollments   Enrollment[]
+  studios       Studio[]
+  imageFilename String?
 }
 
 model Studio {
