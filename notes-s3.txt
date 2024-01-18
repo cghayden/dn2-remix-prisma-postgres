@@ -1,0 +1,10 @@
+to create a new bucket policy:
+
+go to bucket,
+uncheck Permissions > Block Pulic Access > unselect any 'public bucket policies'
+
+save and follow Grider video instructions - > 
+
+return to bucket permissions and check block public access to any new policies (both)
+
+is this enough  protection?

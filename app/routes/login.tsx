@@ -74,6 +74,7 @@ export default function LoginPage() {
 
   return (
     <div className='flex min-h-screen flex-col justify-center'>
+      <h1 className='text-center pb-1 text-xl'>Login</h1>
       <div className='mx-auto w-full max-w-md px-8 py-8'>
         <Form method='post' className='space-y-6'>
           <div>
@@ -131,7 +132,7 @@ export default function LoginPage() {
           </div>
           <button
             type='submit'
-            className='w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400'
+            className='w-full rounded bg-gray-700 px-4 py-2 text-white hover:bg-gray-600 focus:bg-slate-600'
           >
             Log in
           </button>

@@ -1,5 +1,6 @@
 datasource db {
-  provider = "postgresql"
+  // provider = "postgresql" (for render hosted psql)
+  provider = "cockroachdb"
   url      = env("DATABASE_URL")
 }
 
@@ -38,14 +39,15 @@ model Parent {
 }
 
 model Dancer {
-  id          String       @id @default(uuid())
-  firstName   String
-  lastName    String
-  birthdate   DateTime?
-  parent      Parent       @relation(fields: [parentId], references: [userId])
-  parentId    String
-  enrollments Enrollment[]
-  studios     Studio[]
+  id            String       @id @default(uuid())
+  firstName     String
+  lastName      String
+  birthdate     DateTime?
+  parent        Parent       @relation(fields: [parentId], references: [userId])
+  parentId      String
+  enrollments   Enrollment[]
+  studios       Studio[]
+  imageFilename String?
 }
 
 model Studio {
@@ -58,6 +60,30 @@ model Studio {
   enrollments  Enrollment[]
   ageLevels    AgeLevel[]
   skillLevels  SkillLevel[] //studio defined skill levels. (e.g. recreational, company, rising star, excel, etc.)
+  tights       Tights[]
+  shoes        Shoes[]
+}
+
+model Tights {
+  id           String       @id @default(uuid())
+  name         String
+  description  String?
+  url          String?
+  image        String?
+  studio       Studio       @relation(fields: [studioId], references: [userId])
+  studioId     String
+  danceClasses DanceClass[]
+}
+
+model Shoes {
+  id           String       @id @default(uuid())
+  name         String
+  description  String?
+  url          String?
+  image        String?
+  studio       Studio       @relation(fields: [studioId], references: [userId])
+  studioId     String
+  danceClasses DanceClass[]
 }
 
 model Instructor {
@@ -84,8 +110,10 @@ model DanceClass {
   name            String
   performanceName String?
   styleOfDance    String?
-  shoes           String?
-  tights          String?
+  shoes           Shoes?       @relation(fields: [shoesId], references: [id])
+  shoesId         String?
+  tights          Tights?      @relation(fields: [tightsId], references: [id])
+  tightsId        String?
   notes           String?
   song            String?
   competitions    Boolean?

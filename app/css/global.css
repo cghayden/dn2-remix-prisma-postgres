@@ -8,6 +8,7 @@ body {
   color: #303030;
 }
 .form_default {
+  display: grid;
   background-color: #fff;
   padding: 1rem;
   border-radius: 0.375rem;
@@ -30,7 +31,9 @@ body {
 .levels_edit {
   display: grid;
   grid-template-columns: 1fr 1fr 80px;
-  align-items: center;
+  /* align-items: center; */
+  margin: 6px 0;
+  gap: 10px;
 }
 
 .levels_edit div:not(:last-child) {

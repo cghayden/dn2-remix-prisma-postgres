@@ -6,7 +6,7 @@ import { requireUserId } from '~/session.server'
 import { getUserById } from './user.server'
 import { redirect } from '@remix-run/node'
 
-export async function requireParent(request: Request) {
+export async function requireParentUserId(request: Request) {
   // check for UserId - if none, no one is logged in, redirect to /welcome
   const userId = await requireUserId(request)
 

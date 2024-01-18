@@ -2,19 +2,20 @@ import { Link } from 'react-router-dom'
 // import LogoutForm from '../LogoutForm'
 // import XSvg from '../icons/XSvg'
 import { Form } from '@remix-run/react'
-import { useNavContext } from './context/NavContext'
 import type { NavLink } from 'types'
+import { useNavContext } from '../context/NavContext'
 
 // type ComponentProps = {
 //   showNav: boolean
 //   toggleShowNav: (bool: boolean) => void
 // }
 
-export default function Nav({ links }: { links: NavLink[] }) {
+export default function ParentNav({ links }: { links: NavLink[] }) {
   const { showNav, toggleShowNav } = useNavContext()
   const settingsLinks = links.filter((link) => link.url.startsWith('config'))
-  const apparelLinks = links.filter((link) => link.url.startsWith('apparel'))
+  // const apparelLinks = links.filter((link) => link.url.startsWith('apparel'))
   const contentLinks = links.filter((link) => link.url.startsWith('/'))
+  const dancerLinks = links.filter((link) => link.url.startsWith('dancer'))
 
   return (
     <div
@@ -34,6 +35,25 @@ export default function Nav({ links }: { links: NavLink[] }) {
           </button>
         </div> */}
         <div>
+          <legend className=' pl-4 font-bold text-l'>Dancers</legend>
+
+          <ul>
+            {dancerLinks.map((link) => (
+              <li key={link.label} className='px-3'>
+                <Link
+                  className='flex items-center my-2 pl-4 pr-2'
+                  to={`${link.url}`}
+                  onClick={() => {
+                    toggleShowNav()
+                  }}
+                >
+                  <span>{link.label}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
           <ul>
             {contentLinks.map((link) => (
               <li key={link.label} className='px-3'>
@@ -51,25 +71,6 @@ export default function Nav({ links }: { links: NavLink[] }) {
           </ul>
         </div>
 
-        <div className='pb-6'>
-          <legend className=' pl-4 font-bold text-l'>Apparel</legend>
-          <ul>
-            {apparelLinks.map((link) => (
-              <li key={link.label} className='px-3'>
-                <Link
-                  className='flex items-center my-2 pl-4 pr-2'
-                  to={`${link.url}`}
-                  onClick={() => {
-                    toggleShowNav()
-                  }}
-                >
-                  {/* <div className='w-[20px] h-[20px] bg-white mr-2 mt-2 mb-2'></div> */}
-                  <span>{link.label}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
         <div className='pb-6'>
           <legend className=' pl-4 font-bold text-l'>Settings</legend>
           <ul>

@@ -26,3 +26,7 @@ Creating a separate `Enrollment` model as a junction table between `DanceClass` 
    - This approach promotes a consistent way of handling many-to-many relationships throughout your application, which is beneficial for code maintainability and readability.
 
 These advantages make the `Enrollment` model a more robust and flexible choice for managing the many-to-many relationship between dancers and dance classes in your web application.
+
+
+saving Image file:
+   save only the filename, not the entire url.  This is becasue you may someday want ot rename the bucket, or migrate the files to anouther file storage service.  You can keeo th filenames on the backend, and only have to change the url on the front end

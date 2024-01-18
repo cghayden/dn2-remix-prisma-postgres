@@ -1,38 +1,43 @@
 import { type LoaderFunctionArgs } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import { Link, useLoaderData } from '@remix-run/react'
 import { useRef, useState } from 'react'
-import { UpsertLevelForm } from '~/components/studios/UpsertLevelForm'
-import { LevelList } from '~/components/studios/LevelList'
+// import { UpsertLevelForm } from '~/components/studios/UpsertLevelForm'
+// import { LevelList } from '~/components/studios/LevelList'
 import { ContentContainer } from '~/components/styledComponents/ContentContainer'
 import { PageHeader } from '~/components/styledComponents/PageHeader'
-import { getSkillLevels } from '~/models/studio.server'
+import { getStudioShoes } from '~/models/studio.server'
 import { requireUserId } from '~/session.server'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request)
-  const skillLevels = await getSkillLevels(userId)
-  if (!skillLevels) {
-    throw new Error('Oh no! skillLevels could not be loaded')
-  }
-  return skillLevels
+  const shoes = await getStudioShoes(userId)
+  return shoes
 }
 
-export default function SkillLevelsPage() {
-  const formRef = useRef<HTMLFormElement>(null)
-  const levels = useLoaderData<typeof loader>()
+// display shoes:
+//          name
+//         description?
+//         url?
+//         image?
+//         classes
+export default function AgeLevelsPage() {
+  // const formRef = useRef<HTMLFormElement>(null)
+  const shoes = useLoaderData<typeof loader>()
   const [editMode, toggleEditMode] = useState(false)
+
   return (
     <div>
       <div>
-        <PageHeader headerText='Skill Levels' />
+        <PageHeader headerText='Shoes' />
       </div>
       <div className='text-right mb-2 pr-4'>
-        <button
+        <Link
+          to='/studio/settings/addItem/shoes'
           className='text-white bg-gray-700 p-2 rounded-md '
-          onClick={() => toggleEditMode(!editMode)}
+          // onClick={() => toggleEditMode(!editMode)}
         >
-          {editMode ? 'Cancel' : 'Edit / Add New Skill Level'}
-        </button>
+          {editMode ? 'Cancel' : 'Edit / Add New Shoe'}
+        </Link>
       </div>
       <ContentContainer>
         <thead className='block'>
@@ -43,20 +48,23 @@ export default function SkillLevelsPage() {
         </thead>
         {editMode ? (
           <>
-            {levels.map((level) => (
+            Edit Mode
+            {/* {levels.map((level) => (
               <UpsertLevelForm
                 key={level.id}
                 level={level}
-                levelType='skillLevel'
+                levelType='ageLevel'
               />
-            ))}
+            ))} */}
           </>
         ) : (
-          <LevelList levels={levels} />
+          <ul>
+            {shoes.map((shoe) => (
+              <li key={shoe.id}>{shoe.name}</li>
+            ))}
+          </ul>
         )}
-        {editMode && (
-          <UpsertLevelForm formRef={formRef} levelType='skillLevel' />
-        )}
+        {/* {editMode && <UpsertLevelForm formRef={formRef} levelType='ageLevel' />} */}
       </ContentContainer>
     </div>
   )

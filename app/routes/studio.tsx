@@ -18,8 +18,10 @@ export default function StudioLayout() {
     { label: 'Home', url: '/studio' },
     { label: 'Create a New Dance', url: '/studio/addDanceClass' },
     // { label: 'Configuration', url: '/studio/settings' },
-    { label: 'Age Levels', url: '/studio/ageLevels' },
-    { label: 'Skill Levels', url: '/studio/skillLevels' },
+    { label: 'Shoes', url: 'apparel/shoes' },
+    { label: 'Tights', url: 'apparel/tights' },
+    { label: 'Age Levels', url: 'config/ageLevels' },
+    { label: 'Skill Levels', url: 'config/skillLevels' },
   ]
   return (
     <>

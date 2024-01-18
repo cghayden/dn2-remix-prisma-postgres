@@ -57,6 +57,7 @@ export async function requireUser(request: Request) {
   throw await logout(request)
 }
 
+//get UserId from session, (checks for a logged in user)
 export async function requireUserId(
   request: Request,
   redirectTo: string = new URL(request.url).pathname

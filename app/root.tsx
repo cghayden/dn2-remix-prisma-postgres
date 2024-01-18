@@ -9,14 +9,14 @@ import {
 } from '@remix-run/react'
 import styles from './tailwind.css'
 import cssGlobals from './css/global.css'
+import buttons from './css/buttons.css'
 import '@fontsource/inter/400.css'
 import { NavigationProvider } from './components/context/NavContext'
-// Supports weights 100-900
-// import '@fontsource-variable/inter'
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: styles },
   { rel: 'stylesheet', href: cssGlobals },
+  { rel: 'stylesheet', href: buttons },
 ]
 
 export default function App() {
@@ -39,8 +39,8 @@ export default function App() {
         <Links />
       </head>
       <NavigationProvider>
-        <body className='bg-gray-150 h-min-[100%] font-Inter text-[13px] h-full'>
-          <div className='min-h-screen flex flex-col'>
+        <body className='bg-gray-150 font-Inter text-[13px]'>
+          <div className='min-h-screen'>
             <Outlet />
             <ScrollRestoration />
             <Scripts />

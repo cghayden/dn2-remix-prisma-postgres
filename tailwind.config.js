@@ -1,5 +1,3 @@
-import type { Config } from 'tailwindcss'
-
 export default {
   content: ['./app/**/*.{js,jsx,ts,tsx}'],
   theme: {
@@ -17,5 +15,9 @@ export default {
       },
     },
   },
-  plugins: [],
-} satisfies Config
+  plugins: [
+    require('@tailwind-plugin/expose-colors')({
+      extract: ['indigo', 'cyan', 'rose', 'slate'],
+    }),
+  ],
+}

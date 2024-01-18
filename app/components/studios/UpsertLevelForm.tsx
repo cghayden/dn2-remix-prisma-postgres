@@ -2,14 +2,13 @@ import { type AgeLevel, type SkillLevel } from '@prisma/client'
 import { useFetcher } from '@remix-run/react'
 import { TextInput } from '../forms/TextInput'
 import { useEffect, useState } from 'react'
-
-type FetcherData = {
-  success: boolean
-}
+import { useForm } from '@conform-to/react'
+import { type action } from '../../routes/studio.settings.ResourceEditLevels'
 
 type LevelEditableListProps = {
   level?: AgeLevel | SkillLevel
-  levelType: 'skillLevel' | 'ageLevel'
+  // levelType: 'skillLevel' | 'ageLevel'
+  levelType: string
   formRef?: React.RefObject<HTMLFormElement>
 }
 
@@ -18,8 +17,11 @@ export function UpsertLevelForm({
   levelType,
   formRef,
 }: LevelEditableListProps) {
-  const fetcher = useFetcher<FetcherData>()
-  let success = fetcher?.data?.success
+  const fetcher = useFetcher<typeof action>()
+  console.log('fetcher', fetcher)
+  const lastSubmission = fetcher?.data
+  console.log('lastSubmission', lastSubmission)
+  let success = fetcher?.data
   let isSaving = fetcher.state === 'submitting'
   let fetcherState = fetcher.state
   const [showSaveButton, toggleShowSaveButton] = useState(false)
@@ -31,29 +33,43 @@ export function UpsertLevelForm({
     }
   }, [success, fetcherState, formRef])
 
+  const [form] = useForm({
+    lastSubmission,
+  })
+
   return (
     <fetcher.Form
+      {...form.props}
       id={level?.id ?? 'newLevel'}
       method='post'
-      action='/studio/ResourceEditLevels'
-      className=''
+      action='../settings/ResourceEditLevels'
+      className='pl-3'
       ref={formRef}
     >
       <input name={'levelId'} value={level?.id ?? 'new'} type='hidden' />
       <input name={'levelType'} value={levelType} type='hidden' />
       <div className=' levels_edit'>
         <TextInput
-          classProps='flex-1'
           label={''}
           name='newLevelName'
           defaultValue={level?.name ?? ''}
           onChange={() => toggleShowSaveButton(true)}
+          error={
+            lastSubmission?.error?.newLevelName
+              ? lastSubmission?.error?.newLevelName[0]
+              : undefined
+          }
         />
         <TextInput
           label={''}
           name='levelDescription'
           defaultValue={level?.description ?? ''}
           onChange={() => toggleShowSaveButton(true)}
+          error={
+            lastSubmission?.error?.levelDescription
+              ? lastSubmission?.error?.levelDescription[0]
+              : undefined
+          }
         />
         <div className='w-[80px]'>
           {showSaveButton && (
