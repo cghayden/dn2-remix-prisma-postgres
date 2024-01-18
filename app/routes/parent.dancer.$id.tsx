@@ -34,7 +34,12 @@ export default function DancerIndex() {
   return (
     <>
       <h1 className='text-xl font-bold py-4'>Dancer Page/Index</h1>
-      <ContentContainer>
+      <ContentContainer className='relative'>
+        <div className='absolute top-0 right-0 p-4'>
+          <Link to={`editDancer/${dancer.id}`} className='text-rose-600'>
+            Edit Dancer
+          </Link>
+        </div>
         <div className='p-8'>
           <div className='w-36'>
             <img

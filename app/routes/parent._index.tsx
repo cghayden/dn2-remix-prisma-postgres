@@ -42,8 +42,16 @@ export default function ParentIndex() {
       <ul>
         {parent.dancers.map((dancer) => (
           <li key={dancer.id}>
-            <ContentContainer>
-              <p>{dancer.firstName}</p>
+            <ContentContainer className='p-6'>
+              <div className='flex items-center'>
+                <div className='w-14 h-14 overflow-hidden rounded-full'>
+                  <img
+                    src={`https://dancernotes.s3.us-east-2.amazonaws.com/${dancer.imageFilename}`}
+                    alt='dancerImage'
+                  />
+                </div>
+                <p>{dancer.firstName}</p>
+              </div>
             </ContentContainer>
           </li>
         ))}
