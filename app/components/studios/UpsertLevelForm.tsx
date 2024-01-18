@@ -40,7 +40,7 @@ export function UpsertLevelForm({
   return (
     <fetcher.Form
       {...form.props}
-      id={level?.id ?? 'newLevel'}
+      id={level?.id ?? `new${levelType}`}
       method='post'
       action='../settings/ResourceEditLevels'
       className='pl-3'
@@ -76,7 +76,7 @@ export function UpsertLevelForm({
             <button
               type='submit'
               disabled={isSaving}
-              form={level?.id ?? 'newLevel'}
+              form={level?.id ?? `new${levelType}`}
               className='text-sm rounded bg-blue-500  text-white hover:bg-blue-600 focus:bg-blue-400  transition duration-150 ease-in-out ml-auto px-2 py-[2px] '
             >
               Save
