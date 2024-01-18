@@ -112,6 +112,7 @@ export async function getSkillLevels(userId: User['userId']) {
   })
   return studio
 }
+
 export async function getStudioShoes(userId: User['userId']) {
   const studio = prisma.shoes.findMany({
     where: {
