@@ -13,7 +13,7 @@ import { prisma } from '~/db.server'
 import { requireUserId } from '~/session.server'
 import { getUserById } from './user.server'
 import { redirect } from '@remix-run/node'
-import { select } from 'node_modules/@conform-to/react/helpers'
+// import { select } from 'node_modules/@conform-to/react/helpers'
 
 // return logged in studio without password
 export async function requireStudio(request: Request) {
@@ -115,7 +115,7 @@ export async function getSkillLevels(userId: User['userId']) {
 }
 
 export async function getStudioShoes(userId: User['userId']) {
-  const studio = prisma.shoes.findMany({
+  const shoes = prisma.shoes.findMany({
     where: {
       studioId: userId,
     },
@@ -123,7 +123,7 @@ export async function getStudioShoes(userId: User['userId']) {
       name: 'asc',
     },
   })
-  return studio
+  return shoes
 }
 
 export async function getStudioConfig(userId: User['userId']) {
