@@ -40,9 +40,9 @@ export async function action({ request }: ActionFunctionArgs) {
     return json(submission)
   }
 
-  if (submission.value.itemType === 'shoes') {
+  if (submission.value.itemType === 'footwear') {
     await upsertStudioShoe({
-      shoeId: submission.value.itemId ?? 'new',
+      footwearId: submission.value.itemId ?? 'new',
       name: submission.value.name,
       description: submission.value.description,
       url: submission.value.url,
@@ -80,7 +80,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   return { danceClassesLoaderData, itemType }
 }
 
-export default function AddShoesOrTights() {
+export default function AddFootwearOrTights() {
   const { danceClassesLoaderData, itemType } = useLoaderData<typeof loader>()
   const lastSubmission = useActionData<typeof action>()
   const idNameMap: Record<DanceClass['id'], DanceClass['name']> =

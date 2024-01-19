@@ -4,7 +4,7 @@ import type {
   AgeLevel,
   DanceClass,
   SkillLevel,
-  Shoes,
+  Footwear,
   Tights,
 } from '@prisma/client'
 import bcrypt from 'bcryptjs'
@@ -114,8 +114,8 @@ export async function getSkillLevels(userId: User['userId']) {
   return studio
 }
 
-export async function getStudioShoes(userId: User['userId']) {
-  const shoes = prisma.shoes.findMany({
+export async function getStudioFootwear(userId: User['userId']) {
+  const footwear = prisma.footwear.findMany({
     where: {
       studioId: userId,
     },
@@ -123,7 +123,7 @@ export async function getStudioShoes(userId: User['userId']) {
       name: 'asc',
     },
   })
-  return shoes
+  return footwear
 }
 
 export async function getStudioConfig(userId: User['userId']) {
@@ -168,7 +168,7 @@ export async function getDanceClass({
           id: true,
         },
       },
-      shoes: {
+      footwear: {
         select: {
           name: true,
           id: true,
@@ -199,7 +199,7 @@ export async function updateAgeLevel(
 }
 
 export async function upsertStudioShoe({
-  shoeId,
+  footwearId,
   name,
   description,
   url,
@@ -207,20 +207,20 @@ export async function upsertStudioShoe({
   studioId,
   danceClassIds,
 }: {
-  shoeId: Shoes['id'] | 'new'
-  name: Shoes['name']
-  description?: Shoes['description']
-  url?: Shoes['url']
-  image?: Shoes['image']
+  footwearId: Footwear['id'] | 'new'
+  name: Footwear['name']
+  description?: Footwear['description']
+  url?: Footwear['url']
+  image?: Footwear['image']
   studioId: User['userId']
   danceClassIds: string[]
 }) {
   const danceClassConnector = danceClassIds.map((classId) => {
     return { id: classId }
   })
-  await prisma.shoes.upsert({
+  await prisma.footwear.upsert({
     where: {
-      id: shoeId,
+      id: footwearId,
     },
     update: {
       name,
@@ -295,7 +295,7 @@ export async function upsertSkillLevel(
   userId: Studio['userId'],
   levelId: SkillLevel['id'] | 'new',
   newName: SkillLevel['name'],
-  levelDescription: SkillLevel['description']
+  levelDescription: SkillLevel['description'] = null
 ) {
   await prisma.skillLevel.upsert({
     where: {
@@ -320,7 +320,7 @@ export async function upsertAgeLevel(
   userId: Studio['userId'],
   levelId: AgeLevel['id'] | 'new',
   newName: AgeLevel['name'],
-  levelDescription: AgeLevel['description']
+  levelDescription: AgeLevel['description'] = null
 ) {
   await prisma.ageLevel.upsert({
     where: {

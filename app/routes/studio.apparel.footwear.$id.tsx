@@ -22,7 +22,7 @@ export default function IndividualShoePage() {
         <section>
           <h3 className='text-lg font-bold my-2'>Classes</h3>
           <ul>
-            <li>Senior Hip Hop</li>
+            <li>Dummy Data Class Listngs</li>
             <li>Junior Hip Hop</li>
             <li>Production</li>
             <li>Junior Company Hip Hop</li>

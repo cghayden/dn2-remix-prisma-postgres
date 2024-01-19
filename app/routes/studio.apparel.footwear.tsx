@@ -2,28 +2,28 @@ import { type LoaderFunctionArgs } from '@remix-run/node'
 import { Link, Outlet, useLoaderData } from '@remix-run/react'
 
 import { PageHeader } from '~/components/styledComponents/PageHeader'
-import { getStudioShoes } from '~/models/studio.server'
+import { getStudioFootwear } from '~/models/studio.server'
 import { requireUserId } from '~/session.server'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request)
-  const shoes = await getStudioShoes(userId)
-  console.log('server shoes', shoes)
-  return shoes
+  const footwear = await getStudioFootwear(userId)
+  console.log('server footwear', footwear)
+  return footwear
 }
 
 export default function AgeLevelsPage() {
   // const formRef = useRef<HTMLFormElement>(null)
-  const shoes = useLoaderData<typeof loader>()
+  const footwear = useLoaderData<typeof loader>()
 
   // 2 columns display, like a CMS
-  // col 1: list of shoes
+  // col 1: list of footwear
   // col 2: selection
 
   return (
     <div className='flex flex-col h-full'>
       <PageHeader
-        headerText='Shoes / Footwear'
+        headerText='Footwear / Footwear'
         actionRoute='add'
         className='px-8'
       />
@@ -31,9 +31,9 @@ export default function AgeLevelsPage() {
         {/* col 1 - List */}
         <div className='border-r border-slate-600 h-full w-48'>
           <ul>
-            {shoes.map((shoe) => (
-              <li key={shoe.id} className='pl-8 py-2'>
-                <Link to={shoe.id}>Nike Dunks</Link>
+            {footwear.map((footwear) => (
+              <li key={footwear.id} className='pl-8 py-2'>
+                <Link to={footwear.id}>Nike Dunks</Link>
               </li>
             ))}
 

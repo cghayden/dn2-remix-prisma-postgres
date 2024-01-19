@@ -18,7 +18,8 @@ const schema = z.object({
 
 export async function action({ request }: ActionFunctionArgs) {
   const userId = await getUserId(request)
-  if (!userId) throw new Error('You must be logged in to create a shoe entry')
+  if (!userId)
+    throw new Error('You must be logged in to create a footwear entry')
   const formData = await request.formData()
 
   console.log('all danceClassesInput', formData.getAll('danceClassesInput'))

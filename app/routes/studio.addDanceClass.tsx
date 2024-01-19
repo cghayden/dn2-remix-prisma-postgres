@@ -26,7 +26,7 @@ const danceSchema = z.object({
   recital: z.boolean().default(false),
   skillLevelId: z.string(),
   tights: z.string().optional(),
-  shoes: z.string().optional(),
+  footwear: z.string().optional(),
 })
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -48,7 +48,7 @@ export async function action({ request }: ActionFunctionArgs) {
     recital,
     skillLevelId,
     tights,
-    shoes,
+    footwear,
   } = submission.value
 
   await createStudioDance({
@@ -60,7 +60,7 @@ export async function action({ request }: ActionFunctionArgs) {
     recital,
     skillLevelId,
     // tights,
-    // shoes,
+    // footwear,
   }).catch((err) => {
     throw new Error(err.message)
   })
@@ -93,7 +93,7 @@ export default function AddDanceClass() {
       skillLevelId,
       competitions,
       recital,
-      shoes,
+      footwear,
       tights,
     },
   ] = useForm({
@@ -242,9 +242,9 @@ export default function AddDanceClass() {
           </div>
           <div className='input_item'>
             <TextInput
-              name='shoes'
-              label={'Shoes'}
-              error={shoes.error}
+              name='footwear'
+              label={'Footwear'}
+              error={footwear.error}
               required={false}
             />
           </div>
