@@ -13,6 +13,7 @@ import { prisma } from '~/db.server'
 import { requireUserId } from '~/session.server'
 import { getUserById } from './user.server'
 import { redirect } from '@remix-run/node'
+import { select } from 'node_modules/@conform-to/react/helpers'
 
 // return logged in studio without password
 export async function requireStudio(request: Request) {
@@ -137,6 +138,49 @@ export async function getStudioConfig(userId: User['userId']) {
   })
   return studio
 }
+
+export async function getDanceClass({
+  danceId,
+}: {
+  danceId: DanceClass['id']
+}) {
+  const danceClass = await prisma.danceClass.findUnique({
+    where: { id: danceId },
+    select: {
+      studioId: true,
+      name: true,
+      performanceName: true,
+      ageLevel: {
+        select: {
+          name: true,
+          description: true,
+        },
+      },
+      skillLevel: {
+        select: {
+          name: true,
+          description: true,
+        },
+      },
+      tights: {
+        select: {
+          name: true,
+          id: true,
+        },
+      },
+      shoes: {
+        select: {
+          name: true,
+          id: true,
+        },
+      },
+    },
+  })
+
+  return danceClass
+}
+
+// MUTATIONS //
 
 export async function updateAgeLevel(
   levelId: AgeLevel['id'],

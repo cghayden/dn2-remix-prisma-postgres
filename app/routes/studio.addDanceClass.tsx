@@ -16,13 +16,14 @@ import { conform, useForm } from '@conform-to/react'
 import { parse } from '@conform-to/zod'
 import { TextInput } from '~/components/forms/TextInput'
 import { PageHeader } from '~/components/styledComponents/PageHeader'
+import { useState } from 'react'
 
 const danceSchema = z.object({
   name: z.string({ required_error: 'Name is required' }),
   performanceName: z.string().min(3).optional(),
   ageLevelId: z.string(),
-  competitions: z.boolean(),
-  recital: z.boolean(),
+  competitions: z.boolean().default(false),
+  recital: z.boolean().default(false),
   skillLevelId: z.string(),
   tights: z.string().optional(),
   shoes: z.string().optional(),
@@ -37,6 +38,7 @@ export async function action({ request }: ActionFunctionArgs) {
   if (submission.intent !== 'submit' || !submission.value) {
     return json(submission)
   }
+  // if boolean checkboxes are not checked, there will not be a submission
 
   const {
     name,
@@ -78,6 +80,8 @@ export default function AddDanceClass() {
   const { studioConfig } = useLoaderData<typeof loader>()
   const lastSubmission = useActionData<typeof action>()
   console.log('lastSubmission', lastSubmission)
+  const [selectedAgeLevel, setSelectedAgeLevel] = useState('')
+  const [selectedSkillLevel, setSelectedSkillLevel] = useState('')
 
   // The `useForm` hook will return everything you need to setup a form including the error and config of each field
   const [
@@ -130,6 +134,24 @@ export default function AddDanceClass() {
             >
               Age Level
             </label>
+            <input type='hidden' name='ageLevelId' value={selectedAgeLevel} />
+            {studioConfig.ageLevels.map((level) => (
+              <button
+                type='button'
+                key={level.id}
+                className={`inline-block text-sm px-4 py-2 border rounded-full mr-2 mb-2 
+                          ${
+                            selectedAgeLevel === level.id
+                              ? 'bg-green-500 text-white'
+                              : 'bg-gray-200 text-gray-700'
+                          }`}
+                onClick={() => setSelectedAgeLevel(level.id)}
+              >
+                {level.name}
+              </button>
+            ))}
+            {/* 
+             old, traditional native select with dropdown...
             <select
               // required={true}
               name='ageLevelId'
@@ -142,7 +164,7 @@ export default function AddDanceClass() {
                   {level.name}
                 </option>
               ))}
-            </select>
+            </select> */}
             {ageLevelId.error ? (
               <div className='pt-1 text-red-700' id={`ageLevel-error`}>
                 {ageLevelId.error}
@@ -156,7 +178,27 @@ export default function AddDanceClass() {
             >
               Skill Level
             </label>
-            <select
+            <input
+              type='hidden'
+              name='skillLevelId'
+              value={selectedSkillLevel}
+            />
+            {studioConfig.skillLevels.map((level) => (
+              <button
+                type='button'
+                key={level.id}
+                className={`inline-block text-sm px-4 py-2 border rounded-full mr-2 mb-2 
+                          ${
+                            selectedSkillLevel === level.id
+                              ? 'bg-green-500 text-white'
+                              : 'bg-gray-200 text-gray-700'
+                          }`}
+                onClick={() => setSelectedSkillLevel(level.id)}
+              >
+                {level.name}
+              </button>
+            ))}
+            {/* <select
               // required={true}
               name='skillLevelId'
               id='skillLevel'
@@ -168,7 +210,7 @@ export default function AddDanceClass() {
                   {skillLevel.name}
                 </option>
               ))}
-            </select>
+            </select> */}
             {skillLevelId.error ? (
               <div className='pt-1 text-red-700' id={`skillLevel-error`}>
                 {ageLevelId.error}

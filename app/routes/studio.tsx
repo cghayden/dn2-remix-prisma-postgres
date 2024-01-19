@@ -20,8 +20,9 @@ export default function StudioLayout() {
     // { label: 'Configuration', url: '/studio/settings' },
     { label: 'Shoes', url: 'apparel/shoes' },
     { label: 'Tights', url: 'apparel/tights' },
-    { label: 'Age Levels', url: 'config/ageLevels' },
-    { label: 'Skill Levels', url: 'config/skillLevels' },
+    // { label: 'Age Levels', url: 'config/ageLevels' },
+    // { label: 'Skill Levels', url: 'config/skillLevels' },
+    { label: 'Configuration', url: 'config' },
   ]
   return (
     <>

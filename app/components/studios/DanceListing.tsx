@@ -13,7 +13,7 @@ export function DanceListing({
   }
 
   return (
-    <Link to={danceClass.id} className='inline-block py-2'>
+    <Link to={`danceClass/${danceClass.id}`} className='inline-block py-2'>
       {danceClass.name}
     </Link>
   )
