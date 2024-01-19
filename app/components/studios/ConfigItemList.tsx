@@ -17,9 +17,6 @@ export default function ConfigItemList({
   page,
   itemType,
 }: ConfigItemListProps) {
-  // const { data, page, itemType } = useLoaderData<typeof loader>()
-  console.log('data', data)
-
   const formRef = useRef<HTMLFormElement>(null)
   const [editMode, toggleEditMode] = useState(false)
   return (
@@ -56,31 +53,37 @@ export default function ConfigItemList({
           'border-2 border-transparent': editMode === false,
         })}
       >
-        <thead className='block'>
-          <tr className='bg-gray-200 py-1 grid grid-cols-2 justify-items-start rounded-t-md'>
-            <th className='pl-2'>Name</th>
-            <th className='pl-2'>Description</th>
-          </tr>
-        </thead>
-        {!data.length && !editMode && (
-          <p className='text-center py-8'>
-            You have no {page}. Click "edit/add to create
-          </p>
-        )}
-        {editMode ? (
-          <>
-            {data.map((level) => (
-              <UpsertLevelForm
-                key={level.id}
-                level={level}
-                levelType={itemType}
-              />
-            ))}
-          </>
-        ) : (
-          <LevelList levels={data} />
-        )}
-        {editMode && <UpsertLevelForm formRef={formRef} levelType={itemType} />}
+        <table className='w-full'>
+          <thead className='block'>
+            <tr className='bg-gray-200 py-1 grid grid-cols-2 justify-items-start rounded-t-md'>
+              <th className='pl-2'>Name</th>
+              <th className='pl-2'>Description</th>
+            </tr>
+          </thead>
+          {!data.length && !editMode && (
+            <p className='text-center py-8'>
+              You have no {page}. Click "edit/add to create
+            </p>
+          )}
+          {/* if in edit mode, make all current levels names and desc. editable, otherwise just list them */}
+          {editMode ? (
+            <tbody>
+              {data.map((level) => (
+                <UpsertLevelForm
+                  key={level.id}
+                  level={level}
+                  levelType={itemType}
+                />
+              ))}
+            </tbody>
+          ) : (
+            <LevelList levels={data} />
+          )}
+          {/* in edit provide a blank entry at the end of the list to enter a new level name and desc. */}
+          {editMode && (
+            <UpsertLevelForm formRef={formRef} levelType={itemType} />
+          )}
+        </table>
       </ContentContainer>
     </div>
   )
