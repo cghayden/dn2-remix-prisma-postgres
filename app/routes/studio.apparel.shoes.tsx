@@ -21,28 +21,30 @@ export default function AgeLevelsPage() {
   // col 2: selection
 
   return (
-    <div>
-      <div>
-        <PageHeader headerText='Shoes / Footwear' />
-      </div>
-      <div className='grid grid-cols-2'>
+    <div className='flex flex-col h-full'>
+      <PageHeader
+        headerText='Shoes / Footwear'
+        actionRoute='add'
+        className='px-8'
+      />
+      <div className='flex flex-1 '>
         {/* col 1 - List */}
-        <div>
+        <div className='border-r border-slate-600 h-full w-48'>
           <ul>
             {shoes.map((shoe) => (
-              <li key={shoe.id}>
+              <li key={shoe.id} className='pl-8 py-2'>
                 <Link to={shoe.id}>Nike Dunks</Link>
               </li>
             ))}
 
-            <li>Black Taps</li>
-            <li>Tan Taps</li>
-            <li>Ballet Slippers</li>
-            <li>Converse All Stars</li>
+            <li className='pl-8 py-2'>Black Taps</li>
+            <li className='pl-8 py-2'>Tan Taps</li>
+            <li className='pl-8 py-2'>Ballet Slippers</li>
+            <li className='pl-8 py-2'>Converse All Stars</li>
           </ul>
         </div>
         {/* col 2 - selection */}
-        <div>
+        <div className='flex-1 bg-slate-50'>
           <Outlet />
         </div>
       </div>

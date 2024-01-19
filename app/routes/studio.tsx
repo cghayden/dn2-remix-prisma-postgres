@@ -29,11 +29,10 @@ export default function StudioLayout() {
       <StudioHeader />
       <Nav links={studioLinks} />
       <main className='main_custom'>
-        <div className='px-6 flex-1'>
+        <div className='flex-1'>
           <Outlet />
         </div>
       </main>
-      <footer>Footer</footer>
     </>
   )
 }

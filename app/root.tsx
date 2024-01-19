@@ -39,13 +39,11 @@ export default function App() {
         <Links />
       </head>
       <NavigationProvider>
-        <body className='bg-gray-150 font-Inter text-[13px]'>
-          <div className='min-h-screen'>
-            <Outlet />
-            <ScrollRestoration />
-            <Scripts />
-            <LiveReload />
-          </div>
+        <body className='bg-gray-150 font-Inter text-[13px] min-h-screen flex'>
+          <Outlet />
+          <ScrollRestoration />
+          <Scripts />
+          <LiveReload />
         </body>
       </NavigationProvider>
     </html>
