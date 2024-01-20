@@ -1,13 +1,12 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
-import { json, redirect, type LoaderFunctionArgs } from '@remix-run/node'
+import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData, useSubmit } from '@remix-run/react'
 import axios from 'axios'
 import { useState } from 'react'
-import { useFormState } from './parent.dancer.$id'
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-  const dancerId = params.id
+  const footwearId = params.id
 
   const client = new S3Client({
     credentials: {
@@ -16,8 +15,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     },
     region: process.env.STORAGE_REGION,
   })
-
-  const fileKey = `${dancerId}.jpeg`
+  const fileKey = `${footwearId}.jpeg`
 
   const presignedUrl = await getSignedUrl(
     client,
@@ -28,15 +26,16 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     })
   )
 
-  if (!presignedUrl) return redirect('../')
+  if (!presignedUrl)
+    throw new Error('could not establish secure file upload url')
 
-  return json({ presignedUrl, fileKey, dancerId, error: null })
+  return json({ presignedUrl, fileKey, footwearId, error: null })
 }
 
-function ParentAddImage() {
+export default function AddFootwearImage() {
   const submit = useSubmit()
-  const { showForm, toggleShowForm } = useFormState()
-  const { presignedUrl, error, fileKey, dancerId } =
+  // const { showForm, toggleShowForm } = useFormState()
+  const { presignedUrl, error, fileKey, footwearId } =
     useLoaderData<typeof loader>()
   const [file, setFile] = useState<File | null>()
   const [submitting, setSubmitting] = useState(false)
@@ -65,12 +64,12 @@ function ParentAddImage() {
         })
         // TODO - set busy UI
 
-        // Handle successful upload response: save and redirect, -> resource route
+        // Handle successful upload response: programmatically submit form data to a resource route to save the file key to prisma, then redirect back to footwear page on success
         const formData = new FormData()
         formData.append('fileKey', fileKey)
         submit(formData, {
           method: 'post',
-          action: `/parent/dancer/${dancerId}/resourceSaveImage`,
+          action: `/studio/apparel/footwear/${footwearId}/resourceSaveImage`,
         })
       } catch (error) {
         console.error('Upload failed', error)
@@ -79,40 +78,33 @@ function ParentAddImage() {
       }
     }
   }
-
   return (
-    <>
-      {showForm ? (
-        <form onSubmit={handleS3Upload} className='py-4 px-8'>
-          <fieldset disabled={submitting}>
-            <div className='input_item'>
-              <input
-                type='file'
-                accept='image/jpeg'
-                name='img'
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  if (e.target.files) {
-                    setFile(e.target.files[0])
-                  }
-                }}
-              />
-              <div className='pt-4'>
-                <button className='btn btn-confirm mr-4' type='submit'>
-                  Save Image
-                </button>
-                <button
-                  className='btn btn-cancel'
-                  onClick={() => toggleShowForm(false)}
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </fieldset>
-        </form>
-      ) : null}
-    </>
+    <form onSubmit={handleS3Upload} className='py-4 px-8'>
+      <fieldset disabled={submitting}>
+        <div className='input_item'>
+          <input
+            type='file'
+            accept='image/jpeg'
+            name='img'
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              if (e.target.files) {
+                setFile(e.target.files[0])
+              }
+            }}
+          />
+          <div className='pt-4'>
+            <button className='btn btn-confirm mr-4' type='submit'>
+              Save Image
+            </button>
+            <button
+              className='btn btn-cancel'
+              // onClick={() => toggleShowForm(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </fieldset>
+    </form>
   )
 }
-
-export default ParentAddImage

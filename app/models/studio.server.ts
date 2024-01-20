@@ -255,6 +255,23 @@ export async function upsertStudioFootwear({
   })
 }
 
+export async function saveFootwearImage({
+  footwearId,
+  imageFilename,
+}: {
+  footwearId: Footwear['id']
+  imageFilename: Footwear['imageFilename']
+}) {
+  await prisma.footwear.update({
+    where: {
+      id: footwearId,
+    },
+    data: {
+      imageFilename,
+    },
+  })
+}
+
 export async function upsertStudioTights({
   tightsId,
   name,

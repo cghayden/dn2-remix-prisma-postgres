@@ -46,8 +46,8 @@ export async function action({ request }: ActionFunctionArgs) {
     competitions,
     recital,
     skillLevelId,
-    tights,
-    footwear,
+    // tights,
+    // footwear,
   } = submission.value
 
   await createStudioDance({

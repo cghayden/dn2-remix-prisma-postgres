@@ -1,15 +1,15 @@
 import { redirect, type ActionFunctionArgs } from '@remix-run/node'
-import { updateDancer } from '~/models/dancer.server'
+import { saveFootwearImage } from '~/models/studio.server'
 
 export async function action({ request, params }: ActionFunctionArgs) {
   const formData = await request.formData()
   const fileKey = formData.get('fileKey')
-  const dancerId = params.id
+  const footwearId = params.id
 
-  if (!fileKey || typeof fileKey !== 'string' || !dancerId) {
+  if (!fileKey || typeof fileKey !== 'string' || !footwearId) {
     throw new Error('error upoloading image')
   }
 
-  await updateDancer(dancerId, { imageFilename: fileKey })
-  return redirect(`/parent/dancer/${dancerId}`)
+  await saveFootwearImage({ footwearId, imageFilename: fileKey })
+  return redirect(`/studio/apparel/footwear/${footwearId}`)
 }

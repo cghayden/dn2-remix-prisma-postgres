@@ -32,14 +32,9 @@ export default function AgeLevelsPage() {
           <ul>
             {footwear.map((footwear) => (
               <li key={footwear.id} className='pl-8 py-2'>
-                <Link to={footwear.id}>Nike Dunks</Link>
+                <Link to={footwear.id}>{footwear.name}</Link>
               </li>
             ))}
-
-            <li className='pl-8 py-2'>Black Taps</li>
-            <li className='pl-8 py-2'>Tan Taps</li>
-            <li className='pl-8 py-2'>Ballet Slippers</li>
-            <li className='pl-8 py-2'>Converse All Stars</li>
           </ul>
         </div>
         {/* col 2 - selection */}

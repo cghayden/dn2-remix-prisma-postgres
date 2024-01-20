@@ -1,5 +1,5 @@
-import { LoaderFunctionArgs } from '@remix-run/node'
-import { Link, useLoaderData } from '@remix-run/react'
+import { type LoaderFunctionArgs } from '@remix-run/node'
+import { Link, Outlet, useLoaderData } from '@remix-run/react'
 import { getFootwearItem } from '~/models/studio.server'
 import { requireUserId } from '~/session.server'
 
@@ -21,15 +21,27 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 }
 export default function IndividualShoePage() {
   const footwearItem = useLoaderData<typeof loader>()
+  console.log('footwearItem', footwearItem)
 
   return (
     <div className='p-8'>
       <h2 className='text-center text-xl font-bold'>{footwearItem.name}</h2>
-      {footwearItem.imageFilename && (
-        <div className='w-48 mx-auto'>
-          <img src={footwearItem.imageFilename} alt='nikes pic' />
-        </div>
-      )}
+      <div className='min-w-48 min-h-48 mx-auto text-center'>
+        {footwearItem.imageFilename ? (
+          <img
+            // src={
+            //   'https://dancernotes-footwear.s3.us-east-2.amazonaws.com/footwear/1.jpeg'
+            // }
+            src={`https://dancernotes.s3.us-east-2.amazonaws.com/${footwearItem.imageFilename}`}
+            alt='footwear pic'
+          />
+        ) : (
+          <>
+            <Link to={'addImage'}>Add an Image</Link>
+            <Outlet />
+          </>
+        )}
+      </div>
       {footwearItem.url && (
         <div className='grid place-items-center'>
           <Link to={footwearItem.url} className='text-indigo-700'>
