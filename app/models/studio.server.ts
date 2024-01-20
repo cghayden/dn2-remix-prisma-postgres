@@ -115,7 +115,7 @@ export async function getSkillLevels(userId: User['userId']) {
 }
 
 export async function getStudioFootwear(userId: User['userId']) {
-  const footwear = prisma.footwear.findMany({
+  const footwear = await prisma.footwear.findMany({
     where: {
       studioId: userId,
     },
@@ -124,6 +124,16 @@ export async function getStudioFootwear(userId: User['userId']) {
     },
   })
   return footwear
+}
+
+export async function getFootwearItem(footwearId: Footwear['id']) {
+  const footwearItem = await prisma.footwear.findUnique({
+    where: {
+      id: footwearId,
+    },
+  })
+
+  return footwearItem
 }
 
 export async function getStudioConfig(userId: User['userId']) {
@@ -198,27 +208,27 @@ export async function updateAgeLevel(
   })
 }
 
-export async function upsertStudioShoe({
+export async function upsertStudioFootwear({
+  studioId,
   footwearId,
   name,
   description,
   url,
-  image,
-  studioId,
+  imageFilename,
   danceClassIds,
 }: {
+  studioId: User['userId']
   footwearId: Footwear['id'] | 'new'
   name: Footwear['name']
   description?: Footwear['description']
   url?: Footwear['url']
-  image?: Footwear['image']
-  studioId: User['userId']
+  imageFilename?: Footwear['imageFilename']
   danceClassIds: string[]
 }) {
   const danceClassConnector = danceClassIds.map((classId) => {
     return { id: classId }
   })
-  await prisma.footwear.upsert({
+  return await prisma.footwear.upsert({
     where: {
       id: footwearId,
     },
@@ -227,7 +237,7 @@ export async function upsertStudioShoe({
       description,
       studioId,
       url,
-      image,
+      imageFilename,
       danceClasses: {
         connect: danceClassConnector,
       },
@@ -237,19 +247,20 @@ export async function upsertStudioShoe({
       description,
       studioId,
       url,
-      image,
+      imageFilename,
       danceClasses: {
         connect: danceClassConnector,
       },
     },
   })
 }
+
 export async function upsertStudioTights({
   tightsId,
   name,
   description,
   url,
-  image,
+  imageFilename,
   studioId,
   danceClassIds,
 }: {
@@ -257,7 +268,7 @@ export async function upsertStudioTights({
   name: Tights['name']
   description?: Tights['description']
   url?: Tights['url']
-  image?: Tights['image']
+  imageFilename?: Tights['imageFilename']
   studioId: User['userId']
   danceClassIds: string[]
 }) {
@@ -273,7 +284,7 @@ export async function upsertStudioTights({
       description,
       studioId,
       url,
-      image,
+      imageFilename,
       danceClasses: {
         connect: danceClassConnector,
       },
@@ -283,7 +294,7 @@ export async function upsertStudioTights({
       description,
       studioId,
       url,
-      image,
+      imageFilename,
       danceClasses: {
         connect: danceClassConnector,
       },

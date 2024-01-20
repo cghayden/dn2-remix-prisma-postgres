@@ -65,25 +65,25 @@ model Studio {
 }
 
 model Tights {
-  id           String       @id @default(uuid())
-  name         String
-  description  String?
-  url          String?
-  image        String?
-  studio       Studio       @relation(fields: [studioId], references: [userId])
-  studioId     String
-  danceClasses DanceClass[]
+  id            String       @id @default(uuid())
+  name          String
+  description   String?
+  url           String?
+  imageFilename String?
+  studio        Studio       @relation(fields: [studioId], references: [userId])
+  studioId      String
+  danceClasses  DanceClass[]
 }
 
 model Footwear {
-  id           String       @id @default(uuid())
-  name         String
-  description  String?
-  url          String?
-  image        String?
-  studio       Studio       @relation(fields: [studioId], references: [userId])
-  studioId     String
-  danceClasses DanceClass[]
+  id            String       @id @default(uuid())
+  name          String
+  description   String?
+  url           String?
+  studio        Studio       @relation(fields: [studioId], references: [userId])
+  studioId      String
+  danceClasses  DanceClass[]
+  imageFilename String?
 }
 
 model Instructor {

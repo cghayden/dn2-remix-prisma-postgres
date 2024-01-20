@@ -1,22 +1,44 @@
-import { Link } from '@remix-run/react'
+import { LoaderFunctionArgs } from '@remix-run/node'
+import { Link, useLoaderData } from '@remix-run/react'
+import { getFootwearItem } from '~/models/studio.server'
+import { requireUserId } from '~/session.server'
 
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
+  const userId = await requireUserId(request)
+  const footwearId = params.id
+
+  if (!footwearId) {
+    throw new Error('no footwear Id was provided')
+  }
+
+  const footwearItem = await getFootwearItem(footwearId)
+  if (footwearItem?.studioId !== userId) {
+    throw new Error('you cannot view this item')
+  }
+
+  console.log('server footwear', footwearItem)
+  return footwearItem
+}
 export default function IndividualShoePage() {
+  const footwearItem = useLoaderData<typeof loader>()
+
   return (
     <div className='p-8'>
-      <h2 className='text-center text-xl font-bold'>Nike Dunks</h2>
-      <div className='w-48 mx-auto'>
-        <img
-          src='https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/b1bcbca4-e853-4df7-b329-5be3c61ee057/dunk-low-retro-mens-shoes-87q0hf.png'
-          alt='nikes pic'
-        />
-      </div>
-      <div className='grid place-items-center'>
-        <Link
-          to='https://www.nike.com/t/dunk-low-womens-shoes-4W2Z5P/DD1503-101'
-          className='text-indigo-700'
-        >
-          Preferred Store Listing
-        </Link>
+      <h2 className='text-center text-xl font-bold'>{footwearItem.name}</h2>
+      {footwearItem.imageFilename && (
+        <div className='w-48 mx-auto'>
+          <img src={footwearItem.imageFilename} alt='nikes pic' />
+        </div>
+      )}
+      {footwearItem.url && (
+        <div className='grid place-items-center'>
+          <Link to={footwearItem.url} className='text-indigo-700'>
+            Preferred Store Listing
+          </Link>
+        </div>
+      )}
+      <div>
+        <p>{footwearItem.description}</p>
       </div>
       <div>
         <section>

@@ -8,7 +8,6 @@ import { requireUserId } from '~/session.server'
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request)
   const footwear = await getStudioFootwear(userId)
-  console.log('server footwear', footwear)
   return footwear
 }
 
