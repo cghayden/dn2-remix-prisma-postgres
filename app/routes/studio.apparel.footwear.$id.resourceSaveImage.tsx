@@ -11,5 +11,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 
   await saveFootwearImage({ footwearId, imageFilename: fileKey })
+
   return redirect(`/studio/apparel/footwear/${footwearId}`)
 }

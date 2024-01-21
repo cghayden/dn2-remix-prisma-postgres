@@ -1,5 +1,6 @@
 import { type LoaderFunctionArgs } from '@remix-run/node'
 import { Link, Outlet, useLoaderData } from '@remix-run/react'
+import { PanelHeader } from '~/components/styledComponents/PanelHeader'
 import { getFootwearItem } from '~/models/studio.server'
 import { requireUserId } from '~/session.server'
 
@@ -21,12 +22,14 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 }
 export default function IndividualShoePage() {
   const footwearItem = useLoaderData<typeof loader>()
-  console.log('footwearItem', footwearItem)
 
   return (
     <div className='p-8'>
-      <h2 className='text-center text-xl font-bold'>{footwearItem.name}</h2>
-      <div className='min-w-48 min-h-48 mx-auto text-center'>
+      <PanelHeader
+        headerText={footwearItem.name}
+        editRoute={`../edit/${footwearItem.id}`}
+      />
+      <div className='min-w-48 min-h-48 w-52 h-52 mx-auto text-center'>
         {footwearItem.imageFilename ? (
           <img
             // src={
@@ -38,7 +41,7 @@ export default function IndividualShoePage() {
         ) : (
           <>
             <Link to={'addImage'}>Add an Image</Link>
-            <Outlet />
+            <Outlet context={{ footwearItem }} />
           </>
         )}
       </div>
@@ -50,7 +53,7 @@ export default function IndividualShoePage() {
         </div>
       )}
       <div>
-        <p>{footwearItem.description}</p>
+        <p>Description: {footwearItem.description}</p>
       </div>
       <div>
         <section>
