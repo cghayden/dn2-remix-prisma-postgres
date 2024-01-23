@@ -32,9 +32,7 @@ export default function IndividualShoePage() {
       <div className='min-w-48 min-h-48 w-52 h-52 mx-auto text-center'>
         {footwearItem.imageFilename ? (
           <img
-            // src={
-            //   'https://dancernotes-footwear.s3.us-east-2.amazonaws.com/footwear/1.jpeg'
-            // }
+            className='w-full h-full object-contain object-center'
             src={`https://dancernotes.s3.us-east-2.amazonaws.com/${footwearItem.imageFilename}`}
             alt='footwear pic'
           />
@@ -46,16 +44,18 @@ export default function IndividualShoePage() {
         )}
       </div>
       {footwearItem.url && (
-        <div className='grid place-items-center'>
+        <div className='grid place-items-center py-4'>
           <Link to={footwearItem.url} className='text-indigo-700'>
             Preferred Store Listing
           </Link>
         </div>
       )}
-      <div>
-        <p>Description: {footwearItem.description}</p>
+      <div className='p-4'>
+        <p>
+          <span className='font-bold'>Notes:</span> {footwearItem.description}
+        </p>
       </div>
-      <div>
+      <div className='p-4'>
         <section>
           <h3 className='text-lg font-bold my-2'>Classes</h3>
           <ul>
