@@ -125,6 +125,17 @@ export async function getStudioFootwear(userId: User['userId']) {
   })
   return footwear
 }
+export async function getStudioTights(userId: User['userId']) {
+  const tights = await prisma.tights.findMany({
+    where: {
+      studioId: userId,
+    },
+    orderBy: {
+      name: 'asc',
+    },
+  })
+  return tights
+}
 
 export async function getFootwearItem(footwearId: Footwear['id']) {
   const footwearItem = await prisma.footwear.findUnique({

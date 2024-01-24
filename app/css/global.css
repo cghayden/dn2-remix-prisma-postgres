@@ -114,3 +114,7 @@ body {
     padding-left: var(--nav_width_desktop);
   }
 }
+
+.item-image-section_wrapper:has(form) .item-image-section {
+  display: none;
+}

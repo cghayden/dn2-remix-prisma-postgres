@@ -13,6 +13,9 @@ export default {
           150: '#E7ECF3',
         },
       },
+      gridTemplateColumns: {
+        apparelListing: '36px 1fr 30ch',
+      },
     },
   },
   plugins: [

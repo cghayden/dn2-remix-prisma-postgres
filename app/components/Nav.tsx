@@ -1,19 +1,14 @@
 import { Link } from 'react-router-dom'
-// import LogoutForm from '../LogoutForm'
-// import XSvg from '../icons/XSvg'
 import { Form } from '@remix-run/react'
 import { useNavContext } from './context/NavContext'
 import type { NavLink } from 'types'
 
-// type ComponentProps = {
-//   showNav: boolean
-//   toggleShowNav: (bool: boolean) => void
-// }
-
 export default function Nav({ links }: { links: NavLink[] }) {
   const { showNav, toggleShowNav } = useNavContext()
   const settingsLinks = links.filter((link) => link.url.startsWith('config'))
-  const apparelLinks = links.filter((link) => link.url.startsWith('apparel'))
+  const apparelLinks = links.filter(
+    (link) => link.url.startsWith('footwear') || link.url.startsWith('tights')
+  )
   const contentLinks = links.filter((link) => link.url.startsWith('/'))
 
   return (
@@ -23,16 +18,6 @@ export default function Nav({ links }: { links: NavLink[] }) {
     `}
     >
       <nav className='nav_custom items-stretch flex flex-col flex-auto h-full min-h-full min-w-[15rem] pt-4'>
-        {/* <div className='flex'>
-          <button
-            type='button'
-            className='ml-auto btn'
-            aria-label='close navigation'
-            onClick={() => toggleShowNav(false)}
-          >
-            <XSvg w={'24'} h={'24'} />
-          </button>
-        </div> */}
         <div>
           <ul>
             {contentLinks.map((link) => (
@@ -63,7 +48,6 @@ export default function Nav({ links }: { links: NavLink[] }) {
                     toggleShowNav()
                   }}
                 >
-                  {/* <div className='w-[20px] h-[20px] bg-white mr-2 mt-2 mb-2'></div> */}
                   <span>{link.label}</span>
                 </Link>
               </li>
