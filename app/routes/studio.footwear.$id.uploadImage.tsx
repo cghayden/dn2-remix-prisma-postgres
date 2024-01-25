@@ -7,7 +7,8 @@ import { useState } from 'react'
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const footwearId = params.id
-
+  const url = new URL(request.url)
+  const saveToPrisma = url.searchParams.get('new')
   const client = new S3Client({
     credentials: {
       accessKeyId: process.env.STORAGE_ACCESS_KEY!,
@@ -29,12 +30,13 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   if (!presignedUrl)
     throw new Error('could not establish secure file upload url')
 
-  return json({ presignedUrl, fileKey, footwearId, error: null })
+  return json({ presignedUrl, fileKey, footwearId, error: null, saveToPrisma })
 }
 
 export default function AddFootwearImage() {
+  const submit = useSubmit()
   const navigate = useNavigate()
-  const { presignedUrl, error, fileKey, footwearId } =
+  const { presignedUrl, error, fileKey, footwearId, saveToPrisma } =
     useLoaderData<typeof loader>()
   const [file, setFile] = useState<File | null>()
   const [submitting, setSubmitting] = useState(false)
@@ -63,8 +65,15 @@ export default function AddFootwearImage() {
         })
         // TODO - set busy UI
 
-        // Handle successful upload response: already has url in prisma, no need to update
-        navigate(-1)
+        // Handle successful upload response: programmatically submit form data to a resource route to save the file key to prisma, then redirect back to footwear page on success
+        if (saveToPrisma) {
+          const formData = new FormData()
+          formData.append('fileKey', fileKey)
+          submit(formData, {
+            method: 'post',
+            action: `/studio/footwear/${footwearId}/resourceSaveImage`,
+          })
+        }
       } catch (error) {
         console.error('Upload failed', error)
         setSubmitting(false)
@@ -74,7 +83,7 @@ export default function AddFootwearImage() {
   }
   return (
     <form onSubmit={handleS3Upload} className='py-4 px-8'>
-      <legend className='font-bold text-lg'>Choose New Image</legend>
+      <legend className='font-bold text-lg'>Add Image</legend>
       <fieldset disabled={submitting}>
         <div className='input_item'>
           <input

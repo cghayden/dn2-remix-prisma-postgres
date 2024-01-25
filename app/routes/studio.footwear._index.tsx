@@ -1,5 +1,5 @@
 import { type LoaderFunctionArgs } from '@remix-run/node'
-import { Link, Outlet, useLoaderData } from '@remix-run/react'
+import { Link, useLoaderData } from '@remix-run/react'
 import { ContentContainer } from '~/components/styledComponents/ContentContainer'
 
 import { PageHeader } from '~/components/styledComponents/PageHeader'
@@ -52,7 +52,7 @@ export default function AgeLevelsPage() {
                     </p>
                   </Link>
                 ) : (
-                  <Link to={`edit/${footwearItem.id}`}>Add Store Link</Link>
+                  <Link to={`${footwearItem.id}`}>Add Store Link</Link>
                 )}
               </div>
             </li>
