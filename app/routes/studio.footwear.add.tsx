@@ -1,12 +1,13 @@
 import { requireUserId } from '~/session.server'
 import { z } from 'zod'
-import { conform, useForm } from '@conform-to/react'
+import { useForm } from '@conform-to/react'
 import { parse } from '@conform-to/zod'
 import { TextInput } from '~/components/forms/TextInput'
 import { ContentContainer } from '~/components/styledComponents/ContentContainer'
 import { json, type ActionFunctionArgs, redirect } from '@remix-run/node'
 import { upsertStudioFootwear } from '~/models/studio.server'
 import { Form, useActionData } from '@remix-run/react'
+import { PageHeader } from '~/components/styledComponents/PageHeader'
 
 const footwearSchema = z.object({
   name: z.string({ required_error: 'Name is required' }).min(2),
@@ -45,44 +46,47 @@ export default function AddFootwear() {
   const [form, { name, description, url }] = useForm({ lastSubmission })
 
   return (
-    <ContentContainer>
-      <Form method='post' {...form.props} className='form_default'>
-        <fieldset>
-          <legend>Add footwear form</legend>
-          <div className='input_section_wrapper'>
-            <div className='input_item'>
-              <TextInput
-                name='name'
-                label={'Name'}
-                error={name.error}
-                required={true}
-              />
+    <>
+      <PageHeader headerText='Footwear' navigateBack={true} />
+      <ContentContainer className='mx-4'>
+        <Form method='post' {...form.props} className='form_default'>
+          <fieldset>
+            <legend>Add footwear form</legend>
+            <div className='input_section_wrapper'>
+              <div className='input_item'>
+                <TextInput
+                  name='name'
+                  label={'Name'}
+                  error={name.error}
+                  required={true}
+                />
+              </div>
+              <div className='input_item'>
+                <TextInput
+                  name='description'
+                  label={'Description'}
+                  error={description.error}
+                  required={false}
+                />
+              </div>
+              <div className='input_item'>
+                <TextInput
+                  name='url'
+                  label={'Url'}
+                  error={url.error}
+                  required={false}
+                />
+              </div>
+              <button
+                type='submit'
+                className=' rounded bg-blue-500 mt-4 ml-2 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400'
+              >
+                Save Footwear
+              </button>
             </div>
-            <div className='input_item'>
-              <TextInput
-                name='description'
-                label={'Description'}
-                error={description.error}
-                required={false}
-              />
-            </div>
-            <div className='input_item'>
-              <TextInput
-                name='url'
-                label={'Url'}
-                error={url.error}
-                required={false}
-              />
-            </div>
-            <button
-              type='submit'
-              className=' rounded bg-blue-500 mt-4 ml-2 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400'
-            >
-              Save Footwear
-            </button>
-          </div>
-        </fieldset>
-      </Form>
-    </ContentContainer>
+          </fieldset>
+        </Form>
+      </ContentContainer>
+    </>
   )
 }
