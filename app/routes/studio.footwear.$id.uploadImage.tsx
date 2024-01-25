@@ -83,7 +83,7 @@ export default function AddFootwearImage() {
   }
   return (
     <form onSubmit={handleS3Upload} className='py-4 px-8'>
-      <legend className='font-bold text-lg'>Add Image</legend>
+      <legend className='font-bold '>Add Image</legend>
       <fieldset disabled={submitting}>
         <div className='input_item'>
           <input
@@ -97,7 +97,11 @@ export default function AddFootwearImage() {
             }}
           />
           <div className='pt-4'>
-            <button className='btn btn-confirm mr-4' type='submit'>
+            <button
+              className='btn btn-confirm mr-4'
+              type='submit'
+              disabled={!file}
+            >
               Save Image
             </button>
             <button className='btn btn-cancel' onClick={() => navigate(-1)}>

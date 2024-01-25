@@ -14,7 +14,7 @@ export default {
         },
       },
       gridTemplateColumns: {
-        apparelListing: '36px 1fr 30ch',
+        apparelListing: '36px minmax(100px, 1fr) minmax(10ch, 30ch)',
       },
     },
   },

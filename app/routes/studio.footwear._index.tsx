@@ -41,7 +41,7 @@ export default function AgeLevelsPage() {
                   </Link>
                 )}
               </div>
-              <Link to={footwearItem.id} className='mx-8'>
+              <Link to={footwearItem.id} className='w-full'>
                 {footwearItem.name}
               </Link>
               <div className='text-indigo-600'>

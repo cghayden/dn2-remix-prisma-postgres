@@ -21,6 +21,7 @@ import { PageHeader } from '~/components/styledComponents/PageHeader'
 import { PanelHeader } from '~/components/styledComponents/PanelHeader'
 import { getFootwearItem, upsertStudioFootwear } from '~/models/studio.server'
 import ImagePlaceHolderIcon from '~/components/icons/ImagePlaceHolderIcon'
+import { useState } from 'react'
 
 const footwearSchema = z.object({
   name: z.string({ required_error: 'Name is required' }).min(2),
@@ -73,6 +74,7 @@ export default function IndividualShoePage() {
   const footwearItem = useLoaderData<typeof loader>()
   const lastSubmission = useActionData<typeof action>()
   const [form, { name, description, url }] = useForm({ lastSubmission })
+  const [dirtyForm, toggleDirtyForm] = useState(false)
 
   return (
     <div>
@@ -115,6 +117,7 @@ export default function IndividualShoePage() {
           <Outlet context={{ footwearItemName: footwearItem.name }} />
         </div>
         <Form
+          onChange={() => toggleDirtyForm(true)}
           method='post'
           id='editFootwear'
           {...form.props}
@@ -156,7 +159,7 @@ export default function IndividualShoePage() {
               <section>
                 <h3 className='text-lg font-bold my-2'>Classes</h3>
                 <ul>
-                  <li>Dummy Data Class Listngs</li>
+                  <li>Dummy Data Class Listngs...</li>
                   <li>Junior Hip Hop</li>
                   <li>Production</li>
                   <li>Junior Company Hip Hop</li>
@@ -168,9 +171,10 @@ export default function IndividualShoePage() {
             <button
               type='submit'
               form='editFootwear'
-              className=' rounded bg-blue-500 mt-4 ml-2 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400'
+              className=' btn btn-action'
+              disabled={!dirtyForm}
             >
-              Save Footwear
+              Save Changes
             </button>
           </fieldset>
         </Form>
@@ -178,5 +182,3 @@ export default function IndividualShoePage() {
     </div>
   )
 }
-
-// I am storing user-uploaded images in an s3 bucket.  I am uploading them from the client with a presigned URL and storing the url in prisma.  On an initial upload, the UI updates with the newly saved image just fine.  But when I allow the user to upload an updated Image, the UI does not update with the new image, even after refreshing the page manually or stopping and restarting the server.   The URL of the image is not changing, - I am simply replacing the image in S3, using the same filename.  I have confirmed in  s3 that the file presents the new image.  I assume this is a caching issue, so how can I get Remix to hit s3 to refresh the file?   I am using useSubmit to upload the file directly form the client, and posting to a resource route.
