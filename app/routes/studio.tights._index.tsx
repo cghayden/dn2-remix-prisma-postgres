@@ -21,19 +21,7 @@ export default function AgeLevelsPage() {
       <ContentContainer>
         <ul>
           {footwear.map((tightsItem) => (
-            <li key={tightsItem.id} className='pl-8 py-2 flex'>
-              <div className='w-6 h-6'>
-                {tightsItem.imageFilename ? (
-                  <img src={tightsItem.imageFilename} alt='pic' />
-                ) : (
-                  <Link
-                    className='w-full h-full bg-slate-400'
-                    to={`${tightsItem.id}/addImage`}
-                  >
-                    +
-                  </Link>
-                )}
-              </div>
+            <li key={tightsItem.id} className='pl-8 py-2 grid grid-cols-2'>
               <Link to={tightsItem.id}>{tightsItem.name}</Link>
               {tightsItem.url ? (
                 <Link to={tightsItem.url}>Shop</Link>

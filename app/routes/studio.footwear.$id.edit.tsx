@@ -11,14 +11,7 @@ import {
   redirect,
 } from '@remix-run/node'
 import { getFootwearItem, upsertStudioFootwear } from '~/models/studio.server'
-import {
-  Form,
-  Link,
-  Outlet,
-  useActionData,
-  useLoaderData,
-} from '@remix-run/react'
-// import { useState } from 'react'
+import { Form, useActionData, useLoaderData } from '@remix-run/react'
 import { PageHeader } from '~/components/styledComponents/PageHeader'
 import { PanelHeader } from '~/components/styledComponents/PanelHeader'
 
@@ -73,7 +66,6 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 export default function AddFootwear() {
   const lastSubmission = useActionData<typeof action>()
   const footwearItem = useLoaderData<typeof loader>()
-  // const [editImage, toggleEditImage] = useState(false)
   const [form, { name, description, url }] = useForm({ lastSubmission })
 
   return (
@@ -82,10 +74,9 @@ export default function AddFootwear() {
       <ContentContainer>
         <PanelHeader
           headerText={`Edit ${footwearItem.name}`}
-          // editRoute={`../edit/${footwearItem.id}`}
           cancelOption={true}
         />
-        <div className='min-w-48 min-h-48 w-52 h-52 mx-auto text-center'>
+        {/* <div className='min-w-48 min-h-48 w-52 h-52 mx-auto text-center'>
           {footwearItem.imageFilename ? (
             <>
               <img
@@ -106,7 +97,7 @@ export default function AddFootwear() {
             Change / Add Image
           </Link>
           <Outlet context={{ footwearItemName: footwearItem.name }} />
-        </div>
+        </div> */}
         <Form
           method='post'
           id='editFootwear'

@@ -4,13 +4,7 @@ import {
   redirect,
   type LoaderFunctionArgs,
 } from '@remix-run/node'
-import {
-  Form,
-  Link,
-  Outlet,
-  useActionData,
-  useLoaderData,
-} from '@remix-run/react'
+import { Form, Outlet, useActionData, useLoaderData } from '@remix-run/react'
 import { requireUserId } from '~/session.server'
 import { z } from 'zod'
 import { useForm } from '@conform-to/react'
@@ -20,7 +14,7 @@ import { ContentContainer } from '~/components/styledComponents/ContentContainer
 import { PageHeader } from '~/components/styledComponents/PageHeader'
 import { PanelHeader } from '~/components/styledComponents/PanelHeader'
 import { getFootwearItem, upsertStudioFootwear } from '~/models/studio.server'
-import ImagePlaceHolderIcon from '~/components/icons/ImagePlaceHolderIcon'
+// import ImagePlaceHolderIcon from '~/components/icons/ImagePlaceHolderIcon'
 import { useState } from 'react'
 
 const footwearSchema = z.object({
@@ -85,35 +79,7 @@ export default function IndividualShoePage() {
           // editRoute={`../edit/${footwearItem.id}`}
         />
         <div className='item-image-section_wrapper px-4'>
-          <div className='item-image-section'>
-            <div className='min-w-48 min-h-48 w-52 h-52 mx-auto text-center bg-slate-300'>
-              {footwearItem.imageFilename ? (
-                <>
-                  <img
-                    className='w-full h-full object-contain object-center'
-                    src={`https://dancernotes.s3.us-east-2.amazonaws.com/${footwearItem.imageFilename}`}
-                    alt='footwear pic'
-                  />
-
-                  <Link to={`uploadImage?new=false`}>Add /Change Image</Link>
-                </>
-              ) : (
-                <div className='flex flex-col items-center justify-center h-full w-full'>
-                  <Link
-                    to={'uploadImage/?new=true'}
-                    className=' text-indigo-600 w-full h-full'
-                  >
-                    <div className='flex flex-col justify-center w-full h-full'>
-                      <div className='mx-auto mb-4'>
-                        <ImagePlaceHolderIcon w={'60'} h={'60'} />
-                      </div>
-                      Add an Image
-                    </div>
-                  </Link>
-                </div>
-              )}
-            </div>
-          </div>
+          <div className='item-image-section'></div>
           <Outlet context={{ footwearItemName: footwearItem.name }} />
         </div>
         <Form
