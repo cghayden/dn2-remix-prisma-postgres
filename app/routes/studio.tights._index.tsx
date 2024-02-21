@@ -17,17 +17,13 @@ export default function AgeLevelsPage() {
 
   return (
     <div className='flex flex-col h-full'>
-      <PageHeader headerText='Footwear' actionRoute='add' className='px-4' />
-      <ContentContainer>
+      <PageHeader headerText='Tights' actionRoute='add' className='px-4' />
+      <ContentContainer className='max-w-[600px] w-5/6'>
         <ul>
           {footwear.map((tightsItem) => (
             <li key={tightsItem.id} className='pl-8 py-2 grid grid-cols-2'>
               <Link to={tightsItem.id}>{tightsItem.name}</Link>
-              {tightsItem.url ? (
-                <Link to={tightsItem.url}>Shop</Link>
-              ) : (
-                <Link to={`edit/${tightsItem.id}`}>Shop</Link>
-              )}
+              {tightsItem.url ? <Link to={tightsItem.url}>Shop</Link> : null}
             </li>
           ))}
         </ul>

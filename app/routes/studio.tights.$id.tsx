@@ -13,31 +13,32 @@ import { TextInput } from '~/components/forms/TextInput'
 import { ContentContainer } from '~/components/styledComponents/ContentContainer'
 import { PageHeader } from '~/components/styledComponents/PageHeader'
 import { PanelHeader } from '~/components/styledComponents/PanelHeader'
-import { getFootwearItem, upsertStudioFootwear } from '~/models/studio.server'
+import { getTightsItem, upsertStudioTights } from '~/models/studio.server'
 // import ImagePlaceHolderIcon from '~/components/icons/ImagePlaceHolderIcon'
 import { useState } from 'react'
 
-const footwearSchema = z.object({
+const tightsSchema = z.object({
   name: z.string({ required_error: 'Name is required' }).min(2),
   description: z.string().min(2).optional(),
   url: z.string().url().optional(),
   danceClassIds: z.string().array().optional().default([]),
-  footwearId: z.string().default('new'),
+  tightsId: z.string().default('new'),
 })
 
 export async function action({ request }: ActionFunctionArgs) {
   const userId = await requireUserId(request)
   const formData = await request.formData()
-  const submission = parse(formData, { schema: footwearSchema })
+  const submission = parse(formData, { schema: tightsSchema })
 
   if (submission.intent !== 'submit' || !submission.value) {
     return json(submission)
   }
 
-  const { name, description, url, footwearId, danceClassIds } = submission.value
+  const { name, description, url, tightsId, danceClassIds } = submission.value
+  console.log('tightsId', tightsId)
 
-  const footwear = await upsertStudioFootwear({
-    footwearId,
+  await upsertStudioTights({
+    tightsId,
     studioId: userId,
     name,
     description,
@@ -45,58 +46,58 @@ export async function action({ request }: ActionFunctionArgs) {
     danceClassIds,
   })
 
-  return redirect(`/studio/footwear`)
+  return redirect(`/studio/tights`)
 }
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request)
-  const footwearId = params.id
+  const tightsId = params.id
 
-  if (!footwearId) {
-    throw new Error('no footwear Id was provided')
+  if (!tightsId) {
+    throw new Error('no tights Id was provided')
   }
 
-  const footwearItem = await getFootwearItem(footwearId)
-  if (footwearItem?.studioId !== userId) {
+  const tightsItem = await getTightsItem(tightsId)
+  if (tightsItem?.studioId !== userId) {
     throw new Error('you cannot view this item')
   }
 
-  return footwearItem
+  return tightsItem
 }
 
-export default function IndividualShoePage() {
-  const footwearItem = useLoaderData<typeof loader>()
+export default function IndividualTightsPage() {
+  const tightsItem = useLoaderData<typeof loader>()
   const lastSubmission = useActionData<typeof action>()
   const [form, { name, description, url }] = useForm({ lastSubmission })
   const [dirtyForm, toggleDirtyForm] = useState(false)
 
   return (
     <div>
-      <PageHeader headerText='Footwear' actionRoute='add' navigateBack={true} />
+      <PageHeader headerText='Tights' actionRoute='add' navigateBack={true} />
       <ContentContainer className='m-3'>
         <PanelHeader
-          headerText={footwearItem.name}
+          headerText={tightsItem.name}
           // editRoute={`../edit/${footwearItem.id}`}
         />
         <div className='item-image-section_wrapper px-4'>
           <div className='item-image-section'></div>
-          <Outlet context={{ footwearItemName: footwearItem.name }} />
+          <Outlet context={{ tightsItemName: tightsItem.name }} />
         </div>
         <Form
           onChange={() => toggleDirtyForm(true)}
           method='post'
-          id='editFootwear'
+          id='editTights'
           {...form.props}
           className='form_default'
         >
           <fieldset>
             <div className='input_section_wrapper'>
-              <input type='hidden' value={footwearItem.id} name='footwearId' />
+              <input type='hidden' value={tightsItem.id} name='tightsId' />
               <div className='input_item'>
                 <TextInput
                   label={'Name'}
                   name='name'
-                  defaultValue={footwearItem?.name ?? ''}
+                  defaultValue={tightsItem?.name ?? ''}
                   error={name.error}
                   required={true}
                 />
@@ -105,7 +106,7 @@ export default function IndividualShoePage() {
                 <TextInput
                   label={'Description'}
                   name='description'
-                  defaultValue={footwearItem?.description ?? ''}
+                  defaultValue={tightsItem?.description ?? ''}
                   error={description.error}
                   required={false}
                 />
@@ -114,7 +115,7 @@ export default function IndividualShoePage() {
                 <TextInput
                   label={'Url'}
                   name='url'
-                  defaultValue={footwearItem?.url ?? ''}
+                  defaultValue={tightsItem?.url ?? ''}
                   error={url.error}
                   required={false}
                 />
@@ -136,7 +137,7 @@ export default function IndividualShoePage() {
             </div>
             <button
               type='submit'
-              form='editFootwear'
+              form='editTights'
               className=' btn btn-action'
               disabled={!dirtyForm}
             >

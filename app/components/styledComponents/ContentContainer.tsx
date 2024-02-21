@@ -7,17 +7,9 @@ export const ContentContainer = ({
 }) => {
   return (
     <div
-      className={`bg-white rounded-md shadow-sm border border-gray-300 ${className}`}
+      className={`bg-white rounded-md shadow-sm border border-gray-300 mx-auto ${className}`}
     >
       {children}
     </div>
-  )
-}
-
-export default function MyComponent() {
-  return (
-    <ContentContainer className='max-w-[600px]'>
-      <p>Hello from my container</p>
-    </ContentContainer>
   )
 }

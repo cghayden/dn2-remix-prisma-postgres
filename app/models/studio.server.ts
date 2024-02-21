@@ -147,6 +147,16 @@ export async function getFootwearItem(footwearId: Footwear['id']) {
   return footwearItem
 }
 
+export async function getTightsItem(tightsId: Tights['id']) {
+  const tightsItem = await prisma.tights.findUnique({
+    where: {
+      id: tightsId,
+    },
+  })
+
+  return tightsItem
+}
+
 export async function getStudioConfig(userId: User['userId']) {
   const studio = prisma.studio.findUnique({
     where: {
@@ -284,20 +294,20 @@ export async function saveFootwearImage({
 }
 
 export async function upsertStudioTights({
+  studioId,
   tightsId,
   name,
   description,
   url,
   imageFilename,
-  studioId,
   danceClassIds,
 }: {
+  studioId: User['userId']
   tightsId: Tights['id'] | 'new'
   name: Tights['name']
   description?: Tights['description']
   url?: Tights['url']
   imageFilename?: Tights['imageFilename']
-  studioId: User['userId']
   danceClassIds: string[]
 }) {
   const danceClassConnector = danceClassIds.map((classId) => {

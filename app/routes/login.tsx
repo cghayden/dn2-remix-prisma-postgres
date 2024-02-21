@@ -73,7 +73,7 @@ export default function LoginPage() {
   }, [actionData])
 
   return (
-    <div className='flex min-h-screen flex-col justify-center'>
+    <div className='flex min-h-screen flex-col justify-center m-auto'>
       <h1 className='text-center pb-1 text-xl'>Login</h1>
       <div className='mx-auto w-full max-w-md px-8 py-8'>
         <Form method='post' className='space-y-6'>
