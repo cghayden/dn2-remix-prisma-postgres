@@ -25,8 +25,8 @@ const danceSchema = z.object({
   competitions: z.boolean().default(false),
   recital: z.boolean().default(false),
   skillLevelId: z.string(),
-  tights: z.string().optional(),
-  footwear: z.string().optional(),
+  tightsId: z.string().optional(),
+  footwearId: z.string().optional(),
 })
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -46,8 +46,8 @@ export async function action({ request }: ActionFunctionArgs) {
     competitions,
     recital,
     skillLevelId,
-    // tights,
-    // footwear,
+    tightsId,
+    footwearId,
   } = submission.value
 
   await createStudioDance({
@@ -58,8 +58,8 @@ export async function action({ request }: ActionFunctionArgs) {
     competitions,
     recital,
     skillLevelId,
-    // tights,
-    // footwear,
+    tightsId,
+    footwearId,
   }).catch((err) => {
     throw new Error(err.message)
   })
@@ -80,6 +80,8 @@ export default function AddDanceClass() {
   const lastSubmission = useActionData<typeof action>()
   const [selectedAgeLevel, setSelectedAgeLevel] = useState('')
   const [selectedSkillLevel, setSelectedSkillLevel] = useState('')
+  const [selectedTights, setSelectedTights] = useState('')
+  const [selectedFootwear, setSelectedFootwear] = useState('')
 
   // The `useForm` hook will return everything you need to setup a form including the error and config of each field
   const [
@@ -89,10 +91,10 @@ export default function AddDanceClass() {
       performanceName,
       ageLevelId,
       skillLevelId,
+      tightsId,
+      footwearId,
       competitions,
       recital,
-      footwear,
-      tights,
     },
   ] = useForm({
     // The last submission will be used to report the error and serves as the default value and initial error of the form for progressive enhancement
@@ -125,6 +127,8 @@ export default function AddDanceClass() {
               required={false}
             />
           </div>
+
+          {/* Age Level */}
           <div className='input_item'>
             <label
               className='block text-sm text-gray-600 mb-1'
@@ -169,6 +173,8 @@ export default function AddDanceClass() {
               </div>
             ) : null}
           </div>
+
+          {/* Skill Level Selector*/}
           <div className='input_item'>
             <label
               className='block text-sm text-gray-600 mb-1'
@@ -181,41 +187,93 @@ export default function AddDanceClass() {
               name='skillLevelId'
               value={selectedSkillLevel}
             />
-            {studioConfig.skillLevels.map((level) => (
+            {studioConfig.skillLevels.map((skillLevel) => (
               <button
                 type='button'
-                key={level.id}
+                key={skillLevel.id}
                 className={`inline-block text-sm px-4 py-2 border rounded-full mr-2 mb-2 
                           ${
-                            selectedSkillLevel === level.id
+                            selectedSkillLevel === skillLevel.id
                               ? 'bg-green-500 text-white'
                               : 'bg-gray-200 text-gray-700'
                           }`}
-                onClick={() => setSelectedSkillLevel(level.id)}
+                onClick={() => setSelectedSkillLevel(skillLevel.id)}
               >
-                {level.name}
+                {skillLevel.name}
               </button>
             ))}
-            {/* <select
-              // required={true}
-              name='skillLevelId'
-              id='skillLevel'
-              className='w-full border rounded bg-gray-50 border-gray-300 text-gray-800 px-2 py-1 focus:ring-2 focus:ring-blue-300 pt-[5px] pb-[5px]'
-            >
-              <option value='12'>-- Choose a Dance Level --</option>
-              {studioConfig.skillLevels.map((skillLevel) => (
-                <option key={skillLevel.id} value={skillLevel.id}>
-                  {skillLevel.name}
-                </option>
-              ))}
-            </select> */}
             {skillLevelId.error ? (
               <div className='pt-1 text-red-700' id={`skillLevel-error`}>
-                {ageLevelId.error}
+                {skillLevelId.error}
               </div>
             ) : null}
           </div>
 
+          {/* Tights Selector */}
+          <div className='input_item'>
+            <label
+              className='block text-sm text-gray-600 mb-1'
+              htmlFor={'tights'}
+            >
+              Tights
+            </label>
+            <input type='hidden' name='tightsId' value={selectedTights} />
+            {studioConfig.tights.map((tightsItem) => (
+              <button
+                type='button'
+                key={tightsItem.id}
+                className={`inline-block text-sm px-4 py-2 border rounded-full mr-2 mb-2 
+                          ${
+                            selectedTights === tightsItem.id
+                              ? 'bg-green-500 text-white'
+                              : 'bg-gray-200 text-gray-700'
+                          }`}
+                onClick={() => setSelectedTights(tightsItem.id)}
+              >
+                {tightsItem.name}
+              </button>
+            ))}
+            {tightsId.error ? (
+              <div className='pt-1 text-red-700' id={`tights-error`}>
+                {tightsId.error}
+              </div>
+            ) : null}
+          </div>
+
+          {/* Footwear Selector */}
+
+          {/* Tights Selector */}
+          <div className='input_item'>
+            <label
+              className='block text-sm text-gray-600 mb-1'
+              htmlFor={'footwear'}
+            >
+              Footwear
+            </label>
+            <input type='hidden' name='footwearId' value={selectedFootwear} />
+            {studioConfig.footwear.map((footwearItem) => (
+              <button
+                type='button'
+                key={footwearItem.id}
+                className={`inline-block text-sm px-4 py-2 border rounded-full mr-2 mb-2 
+                          ${
+                            selectedFootwear === footwearItem.id
+                              ? 'bg-green-500 text-white'
+                              : 'bg-gray-200 text-gray-700'
+                          }`}
+                onClick={() => setSelectedFootwear(footwearItem.id)}
+              >
+                {footwearItem.name}
+              </button>
+            ))}
+            {footwearId.error ? (
+              <div className='pt-1 text-red-700' id={`footwear-error`}>
+                {footwearId.error}
+              </div>
+            ) : null}
+          </div>
+
+          {/* Competitions Selector */}
           <div className='input_item'>
             <label className='flex gap-4'>
               <input {...conform.input(competitions, { type: 'checkbox' })} />
@@ -223,6 +281,7 @@ export default function AddDanceClass() {
             </label>
           </div>
 
+          {/* Recital Selector */}
           <div className='input_item'>
             <label className='flex gap-4'>
               <input {...conform.input(recital, { type: 'checkbox' })} />
@@ -230,22 +289,6 @@ export default function AddDanceClass() {
             </label>
           </div>
           <div>{recital.error}</div>
-          <div className='input_item'>
-            <TextInput
-              name='tights'
-              label={'Tights'}
-              error={tights.error}
-              required={false}
-            />
-          </div>
-          <div className='input_item'>
-            <TextInput
-              name='footwear'
-              label={'Footwear'}
-              error={footwear.error}
-              required={false}
-            />
-          </div>
           <button
             type='submit'
             className=' rounded bg-blue-500 mt-4 ml-2 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400'
