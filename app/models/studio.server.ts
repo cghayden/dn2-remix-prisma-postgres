@@ -13,7 +13,7 @@ import { prisma } from '~/db.server'
 import { requireUserId } from '~/session.server'
 import { getUserById } from './user.server'
 import { redirect } from '@remix-run/node'
-import { DeleteItem } from 'types'
+import type { DeleteItem } from 'types'
 // import { select } from 'node_modules/@conform-to/react/helpers'
 
 // return logged in studio without password

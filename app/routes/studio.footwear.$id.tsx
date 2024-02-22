@@ -4,7 +4,13 @@ import {
   redirect,
   type LoaderFunctionArgs,
 } from '@remix-run/node'
-import { Form, Outlet, useActionData, useLoaderData } from '@remix-run/react'
+import {
+  Form,
+  Outlet,
+  useActionData,
+  useLoaderData,
+  useSubmit,
+} from '@remix-run/react'
 import { requireUserId } from '~/session.server'
 import { z } from 'zod'
 import { useForm } from '@conform-to/react'
@@ -16,6 +22,7 @@ import { PanelHeader } from '~/components/styledComponents/PanelHeader'
 import { getFootwearItem, upsertStudioFootwear } from '~/models/studio.server'
 // import ImagePlaceHolderIcon from '~/components/icons/ImagePlaceHolderIcon'
 import { useState } from 'react'
+import deleteItem from '~/lib/deleteItem'
 
 const footwearSchema = z.object({
   name: z.string({ required_error: 'Name is required' }).min(2),
@@ -36,7 +43,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const { name, description, url, footwearId, danceClassIds } = submission.value
 
-  const footwear = await upsertStudioFootwear({
+  await upsertStudioFootwear({
     footwearId,
     studioId: userId,
     name,
@@ -69,6 +76,7 @@ export default function IndividualShoePage() {
   const lastSubmission = useActionData<typeof action>()
   const [form, { name, description, url }] = useForm({ lastSubmission })
   const [dirtyForm, toggleDirtyForm] = useState(false)
+  const submit = useSubmit()
 
   return (
     <div>
@@ -134,14 +142,28 @@ export default function IndividualShoePage() {
                 </ul>
               </section>
             </div>
-            <button
-              type='submit'
-              form='editFootwear'
-              className=' btn btn-action'
-              disabled={!dirtyForm}
-            >
-              Save Changes
-            </button>
+            <div className='flex justify-between'>
+              <button
+                type='submit'
+                form='editTights'
+                className=' btn btn-action'
+                disabled={!dirtyForm}
+              >
+                Save Changes
+              </button>
+              <button
+                type='button'
+                className='btn btn-cancel'
+                onClick={() =>
+                  deleteItem(
+                    { itemId: footwearItem.id, itemType: 'footwear' },
+                    submit
+                  )
+                }
+              >
+                Delete
+              </button>
+            </div>
           </fieldset>
         </Form>
       </ContentContainer>

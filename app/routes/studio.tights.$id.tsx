@@ -22,8 +22,7 @@ import { PanelHeader } from '~/components/styledComponents/PanelHeader'
 import { getTightsItem, upsertStudioTights } from '~/models/studio.server'
 // import ImagePlaceHolderIcon from '~/components/icons/ImagePlaceHolderIcon'
 import { useState } from 'react'
-import { DeleteItem } from 'types'
-import { Delete } from '@aws-sdk/client-s3'
+import deleteItem from '~/lib/deleteItem'
 
 const tightsSchema = z.object({
   name: z.string({ required_error: 'Name is required' }).min(2),
@@ -78,14 +77,6 @@ export default function IndividualTightsPage() {
   const [form, { name, description, url }] = useForm({ lastSubmission })
   const [dirtyForm, toggleDirtyForm] = useState(false)
   const submit = useSubmit()
-
-  const deleteItem = ({ itemId, itemType }: DeleteItem) => {
-    console.log(`delete ${itemId}`)
-    submit(
-      { itemId, itemType },
-      { method: 'post', action: '/studio/resourceDeleteItem' }
-    )
-  }
 
   return (
     <div>
@@ -164,7 +155,10 @@ export default function IndividualTightsPage() {
                 type='button'
                 className='btn btn-cancel'
                 onClick={() =>
-                  deleteItem({ itemId: tightsItem.id, itemType: 'tights' })
+                  deleteItem(
+                    { itemId: tightsItem.id, itemType: 'tights' },
+                    submit
+                  )
                 }
               >
                 Delete
