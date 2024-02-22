@@ -17,7 +17,6 @@ import { useForm } from '@conform-to/react'
 import { parse } from '@conform-to/zod'
 import { TextInput } from '~/components/forms/TextInput'
 import { ContentContainer } from '~/components/styledComponents/ContentContainer'
-import { PageHeader } from '~/components/styledComponents/PageHeader'
 import { PanelHeader } from '~/components/styledComponents/PanelHeader'
 import { getFootwearItem, upsertStudioFootwear } from '~/models/studio.server'
 // import ImagePlaceHolderIcon from '~/components/icons/ImagePlaceHolderIcon'
@@ -80,7 +79,6 @@ export default function IndividualShoePage() {
 
   return (
     <div>
-      <PageHeader headerText='Footwear' actionRoute='add' navigateBack={true} />
       <ContentContainer className='m-3'>
         <PanelHeader
           headerText={footwearItem.name}

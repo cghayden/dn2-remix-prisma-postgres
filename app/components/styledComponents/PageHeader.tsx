@@ -27,7 +27,7 @@ export function PageHeader({
       </div>
       <h1 className='font-bold text-xl'>{headerText}</h1>
       {actionRoute && (
-        <Link to={actionRoute} className='ml-auto text-2xl'>
+        <Link to={actionRoute} className='ml-auto text-2xl pr-8'>
           +
         </Link>
       )}

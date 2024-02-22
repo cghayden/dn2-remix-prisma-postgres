@@ -15,7 +15,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function StudioConfigIndex() {
   const { ageLevels, skillLevels } = useLoaderData<typeof loader>()
   return (
-    <div>
+    <>
       {/* editable age levels ui */}
       <ConfigItemList itemType='ageLevel' page='Age Levels' data={ageLevels} />
       {/* editable skill levels ui */}
@@ -24,6 +24,6 @@ export default function StudioConfigIndex() {
         page='Skill Levels'
         data={skillLevels}
       />
-    </div>
+    </>
   )
 }

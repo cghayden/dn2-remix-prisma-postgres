@@ -3,7 +3,7 @@ import { PageHeader } from '~/components/styledComponents/PageHeader'
 
 export default function StudioConfigRoot() {
   return (
-    <div className='px-8'>
+    <div>
       <PageHeader headerText='Studio Configuration' />
       <Outlet />
     </div>
