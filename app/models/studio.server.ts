@@ -181,19 +181,26 @@ export async function getDanceClass({
   const danceClass = await prisma.danceClass.findUnique({
     where: { id: danceId },
     select: {
+      id: true,
       studioId: true,
       name: true,
       performanceName: true,
+      tightsId: true,
+      footwearId: true,
+      skillLevelId: true,
+      ageLevelId: true,
+      competitions: true,
+      recital: true,
       ageLevel: {
         select: {
           name: true,
-          description: true,
+          id: true,
         },
       },
       skillLevel: {
         select: {
           name: true,
-          description: true,
+          id: true,
         },
       },
       tights: {
@@ -416,6 +423,47 @@ export async function createStudioDance({
   footwearId?: DanceClass['footwearId'] | null
 }) {
   await prisma.danceClass.create({
+    data: {
+      name,
+      performanceName,
+      studioId,
+      ageLevelId,
+      competitions,
+      recital,
+      skillLevelId,
+      tightsId,
+      footwearId,
+    },
+  })
+}
+
+export async function updateStudioDance({
+  danceClassId,
+  name,
+  performanceName,
+  competitions,
+  recital,
+  studioId,
+  ageLevelId,
+  skillLevelId,
+  tightsId = null,
+  footwearId = null,
+}: {
+  danceClassId: DanceClass['id']
+  name: DanceClass['name']
+  performanceName: DanceClass['performanceName']
+  competitions: DanceClass['competitions']
+  recital: DanceClass['recital']
+  studioId: DanceClass['studioId']
+  ageLevelId: DanceClass['ageLevelId']
+  skillLevelId: DanceClass['skillLevelId']
+  tightsId?: DanceClass['tightsId'] | null
+  footwearId?: DanceClass['footwearId'] | null
+}) {
+  await prisma.danceClass.update({
+    where: {
+      id: danceClassId,
+    },
     data: {
       name,
       performanceName,

@@ -33,6 +33,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const studioId = await requireStudioUserId(request)
   const formData = await request.formData()
   const submission = parse(formData, { schema: danceSchema })
+  console.log('submission', submission)
 
   if (submission.intent !== 'submit' || !submission.value) {
     return json(submission)
@@ -241,8 +242,6 @@ export default function AddDanceClass() {
           </div>
 
           {/* Footwear Selector */}
-
-          {/* Tights Selector */}
           <div className='input_item'>
             <label
               className='block text-sm text-gray-600 mb-1'
