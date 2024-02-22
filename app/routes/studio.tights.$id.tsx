@@ -22,7 +22,7 @@ import { PanelHeader } from '~/components/styledComponents/PanelHeader'
 import { getTightsItem, upsertStudioTights } from '~/models/studio.server'
 // import ImagePlaceHolderIcon from '~/components/icons/ImagePlaceHolderIcon'
 import { useState } from 'react'
-import deleteItem from '~/lib/deleteItem'
+import deleteItem from '~/lib/deleteItemUtil'
 
 const tightsSchema = z.object({
   name: z.string({ required_error: 'Name is required' }).min(2),

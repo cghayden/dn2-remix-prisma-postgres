@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { UpsertLevelForm } from '~/components/studios/UpsertLevelForm'
 import { LevelList } from '~/components/studios/LevelList'
 import { ContentContainer } from '~/components/styledComponents/ContentContainer'
-import { PageHeader } from '~/components/styledComponents/PageHeader'
+import { TableHeader } from '~/components/styledComponents/TableHeader'
 import type { AgeLevel, SkillLevel } from '@prisma/client'
 import { cn } from '~/lib/tailwindUtils'
 
@@ -20,9 +20,8 @@ export default function ConfigItemList({
   const formRef = useRef<HTMLFormElement>(null)
   const [editMode, toggleEditMode] = useState(false)
   return (
-    <div className='mb-8 border-red-600'>
-      <div className='flex justify-between items-end relative'>
-        <PageHeader headerText={page} className='pb-1' />
+    <div className='w-5/6 mx-auto mb-8'>
+      <TableHeader headerText={page} className=''>
         <div className='text-right mb-2'>
           {editMode ? (
             <button
@@ -40,17 +39,19 @@ export default function ConfigItemList({
             </button>
           )}
         </div>
-        {/* Text that alerts the user that the field is in edit mode.  This is not needed as the red border and 'cancel edit mode' button should be enough of a UI signal: 
+      </TableHeader>
+      {/* Text that alerts the user that the field is in edit mode.  This is not needed as the red border and 'cancel edit mode' button should be enough of a UI signal: 
 
         {editMode && (
           <div className='text-rose-600 absolute bottom-0'>Edit Mode</div>
         )} */}
-      </div>
 
       <ContentContainer
         className={cn({
-          'border-2 border-rose-600': editMode === true,
-          'border-2 border-transparent': editMode === false,
+          ' border-rose-600': editMode === true,
+          ' border-transparent': editMode === false,
+          'w-full': true,
+          'border-2': true,
         })}
       >
         <table className='w-full'>

@@ -14,7 +14,7 @@ export const LevelList = ({
           <th className='px-4 py-2 text-sm font-semibold text-start'>
             {level.name}
           </th>
-          <td className='px-4 py-2 text-xs'>{level.description}</td>
+          <td className='px-4 py-2 text-sm'>{level.description}</td>
         </tr>
       ))}
     </tbody>

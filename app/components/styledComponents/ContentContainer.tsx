@@ -7,7 +7,7 @@ export const ContentContainer = ({
 }) => {
   return (
     <div
-      className={`bg-white rounded-md shadow-sm border border-gray-300 mx-auto ${className} w-5/6 `}
+      className={`bg-white rounded-md shadow-sm border border-gray-300 mx-auto ${className} `}
     >
       {children}
     </div>
