@@ -5,31 +5,30 @@ import { parse } from '@conform-to/zod'
 import { TextInput } from '~/components/forms/TextInput'
 import { ContentContainer } from '~/components/styledComponents/ContentContainer'
 import { json, type ActionFunctionArgs, redirect } from '@remix-run/node'
-import { upsertStudioFootwear } from '~/models/studio.server'
+import { upsertStudioTights } from '~/models/studio.server'
 import { Form, useActionData } from '@remix-run/react'
-import { PageHeader } from '~/components/styledComponents/PageHeader'
 
-const footwearSchema = z.object({
+const tightsSchema = z.object({
   name: z.string({ required_error: 'Name is required' }).min(2),
   description: z.string().min(2).optional(),
   url: z.string().url().optional(),
   danceClassIds: z.string().array().optional().default([]),
-  footwearId: z.string().default('new'),
+  tightsId: z.string().default('new'),
 })
 
 export async function action({ request }: ActionFunctionArgs) {
   const userId = await requireUserId(request)
   const formData = await request.formData()
-  const submission = parse(formData, { schema: footwearSchema })
+  const submission = parse(formData, { schema: tightsSchema })
 
   if (submission.intent !== 'submit' || !submission.value) {
     return json(submission)
   }
 
-  const { name, description, url, footwearId, danceClassIds } = submission.value
+  const { name, description, url, tightsId, danceClassIds } = submission.value
 
-  const footwear = await upsertStudioFootwear({
-    footwearId,
+  const newTights = await upsertStudioTights({
+    tightsId,
     studioId: userId,
     name,
     description,
@@ -37,10 +36,10 @@ export async function action({ request }: ActionFunctionArgs) {
     danceClassIds,
   })
 
-  return redirect(`/studio/footwear/${footwear.id}`)
+  return redirect(`/studio/tights/${newTights.id}`)
 }
 
-export default function AddFootwear() {
+export default function AddTights() {
   const lastSubmission = useActionData<typeof action>()
 
   const [form, { name, description, url }] = useForm({ lastSubmission })
@@ -51,7 +50,7 @@ export default function AddFootwear() {
         <Form method='post' {...form.props} className='form_default'>
           <fieldset>
             <legend className='text-lg font-semibold py-4'>
-              Add footwear to your studio
+              Add tights to your studio
             </legend>
             <div className='input_section_wrapper'>
               <div className='input_item'>
@@ -82,7 +81,7 @@ export default function AddFootwear() {
                 type='submit'
                 className=' rounded bg-blue-500 mt-4 ml-2 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400'
               >
-                Save Footwear
+                Save Tights
               </button>
             </div>
           </fieldset>

@@ -80,8 +80,7 @@ export default function IndividualTightsPage() {
 
   return (
     <div>
-      <PageHeader headerText='Tights' actionRoute='add' navigateBack={true} />
-      <ContentContainer className='m-3'>
+      <ContentContainer className='m-3 w-5/6'>
         <PanelHeader
           headerText={tightsItem.name}
           // editRoute={`../edit/${footwearItem.id}`}

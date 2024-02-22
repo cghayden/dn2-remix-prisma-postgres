@@ -314,7 +314,7 @@ export async function upsertStudioTights({
   const danceClassConnector = danceClassIds.map((classId) => {
     return { id: classId }
   })
-  await prisma.tights.upsert({
+  return await prisma.tights.upsert({
     where: {
       id: tightsId,
     },
