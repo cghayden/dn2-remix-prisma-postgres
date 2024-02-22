@@ -5,7 +5,7 @@ type PageHeaderProps = {
   className?: string
   actionRoute?: string | null
   navigateBack?: boolean
-  children: ReactNode
+  children?: ReactNode
 }
 
 export function TableHeader({

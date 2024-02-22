@@ -109,7 +109,7 @@ export default function AddDanceClass() {
   return (
     <>
       <PageHeader headerText='Add A New Dance' />
-      <Form method='post' {...form.props} className='form_default'>
+      <Form method='post' {...form.props} className='form_default w-5/6'>
         <div className='input_section_wrapper'>
           <div className='input_item'>
             <TextInput

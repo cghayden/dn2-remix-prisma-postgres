@@ -2,6 +2,7 @@ import { type LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { ContentContainer } from '~/components/styledComponents/ContentContainer'
 import { PageHeader } from '~/components/styledComponents/PageHeader'
+import { TableHeader } from '~/components/styledComponents/TableHeader'
 import { getDanceClass, requireStudioUserId } from '~/models/studio.server'
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
@@ -25,34 +26,36 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 export default function StudioDanceClass() {
   const danceClass = useLoaderData<typeof loader>()
-  console.log('danceClass', danceClass)
 
   return (
     <div>
-      <PageHeader headerText={danceClass.name} />
-
-      <ContentContainer>
-        <div>
-          <ul>
-            <li>
-              <span className='font-bold text-lg'>name: </span>
-              {danceClass.name}
-            </li>
-            <li>
-              <span className='font-bold text-lg'>performance name:</span>{' '}
-              {danceClass.performanceName}
-            </li>
-            <li>
-              <span className='font-bold text-lg'>age level:</span>{' '}
-              {danceClass.ageLevel.name}
-            </li>
-            <li>
-              <span className='font-bold text-lg'>skill level:</span>{' '}
-              {danceClass.skillLevel.name}
-            </li>
-          </ul>
-        </div>
-      </ContentContainer>
+      <PageHeader headerText='Dance Class' />
+      <div className='w-5/6 mx-auto'>
+        {/* <TableHeader headerText={danceClass.name} /> */}
+        <ContentContainer className='w-full p-4'>
+          <h2 className='font-bold text-lg pb-2'>{danceClass.name}</h2>
+          <div>
+            <ul>
+              <li>
+                <span className='font-bold text-lg'>name: </span>
+                {danceClass.name}
+              </li>
+              <li>
+                <span className='font-bold text-lg'>performance name:</span>{' '}
+                {danceClass.performanceName}
+              </li>
+              <li>
+                <span className='font-bold text-lg'>age level:</span>{' '}
+                {danceClass.ageLevel.name}
+              </li>
+              <li>
+                <span className='font-bold text-lg'>skill level:</span>{' '}
+                {danceClass.skillLevel.name}
+              </li>
+            </ul>
+          </div>
+        </ContentContainer>
+      </div>
     </div>
   )
 }
