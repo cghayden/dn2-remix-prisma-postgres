@@ -4,7 +4,13 @@ import {
   redirect,
   type LoaderFunctionArgs,
 } from '@remix-run/node'
-import { Form, Outlet, useActionData, useLoaderData } from '@remix-run/react'
+import {
+  Form,
+  Outlet,
+  useActionData,
+  useLoaderData,
+  useSubmit,
+} from '@remix-run/react'
 import { requireUserId } from '~/session.server'
 import { z } from 'zod'
 import { useForm } from '@conform-to/react'
@@ -16,6 +22,8 @@ import { PanelHeader } from '~/components/styledComponents/PanelHeader'
 import { getTightsItem, upsertStudioTights } from '~/models/studio.server'
 // import ImagePlaceHolderIcon from '~/components/icons/ImagePlaceHolderIcon'
 import { useState } from 'react'
+import { DeleteItem } from 'types'
+import { Delete } from '@aws-sdk/client-s3'
 
 const tightsSchema = z.object({
   name: z.string({ required_error: 'Name is required' }).min(2),
@@ -35,7 +43,6 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   const { name, description, url, tightsId, danceClassIds } = submission.value
-  console.log('tightsId', tightsId)
 
   await upsertStudioTights({
     tightsId,
@@ -70,6 +77,15 @@ export default function IndividualTightsPage() {
   const lastSubmission = useActionData<typeof action>()
   const [form, { name, description, url }] = useForm({ lastSubmission })
   const [dirtyForm, toggleDirtyForm] = useState(false)
+  const submit = useSubmit()
+
+  const deleteItem = ({ itemId, itemType }: DeleteItem) => {
+    console.log(`delete ${itemId}`)
+    submit(
+      { itemId, itemType },
+      { method: 'post', action: '/studio/resourceDeleteItem' }
+    )
+  }
 
   return (
     <div>
@@ -135,14 +151,25 @@ export default function IndividualTightsPage() {
                 </ul>
               </section>
             </div>
-            <button
-              type='submit'
-              form='editTights'
-              className=' btn btn-action'
-              disabled={!dirtyForm}
-            >
-              Save Changes
-            </button>
+            <div className='flex justify-between'>
+              <button
+                type='submit'
+                form='editTights'
+                className=' btn btn-action'
+                disabled={!dirtyForm}
+              >
+                Save Changes
+              </button>
+              <button
+                type='button'
+                className='btn btn-cancel'
+                onClick={() =>
+                  deleteItem({ itemId: tightsItem.id, itemType: 'tights' })
+                }
+              >
+                Delete
+              </button>
+            </div>
           </fieldset>
         </Form>
       </ContentContainer>

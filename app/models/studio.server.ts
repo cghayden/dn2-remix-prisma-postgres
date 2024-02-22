@@ -13,6 +13,7 @@ import { prisma } from '~/db.server'
 import { requireUserId } from '~/session.server'
 import { getUserById } from './user.server'
 import { redirect } from '@remix-run/node'
+import { DeleteItem } from 'types'
 // import { select } from 'node_modules/@conform-to/react/helpers'
 
 // return logged in studio without password
@@ -419,4 +420,23 @@ export async function createStudioDance({
       skillLevelId,
     },
   })
+}
+
+export async function deleteItem({ itemId, itemType }: DeleteItem) {
+  switch (itemType) {
+    case 'tights':
+      await prisma.tights.delete({
+        where: { id: itemId },
+      })
+      break
+
+    case 'footwear':
+      await prisma.footwear.delete({
+        where: { id: itemId },
+      })
+      break
+
+    default:
+      throw new Error('id or item type not provided')
+  }
 }
