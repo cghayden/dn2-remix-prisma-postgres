@@ -24,7 +24,7 @@ CREATE TABLE "DanceClass" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "style" TEXT,
-    "shoes" TEXT,
+    "footwear" TEXT,
     "tights" TEXT,
     "notes" TEXT,
     "song" TEXT,

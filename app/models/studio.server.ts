@@ -4,7 +4,7 @@ import type {
   AgeLevel,
   DanceClass,
   SkillLevel,
-  Shoes,
+  Footwear,
   Tights,
 } from '@prisma/client'
 import bcrypt from 'bcryptjs'
@@ -13,6 +13,8 @@ import { prisma } from '~/db.server'
 import { requireUserId } from '~/session.server'
 import { getUserById } from './user.server'
 import { redirect } from '@remix-run/node'
+import type { DeleteItem } from 'types'
+// import { select } from 'node_modules/@conform-to/react/helpers'
 
 // return logged in studio without password
 export async function requireStudio(request: Request) {
@@ -112,8 +114,9 @@ export async function getSkillLevels(userId: User['userId']) {
   })
   return studio
 }
-export async function getStudioShoes(userId: User['userId']) {
-  const studio = prisma.shoes.findMany({
+
+export async function getStudioFootwear(userId: User['userId']) {
+  const footwear = await prisma.footwear.findMany({
     where: {
       studioId: userId,
     },
@@ -121,7 +124,38 @@ export async function getStudioShoes(userId: User['userId']) {
       name: 'asc',
     },
   })
-  return studio
+  return footwear
+}
+export async function getStudioTights(userId: User['userId']) {
+  const tights = await prisma.tights.findMany({
+    where: {
+      studioId: userId,
+    },
+    orderBy: {
+      name: 'asc',
+    },
+  })
+  return tights
+}
+
+export async function getFootwearItem(footwearId: Footwear['id']) {
+  const footwearItem = await prisma.footwear.findUnique({
+    where: {
+      id: footwearId,
+    },
+  })
+
+  return footwearItem
+}
+
+export async function getTightsItem(tightsId: Tights['id']) {
+  const tightsItem = await prisma.tights.findUnique({
+    where: {
+      id: tightsId,
+    },
+  })
+
+  return tightsItem
 }
 
 export async function getStudioConfig(userId: User['userId']) {
@@ -136,6 +170,49 @@ export async function getStudioConfig(userId: User['userId']) {
   })
   return studio
 }
+
+export async function getDanceClass({
+  danceId,
+}: {
+  danceId: DanceClass['id']
+}) {
+  const danceClass = await prisma.danceClass.findUnique({
+    where: { id: danceId },
+    select: {
+      studioId: true,
+      name: true,
+      performanceName: true,
+      ageLevel: {
+        select: {
+          name: true,
+          description: true,
+        },
+      },
+      skillLevel: {
+        select: {
+          name: true,
+          description: true,
+        },
+      },
+      tights: {
+        select: {
+          name: true,
+          id: true,
+        },
+      },
+      footwear: {
+        select: {
+          name: true,
+          id: true,
+        },
+      },
+    },
+  })
+
+  return danceClass
+}
+
+// MUTATIONS //
 
 export async function updateAgeLevel(
   levelId: AgeLevel['id'],
@@ -153,36 +230,36 @@ export async function updateAgeLevel(
   })
 }
 
-export async function upsertStudioShoe({
-  shoeId,
+export async function upsertStudioFootwear({
+  studioId,
+  footwearId,
   name,
   description,
   url,
-  image,
-  studioId,
+  imageFilename,
   danceClassIds,
 }: {
-  shoeId: Shoes['id'] | 'new'
-  name: Shoes['name']
-  description?: Shoes['description']
-  url?: Shoes['url']
-  image?: Shoes['image']
   studioId: User['userId']
+  footwearId: Footwear['id'] | 'new'
+  name: Footwear['name']
+  description?: Footwear['description']
+  url?: Footwear['url']
+  imageFilename?: Footwear['imageFilename']
   danceClassIds: string[]
 }) {
   const danceClassConnector = danceClassIds.map((classId) => {
     return { id: classId }
   })
-  await prisma.shoes.upsert({
+  return await prisma.footwear.upsert({
     where: {
-      id: shoeId,
+      id: footwearId,
     },
     update: {
       name,
       description,
       studioId,
       url,
-      image,
+      imageFilename,
       danceClasses: {
         connect: danceClassConnector,
       },
@@ -192,34 +269,52 @@ export async function upsertStudioShoe({
       description,
       studioId,
       url,
-      image,
+      imageFilename,
       danceClasses: {
         connect: danceClassConnector,
       },
     },
   })
 }
+
+export async function saveFootwearImage({
+  footwearId,
+  imageFilename,
+}: {
+  footwearId: Footwear['id']
+  imageFilename: Footwear['imageFilename']
+}) {
+  await prisma.footwear.update({
+    where: {
+      id: footwearId,
+    },
+    data: {
+      imageFilename,
+    },
+  })
+}
+
 export async function upsertStudioTights({
+  studioId,
   tightsId,
   name,
   description,
   url,
-  image,
-  studioId,
+  imageFilename,
   danceClassIds,
 }: {
+  studioId: User['userId']
   tightsId: Tights['id'] | 'new'
   name: Tights['name']
   description?: Tights['description']
   url?: Tights['url']
-  image?: Tights['image']
-  studioId: User['userId']
+  imageFilename?: Tights['imageFilename']
   danceClassIds: string[]
 }) {
   const danceClassConnector = danceClassIds.map((classId) => {
     return { id: classId }
   })
-  await prisma.tights.upsert({
+  return await prisma.tights.upsert({
     where: {
       id: tightsId,
     },
@@ -228,7 +323,7 @@ export async function upsertStudioTights({
       description,
       studioId,
       url,
-      image,
+      imageFilename,
       danceClasses: {
         connect: danceClassConnector,
       },
@@ -238,7 +333,7 @@ export async function upsertStudioTights({
       description,
       studioId,
       url,
-      image,
+      imageFilename,
       danceClasses: {
         connect: danceClassConnector,
       },
@@ -250,7 +345,7 @@ export async function upsertSkillLevel(
   userId: Studio['userId'],
   levelId: SkillLevel['id'] | 'new',
   newName: SkillLevel['name'],
-  levelDescription: SkillLevel['description']
+  levelDescription: SkillLevel['description'] = null
 ) {
   await prisma.skillLevel.upsert({
     where: {
@@ -275,7 +370,7 @@ export async function upsertAgeLevel(
   userId: Studio['userId'],
   levelId: AgeLevel['id'] | 'new',
   newName: AgeLevel['name'],
-  levelDescription: AgeLevel['description']
+  levelDescription: AgeLevel['description'] = null
 ) {
   await prisma.ageLevel.upsert({
     where: {
@@ -325,4 +420,23 @@ export async function createStudioDance({
       skillLevelId,
     },
   })
+}
+
+export async function deleteItem({ itemId, itemType }: DeleteItem) {
+  switch (itemType) {
+    case 'tights':
+      await prisma.tights.delete({
+        where: { id: itemId },
+      })
+      break
+
+    case 'footwear':
+      await prisma.footwear.delete({
+        where: { id: itemId },
+      })
+      break
+
+    default:
+      throw new Error('id or item type not provided')
+  }
 }

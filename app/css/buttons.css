@@ -26,3 +26,17 @@
 .btn-cancel:disabled {
   background-color: var(--tw-slate-300);
 }
+
+.btn-noBg-cancel {
+  color: var(--tw-rose-700);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-noBg-action {
+  color: var(--tw-indigo-500);
+  background: none;
+  border: none;
+  cursor: pointer;
+}

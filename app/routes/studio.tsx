@@ -18,21 +18,21 @@ export default function StudioLayout() {
     { label: 'Home', url: '/studio' },
     { label: 'Create a New Dance', url: '/studio/addDanceClass' },
     // { label: 'Configuration', url: '/studio/settings' },
-    { label: 'Shoes', url: 'apparel/shoes' },
-    { label: 'Tights', url: 'apparel/tights' },
-    { label: 'Age Levels', url: 'config/ageLevels' },
-    { label: 'Skill Levels', url: 'config/skillLevels' },
+    { label: 'Footwear', url: 'footwear' },
+    { label: 'Tights', url: 'tights' },
+    // { label: 'Age Levels', url: 'config/ageLevels' },
+    // { label: 'Skill Levels', url: 'config/skillLevels' },
+    { label: 'Configuration', url: 'config' },
   ]
   return (
     <>
       <StudioHeader />
       <Nav links={studioLinks} />
       <main className='main_custom'>
-        <div className='px-6 flex-1'>
+        <div className='flex-1'>
           <Outlet />
         </div>
       </main>
-      <footer>Footer</footer>
     </>
   )
 }

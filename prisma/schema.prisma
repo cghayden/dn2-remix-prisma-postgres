@@ -61,29 +61,29 @@ model Studio {
   ageLevels    AgeLevel[]
   skillLevels  SkillLevel[] //studio defined skill levels. (e.g. recreational, company, rising star, excel, etc.)
   tights       Tights[]
-  shoes        Shoes[]
+  footwear     Footwear[]
 }
 
 model Tights {
-  id           String       @id @default(uuid())
-  name         String
-  description  String?
-  url          String?
-  image        String?
-  studio       Studio       @relation(fields: [studioId], references: [userId])
-  studioId     String
-  danceClasses DanceClass[]
+  id            String       @id @default(uuid())
+  name          String
+  description   String?
+  url           String?
+  imageFilename String?
+  studio        Studio       @relation(fields: [studioId], references: [userId])
+  studioId      String
+  danceClasses  DanceClass[]
 }
 
-model Shoes {
-  id           String       @id @default(uuid())
-  name         String
-  description  String?
-  url          String?
-  image        String?
-  studio       Studio       @relation(fields: [studioId], references: [userId])
-  studioId     String
-  danceClasses DanceClass[]
+model Footwear {
+  id            String       @id @default(uuid())
+  name          String
+  description   String?
+  url           String?
+  studio        Studio       @relation(fields: [studioId], references: [userId])
+  studioId      String
+  danceClasses  DanceClass[]
+  imageFilename String?
 }
 
 model Instructor {
@@ -110,8 +110,8 @@ model DanceClass {
   name            String
   performanceName String?
   styleOfDance    String?
-  shoes           Shoes?       @relation(fields: [shoesId], references: [id])
-  shoesId         String?
+  footwear        Footwear?    @relation(fields: [footwearId], references: [id])
+  footwearId      String?
   tights          Tights?      @relation(fields: [tightsId], references: [id])
   tightsId        String?
   notes           String?

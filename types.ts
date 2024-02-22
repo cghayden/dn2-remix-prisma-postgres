@@ -21,3 +21,8 @@ export type NavLink = {
   label: string
   url: string
 }
+
+export type DeleteItem = {
+  itemId: string
+  itemType: 'tights' | 'footwear'
+}

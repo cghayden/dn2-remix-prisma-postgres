@@ -58,17 +58,12 @@ function ParentAddImage() {
     // }
     if (file) {
       try {
-        const response = await axios.put(presignedUrl, file, {
+        await axios.put(presignedUrl, file, {
           headers: {
             'Content-Type': file.type,
           },
         })
         // TODO - set busy UI
-        // setSubmitting(false)
-        // toggleShowForm(false)
-        // navigate('..', {
-        //   replace: true,
-        // })
 
         // Handle successful upload response: save and redirect, -> resource route
         const formData = new FormData()

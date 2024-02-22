@@ -77,12 +77,14 @@ export default function AddDancer() {
               <input type='file' accept='image/*' name='imgFile' />
             </div> */}
           </div>
-          <button
-            type='submit'
-            className='w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400'
-          >
-            Create Dancer
-          </button>
+          <div className='pt-4'>
+            <button
+              type='submit'
+              className='w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400'
+            >
+              Create Dancer
+            </button>
+          </div>
         </Form>
       </div>
     </div>

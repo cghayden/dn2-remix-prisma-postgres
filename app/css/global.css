@@ -4,6 +4,11 @@
   --header_height: 3.5rem;
   --nav_width_desktop: 15rem;
 }
+
+html {
+  font-size: 14px;
+}
+
 body {
   color: #303030;
 }
@@ -31,8 +36,6 @@ body {
 .levels_edit {
   display: grid;
   grid-template-columns: 1fr 1fr 80px;
-  /* align-items: center; */
-  margin: 6px 0;
   gap: 10px;
 }
 
@@ -61,11 +64,6 @@ body {
 }
 .input_button_as_row div {
   flex-grow: 1;
-}
-
-.form_default button[type='submit'] {
-  width: 60%;
-  margin: 1.5rem auto 0;
 }
 
 .header {
@@ -115,4 +113,8 @@ body {
   @media (min-width: 767px) {
     padding-left: var(--nav_width_desktop);
   }
+}
+
+.item-image-section_wrapper:has(form) .item-image-section {
+  display: none;
 }

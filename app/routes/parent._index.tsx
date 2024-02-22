@@ -20,7 +20,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   if (!parent.dancers || parent.dancers.length === 0) {
-    console.log('no dancers')
     return redirect('addDancer')
   }
   return json({ parent })
@@ -44,12 +43,12 @@ export default function ParentIndex() {
           <li key={dancer.id}>
             <ContentContainer className='p-6'>
               <div className='flex items-center'>
-                <div className='w-14 h-14 overflow-hidden rounded-full'>
+                {/* <div className='w-14 h-14 overflow-hidden rounded-full'>
                   <img
                     src={`https://dancernotes.s3.us-east-2.amazonaws.com/${dancer.imageFilename}`}
                     alt='dancerImage'
                   />
-                </div>
+                </div> */}
                 <p>{dancer.firstName}</p>
               </div>
             </ContentContainer>
