@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 const prisma = new PrismaClient()
 
-async function seedParentsAndDancers() {
+export async function seedParentsAndDancers() {
   console.log('seeding parents and dancers...')
   const parentNames = [
     { firstName: 'Jon', lastName: 'Snow' },

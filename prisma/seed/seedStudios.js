@@ -122,7 +122,7 @@ const footwear = [
   },
 ]
 
-async function seedStudios() {
+export async function seedStudios() {
   console.log('seeding studios')
   const studioNames = ['A', 'B', 'C', 'D', 'E']
 

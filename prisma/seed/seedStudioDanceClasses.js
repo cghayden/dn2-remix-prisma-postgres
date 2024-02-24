@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 // after retrieving studios from db, this function populates an array of dance classes that can then be used in a prisma create many mutation to create those dances for the studio
-function generateStudioDanceData(studio, stylesOfDance) {
+export function generateStudioDanceData(studio, stylesOfDance) {
   let danceClasses = []
   const ageLevels = studio.ageLevels
   const tights = studio.tights
@@ -60,7 +60,8 @@ function generateStudioDanceData(studio, stylesOfDance) {
   return danceClasses
 }
 
-async function seedDanceClasses() {
+export async function seedDanceClasses() {
+  console.log('seeding studio dance classes')
   const stylesOfDance = ['Tap', 'Jazz', 'Hip Hop', 'Lyric', 'Ballet']
 
   const studios = await prisma.studio.findMany({
