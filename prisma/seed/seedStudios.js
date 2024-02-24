@@ -1,3 +1,5 @@
+// seed database with studios, including skill levels, age levels, footwear, and tights for each studio
+
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 const prisma = new PrismaClient()
@@ -234,107 +236,8 @@ async function seedStudios() {
   }
 }
 
-function generateStudioDanceData(studio, stylesOfDance) {
-  let danceClasses = []
-  const ageLevels = studio.ageLevels
-  const tights = studio.tights
-  const footwear = studio.footwear
-  const skillLevels = studio.skillLevels
-  const defaultSkillLevel = skillLevels.filter(
-    (level) => level.name === 'Recreational'
-  )[0]
-
-  for (const ageLevel of ageLevels) {
-    for (const style of stylesOfDance) {
-      const shouldDuplicateForSkillLevels = [
-        'Mini',
-        'Junior',
-        'Teen',
-        'Senior',
-      ].includes(ageLevel.name)
-
-      if (shouldDuplicateForSkillLevels) {
-        for (let skillLevel of skillLevels) {
-          const tightsId = tights[Math.floor(Math.random() * tights.length)].id
-          const footwearId =
-            footwear[Math.floor(Math.random() * footwear.length)].id
-          danceClasses.push({
-            name: `${ageLevel.name} ${skillLevel.id.slice(23)} ${style} `,
-            ageLevelId: ageLevel.id,
-            skillLevelId: skillLevel.id,
-            styleOfDance: style,
-            tightsId: tightsId,
-            footwearId: footwearId,
-            studioId: studio.userId,
-            competitions: skillLevel.id.slice(23) === 'Company' ? true : false,
-            recital: true,
-          })
-        }
-      } else {
-        const tightsId = tights[Math.floor(Math.random() * tights.length)].id
-        const footwearId =
-          footwear[Math.floor(Math.random() * footwear.length)].id
-
-        danceClasses.push({
-          name: `${ageLevel.name} Recreational ${style}`,
-          ageLevelId: ageLevel.id,
-          skillLevelId: defaultSkillLevel.id,
-          styleOfDance: style,
-          tightsId: tightsId,
-          footwearId: footwearId,
-          studioId: studio.userId,
-          competitions: false,
-          recital: true,
-        })
-      }
-    }
-  }
-  return danceClasses
-}
-
-async function seedDanceClasses() {
-  const stylesOfDance = ['Tap', 'Jazz', 'Hip Hop', 'Lyric', 'Ballet']
-
-  const studios = await prisma.studio.findMany({
-    select: {
-      userId: true,
-      ageLevels: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-      tights: {
-        select: {
-          id: true,
-        },
-      },
-      footwear: {
-        select: {
-          id: true,
-        },
-      },
-      skillLevels: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-    },
-  })
-  for (const studio of studios) {
-    const danceClassData = generateStudioDanceData(studio, stylesOfDance)
-    await prisma.danceClass.createMany({
-      data: danceClassData,
-    })
-  }
-}
-
 async function main() {
-  //seed studios
-  // await seedStudios()
-  //seed studio dance classes
-  await seedDanceClasses()
+  await seedStudios()
 }
 
 main()

@@ -1,34 +1,11 @@
+//deletes all studios, including dance classes, skill levels, age levels, footwear and tights
+// import { argv } from 'node:process'
+
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-export async function deleteAllDanceClasses() {
-  console.log('deleting all dance classes ...')
-  await prisma.danceClass.deleteMany({
-    where: {
-      parentId: null,
-    },
-  })
-}
-
-export async function deleteAllSkillLevels() {
-  console.log('deleting all skill levels ...')
-  await prisma.skillLevel.deleteMany({})
-}
-
-export async function deleteAllAgeLevels() {
-  console.log('deleting all age levels ...')
-  await prisma.ageLevel.deleteMany({})
-}
-
-export async function deleteAllFootwear() {
-  console.log('deleting all footwear ...')
-  await prisma.footwear.deleteMany({})
-}
-
-export async function deleteAllTights() {
-  console.log('deleting all tights ...')
-  await prisma.tights.deleteMany({})
-}
+// print process.argv
+// const studioId = argv[2]
 
 export async function deleteAllStudios() {
   console.log('deleting all studios ...')
@@ -40,11 +17,6 @@ export async function deleteAllStudios() {
 }
 
 async function main() {
-  await deleteAllDanceClasses()
-  await deleteAllSkillLevels()
-  await deleteAllAgeLevels()
-  await deleteAllFootwear()
-  await deleteAllTights()
   await deleteAllStudios()
 }
 
@@ -57,3 +29,23 @@ main()
     await prisma.$disconnect()
     process.exit(1)
   })
+
+async function deleteAllSkillLevels() {
+  console.log('deleting all skill levels ...')
+  await prisma.skillLevel.deleteMany({})
+}
+
+async function deleteAllAgeLevels() {
+  console.log('deleting all age levels ...')
+  await prisma.ageLevel.deleteMany({})
+}
+
+async function deleteAllFootwear() {
+  console.log('deleting all footwear ...')
+  await prisma.footwear.deleteMany({})
+}
+
+async function deleteAllTights() {
+  console.log('deleting all tights ...')
+  await prisma.tights.deleteMany({})
+}
