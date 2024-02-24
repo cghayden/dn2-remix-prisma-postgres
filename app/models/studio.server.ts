@@ -47,8 +47,8 @@ export async function createStudio(
   return await prisma.user.create({
     data: {
       email,
-      type,
       password: hashedPassword,
+      type,
       studio: {
         create: {
           name,

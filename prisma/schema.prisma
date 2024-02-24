@@ -31,7 +31,7 @@ enum CompetitiveLevel {
 
 model Parent {
   userId       String       @id // UUID type, primary key and foreign key to User
-  user         User         @relation(fields: [userId], references: [userId])
+  user         User         @relation(fields: [userId], references: [userId], onDelete: Cascade)
   dancers      Dancer[]
   firstName    String
   lastName     String
@@ -43,7 +43,7 @@ model Dancer {
   firstName     String
   lastName      String
   birthdate     DateTime?
-  parent        Parent       @relation(fields: [parentId], references: [userId])
+  parent        Parent       @relation(fields: [parentId], references: [userId], onDelete: Cascade)
   parentId      String
   enrollments   Enrollment[]
   studios       Studio[]
@@ -52,7 +52,7 @@ model Dancer {
 
 model Studio {
   userId       String       @id // UUID type, primary key and foreign key to User
-  user         User         @relation(fields: [userId], references: [userId])
+  user         User         @relation(fields: [userId], references: [userId], onDelete: Cascade)
   name         String
   danceClasses DanceClass[]
   instructors  Instructor[]
@@ -70,9 +70,10 @@ model Tights {
   description   String?
   url           String?
   imageFilename String?
-  studio        Studio       @relation(fields: [studioId], references: [userId])
+  studio        Studio       @relation(fields: [studioId], references: [userId], onDelete: Cascade)
   studioId      String
   danceClasses  DanceClass[]
+  color         String?
 }
 
 model Footwear {
@@ -80,10 +81,11 @@ model Footwear {
   name          String
   description   String?
   url           String?
-  studio        Studio       @relation(fields: [studioId], references: [userId])
+  studio        Studio       @relation(fields: [studioId], references: [userId], onDelete: Cascade)
   studioId      String
   danceClasses  DanceClass[]
   imageFilename String?
+  color         String?
 }
 
 model Instructor {
@@ -95,11 +97,11 @@ model Instructor {
 
 model Enrollment {
   id        String     @id @default(uuid())
-  dancer    Dancer     @relation(fields: [dancerId], references: [id])
+  dancer    Dancer     @relation(fields: [dancerId], references: [id], onDelete: Cascade)
   dancerId  String
-  class     DanceClass @relation(fields: [classId], references: [id])
+  class     DanceClass @relation(fields: [classId], references: [id], onDelete: Cascade)
   classId   String
-  studio    Studio     @relation(fields: [studioId], references: [userId])
+  studio    Studio     @relation(fields: [studioId], references: [userId], onDelete: Cascade)
   studioId  String
   requested DateTime?  @default(now())
   approved  DateTime?  @default(now())
@@ -118,11 +120,11 @@ model DanceClass {
   song            String?
   competitions    Boolean?
   recital         Boolean
-  studio          Studio?      @relation(fields: [studioId], references: [userId])
+  studio          Studio?      @relation(fields: [studioId], references: [userId], onDelete: Cascade)
   studioId        String?
   instructor      Instructor?  @relation(fields: [instructorId], references: [userId])
   instructorId    String?
-  parent          Parent?      @relation(fields: [parentId], references: [userId])
+  parent          Parent?      @relation(fields: [parentId], references: [userId], onDelete: Cascade)
   parentId        String?
   enrollments     Enrollment[]
   schedules       Schedule[]
@@ -136,7 +138,7 @@ model SkillLevel {
   id           String       @id @default(uuid())
   name         String // e.g. 'recreational', 'company', 'excel' or any custom skill level defined by studio
   description  String?
-  studio       Studio       @relation(fields: [studioId], references: [userId])
+  studio       Studio       @relation(fields: [studioId], references: [userId], onDelete: Cascade)
   studioId     String
   danceClasses DanceClass[]
 }
@@ -145,14 +147,14 @@ model AgeLevel {
   id           String       @id @default(uuid())
   name         String // e.g. 'beginner', 'senior', or any custom name
   description  String?
-  studio       Studio       @relation(fields: [studioId], references: [userId])
+  studio       Studio       @relation(fields: [studioId], references: [userId], onDelete: Cascade)
   studioId     String
   danceClasses DanceClass[]
 }
 
 model Schedule {
   id        String     @id @default(uuid())
-  class     DanceClass @relation(fields: [classId], references: [id])
+  class     DanceClass @relation(fields: [classId], references: [id], onDelete: Cascade)
   classId   String
   startTime DateTime
   endTime   DateTime
