@@ -68,9 +68,6 @@ export async function getFullStudio(userId: User['userId']) {
         select: {
           id: true,
           name: true,
-          ageLevel: {
-            select: { name: true },
-          },
         },
       },
     },
@@ -86,6 +83,18 @@ export async function getDanceClasses_Name_Id(userId: User['userId']) {
     select: {
       name: true,
       id: true,
+      skillLevel: true,
+      ageLevel: {
+        select: {
+          name: true,
+        },
+      },
+      styleOfDance: true,
+    },
+    orderBy: {
+      ageLevel: {
+        name: 'asc',
+      },
     },
   })
   return studio
