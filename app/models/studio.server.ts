@@ -8,7 +8,6 @@ import type {
   Tights,
 } from '@prisma/client'
 import bcrypt from 'bcryptjs'
-
 import { prisma } from '~/db.server'
 import { requireUserId } from '~/session.server'
 import { getUserById } from './user.server'
@@ -73,6 +72,21 @@ export async function getFullStudio(userId: User['userId']) {
     },
   })
   return studio
+}
+
+export async function parentSearchStudios({
+  searchVal,
+}: {
+  searchVal: string
+}) {
+  const studios = await prisma.studio.findMany({
+    where: {
+      name: {
+        startsWith: searchVal,
+      },
+    },
+  })
+  return studios
 }
 
 export async function getDanceClasses_Name_Id(userId: User['userId']) {
