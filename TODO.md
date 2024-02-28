@@ -27,3 +27,7 @@ need parent optional on dancer model
 # seed enrollments to have data to build UI and data mining
 
 # About page for each studio that a parent can browse
+
+# Add Max Size to classes
+
+mark as full where appropriate

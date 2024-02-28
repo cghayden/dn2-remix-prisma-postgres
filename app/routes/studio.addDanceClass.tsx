@@ -33,7 +33,6 @@ export async function action({ request }: ActionFunctionArgs) {
   const studioId = await requireStudioUserId(request)
   const formData = await request.formData()
   const submission = parse(formData, { schema: danceSchema })
-  console.log('submission', submission)
 
   if (submission.intent !== 'submit' || !submission.value) {
     return json(submission)

@@ -1,5 +1,5 @@
 import { useForm } from '@conform-to/react'
-import { Form, useActionData } from '@remix-run/react'
+import { Form, Link, useActionData } from '@remix-run/react'
 import { TextInput } from '~/components/forms/TextInput'
 import { ContentContainer } from '~/components/styledComponents/ContentContainer'
 import { z } from 'zod'
@@ -61,7 +61,11 @@ export default function SearchStudios() {
         <h2>Search Results...</h2>
         <ul>
           {actionData?.studios.map((studio) => (
-            <li key={studio.userId}>{studio.name}</li>
+            <li key={studio.userId}>
+              <Link to={`/parent/browseStudioDances/${studio.userId}`}>
+                {studio.name}
+              </Link>
+            </li>
           ))}
         </ul>
       </div>
