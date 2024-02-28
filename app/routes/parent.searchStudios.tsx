@@ -5,10 +5,7 @@ import { ContentContainer } from '~/components/styledComponents/ContentContainer
 import { z } from 'zod'
 import { json, type ActionFunctionArgs } from '@remix-run/node'
 import { parse } from '@conform-to/zod'
-import { prisma } from '~/db.server'
 import { parentSearchStudios } from '~/models/studio.server'
-
-type Props = {}
 
 const searchSchema = z.object({
   searchVal: z.string(),
@@ -19,10 +16,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const submission = parse(formData, { schema: searchSchema })
 
   if (!submission.value) {
-    return json(
-      { status: 'error', submission, studios: undefined },
-      { status: 400 }
-    )
+    return json({ status: 'error', submission, studios: [] })
   }
 
   const { searchVal } = submission.value
@@ -33,7 +27,7 @@ export async function action({ request }: ActionFunctionArgs) {
   return json({ submission, studios })
 }
 
-export default function SearchStudios({}: Props) {
+export default function SearchStudios() {
   const actionData = useActionData<typeof action>()
   console.log('actionData', actionData)
   // console.log('studios', studios);
@@ -66,7 +60,7 @@ export default function SearchStudios({}: Props) {
       <div>
         <h2>Search Results...</h2>
         <ul>
-          {actionData?.studios?.map((studio) => (
+          {actionData?.studios.map((studio) => (
             <li key={studio.userId}>{studio.name}</li>
           ))}
         </ul>

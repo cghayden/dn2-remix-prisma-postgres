@@ -82,7 +82,8 @@ export async function parentSearchStudios({
   const studios = await prisma.studio.findMany({
     where: {
       name: {
-        startsWith: searchVal,
+        contains: searchVal,
+        mode: 'insensitive',
       },
     },
   })
