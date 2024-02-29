@@ -32,7 +32,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const type = 'STUDIO'
   const formData = await request.formData()
   const submission = parse(formData, { schema: studioJoinSchema })
-  console.log(' join submission', submission)
   const redirectTo = safeRedirect(formData.get('redirectTo'), '/')
 
   if (submission.intent !== 'submit' || !submission.value) {
@@ -52,7 +51,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   const user = await createStudio(email, password, type, name)
-  console.log('user', user)
 
   return await createUserSession({
     redirectTo,

@@ -31,15 +31,27 @@ export async function updateDancer(
   })
 }
 
-export async function getDancersName(userId: User['userId']) {
-  // return await prisma.dancer.findMany({
-  //   where: {
-  //     parentId: userId,
-  //   },
-  // })
+export async function getDancers_Id_Name(userId: User['userId']) {
   const dancersNames = await prisma.dancer.findMany({
     where: { parentId: userId },
     select: { firstName: true, id: true },
+  })
+  return dancersNames
+}
+
+export async function getDancersForEnrollment(userId: User['userId']) {
+  const dancersNames = await prisma.dancer.findMany({
+    where: { parentId: userId },
+    select: {
+      firstName: true,
+      id: true,
+      birthdate: true,
+      enrollments: {
+        select: {
+          classId: true,
+        },
+      },
+    },
   })
   return dancersNames
 }

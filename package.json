@@ -7,7 +7,14 @@
     "build": "remix build",
     "dev": "remix dev --manual",
     "start": "remix-serve ./build/index.js",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "seedParents": "node prisma/seed/seedParents.js",
+    "seedStudios": "node prisma/seed/seedStudios.js",
+    "seedStudioClasses": "node prisma/seed/seedStudioDanceClasses.js",
+    "deleteParents": "node prisma/delete/deleteParentsAndDancers.js",
+    "deleteStudios": "node prisma/delete/deleteStudios.js",
+    "deleteStudioClasses": "node prisma/delete/deleteStudioDanceClasses.js",
+    "seedAll": "npm-run-all seedStudios seedStudioClasses seedParents"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.472.0",
@@ -16,7 +23,7 @@
     "@conform-to/zod": "^0.9.0",
     "@fontsource-variable/inter": "^5.0.13",
     "@fontsource/inter": "^5.0.13",
-    "@prisma/client": "^5.3.1",
+    "@prisma/client": "^5.10.2",
     "@remix-run/css-bundle": "^2.0.1",
     "@remix-run/node": "^2.0.1",
     "@remix-run/react": "^2.0.1",
@@ -24,12 +31,14 @@
     "axios": "^1.6.2",
     "bcryptjs": "^2.4.3",
     "clsx": "^2.1.0",
+    "esbuild-register": "^3.5.0",
     "isbot": "^3.6.8",
     "node-fetch": "^3.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwind-merge": "^2.2.0",
-    "tiny-invariant": "^1.3.1"
+    "tiny-invariant": "^1.3.1",
+    "tsconfig-paths": "^4.2.0"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.0.1",
@@ -37,10 +46,10 @@
     "@tailwind-plugin/expose-colors": "^1.1.7",
     "@types/bcryptjs": "^2.4.4",
     "@types/react": "^18.2.20",
-    "@types/react-dom": "^18.2.7",
     "eslint": "^8.38.0",
+    "npm-run-all": "^4.1.5",
     "prettier-plugin-prisma": "^5.0.0",
-    "prisma": "^5.3.1",
+    "prisma": "^5.10.2",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.1.6"
   },

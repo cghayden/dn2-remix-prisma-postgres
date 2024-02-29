@@ -14,7 +14,7 @@ export type ComposeTextInputProps = {
   label: string | null
   name: string
   required?: boolean
-  defaultValue?: string
+  defaultValue?: string | null | undefined
   error: string | undefined
   type?: string
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void

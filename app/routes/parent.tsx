@@ -41,6 +41,7 @@ function ParentLayout() {
     // { label: 'Home', url: '/' },
     { label: 'Create a New Dance', url: '/parent/addDanceClass' },
     { label: 'Add a Dancer', url: '/parent/addDancer' },
+    { label: 'Find a Studio', url: '/parent/searchStudios' },
     ...dancerLinks,
     // { label: 'Configuration', url: '/parent/settings' },
   ]

@@ -76,13 +76,11 @@ export default function ConfigItemList({
                   levelType={itemType}
                 />
               ))}
+              {/* in edit provide a blank entry at the end of the list to enter a new level name and desc. */}
+              <UpsertLevelForm formRef={formRef} levelType={itemType} />
             </tbody>
           ) : (
             <LevelList levels={data} />
-          )}
-          {/* in edit provide a blank entry at the end of the list to enter a new level name and desc. */}
-          {editMode && (
-            <UpsertLevelForm formRef={formRef} levelType={itemType} />
           )}
         </table>
       </ContentContainer>
