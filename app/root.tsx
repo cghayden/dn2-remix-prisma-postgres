@@ -39,7 +39,7 @@ export default function App() {
         <Links />
       </head>
       <NavigationProvider>
-        <body className='bg-gray-150 text-base font-Inter min-h-screen flex'>
+        <body className='bg-gray-150 text-base font-Inter min-h-screen'>
           <Outlet />
           <ScrollRestoration />
           <Scripts />

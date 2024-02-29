@@ -53,7 +53,7 @@ export default function BrowseStudioDances() {
   const [activeDancer, setActiveDancer] = useState(formattedDancers[0])
 
   return (
-    <div>
+    <>
       <PageHeader headerText={`Classes at ${studio?.name}`} />
 
       {/* 
@@ -62,7 +62,7 @@ export default function BrowseStudioDances() {
 // studio website
 // studio about
 // studio image(s) */}
-      <div className='w-4/5 w-min-[300px] w-max-[600px] '>
+      <div className='w-4/5 max-w-[600px] mx-auto min-w-[300px]'>
         <div className='w-full flex justify-center gap-8 m-4'>
           {formattedDancers.map((dancer) => (
             <button
@@ -92,6 +92,6 @@ export default function BrowseStudioDances() {
           ))}
         </ul>
       </div>
-    </div>
+    </>
   )
 }
