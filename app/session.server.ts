@@ -45,7 +45,6 @@ export async function getUser(request: Request) {
 // requireUser > (requireUserId(userId or redirect) > getUserId(userID off Session))
 export async function requireUser(request: Request) {
   const userId = await requireUserId(request)
-  console.log('userId from require user', userId)
   // no userId redirects to welcome
 
   const user = await getUserById(userId)

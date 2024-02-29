@@ -65,6 +65,45 @@ model Studio {
   footwear     Footwear[]
 }
 
+model DanceClass {
+  id              String       @id @default(uuid())
+  name            String
+  performanceName String?
+  styleOfDance    String?
+  footwear        Footwear?    @relation(fields: [footwearId], references: [id])
+  footwearId      String?
+  tights          Tights?      @relation(fields: [tightsId], references: [id])
+  tightsId        String?
+  notes           String?
+  song            String?
+  competitions    Boolean?
+  recital         Boolean
+  studio          Studio?      @relation(fields: [studioId], references: [userId], onDelete: Cascade)
+  studioId        String?
+  instructor      Instructor?  @relation(fields: [instructorId], references: [userId])
+  instructorId    String?
+  parent          Parent?      @relation(fields: [parentId], references: [userId], onDelete: Cascade)
+  parentId        String?
+  enrollments     Enrollment[]
+  schedules       Schedule[]
+  ageLevel        AgeLevel     @relation(fields: [ageLevelId], references: [id])
+  ageLevelId      String
+  skillLevel      SkillLevel   @relation(fields: [skillLevelId], references: [id])
+  skillLevelId    String
+}
+
+model Enrollment {
+  id        String     @id @default(uuid())
+  dancer    Dancer     @relation(fields: [dancerId], references: [id], onDelete: Cascade)
+  dancerId  String
+  class     DanceClass @relation(fields: [classId], references: [id], onDelete: Cascade)
+  classId   String
+  studio    Studio     @relation(fields: [studioId], references: [userId], onDelete: Cascade)
+  studioId  String
+  requested DateTime?  @default(now())
+  approved  DateTime?  @default(now())
+}
+
 model Tights {
   id            String       @id @default(uuid())
   name          String
@@ -94,45 +133,6 @@ model Instructor {
   user       User         @relation(fields: [userId], references: [userId])
   studios    Studio[] // Many-to-many relationship with Studio
   danceClass DanceClass[]
-}
-
-model Enrollment {
-  id        String     @id @default(uuid())
-  dancer    Dancer     @relation(fields: [dancerId], references: [id], onDelete: Cascade)
-  dancerId  String
-  class     DanceClass @relation(fields: [classId], references: [id], onDelete: Cascade)
-  classId   String
-  studio    Studio     @relation(fields: [studioId], references: [userId], onDelete: Cascade)
-  studioId  String
-  requested DateTime?  @default(now())
-  approved  DateTime?  @default(now())
-}
-
-model DanceClass {
-  id              String       @id @default(uuid())
-  name            String
-  performanceName String?
-  styleOfDance    String?
-  footwear        Footwear?    @relation(fields: [footwearId], references: [id])
-  footwearId      String?
-  tights          Tights?      @relation(fields: [tightsId], references: [id])
-  tightsId        String?
-  notes           String?
-  song            String?
-  competitions    Boolean?
-  recital         Boolean
-  studio          Studio?      @relation(fields: [studioId], references: [userId], onDelete: Cascade)
-  studioId        String?
-  instructor      Instructor?  @relation(fields: [instructorId], references: [userId])
-  instructorId    String?
-  parent          Parent?      @relation(fields: [parentId], references: [userId], onDelete: Cascade)
-  parentId        String?
-  enrollments     Enrollment[]
-  schedules       Schedule[]
-  ageLevel        AgeLevel     @relation(fields: [ageLevelId], references: [id])
-  ageLevelId      String
-  skillLevel      SkillLevel   @relation(fields: [skillLevelId], references: [id])
-  skillLevelId    String
 }
 
 model SkillLevel {

@@ -6,6 +6,7 @@ import type {
   SkillLevel,
   Footwear,
   Tights,
+  Dancer,
 } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 import { prisma } from '~/db.server'
@@ -250,22 +251,22 @@ export async function getStudioDancesToBrowse({
 }: {
   studioId: Studio['userId']
 }) {
-  const studioDances = await prisma.danceClass.findMany({
+  const studioDances = await prisma.studio.findUnique({
     where: {
-      studioId,
+      userId: studioId,
     },
     select: {
-      id: true,
-      styleOfDance: true,
       name: true,
-      enrollments: {
+      danceClasses: {
         select: {
-          dancerId: true,
-        },
-      },
-      ageLevel: {
-        select: {
+          id: true,
+          styleOfDance: true,
           name: true,
+          ageLevel: {
+            select: {
+              name: true,
+            },
+          },
         },
       },
     },
@@ -547,4 +548,22 @@ export async function deleteItem({ itemId, itemType }: DeleteItem) {
     default:
       throw new Error('id or item type not provided')
   }
+}
+
+export async function enrollDancerInDanceClass({
+  dancerId,
+  danceClassId,
+  studioId,
+}: {
+  dancerId: Dancer['id']
+  danceClassId: DanceClass['id']
+  studioId: Studio['userId']
+}) {
+  return await prisma.enrollment.create({
+    data: {
+      dancerId,
+      classId: danceClassId,
+      studioId: studioId,
+    },
+  })
 }

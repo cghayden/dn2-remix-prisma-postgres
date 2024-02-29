@@ -1,13 +1,18 @@
-import {
-  json,
-  type ActionFunctionArgs,
-  type LoaderFunctionArgs,
-} from '@remix-run/node'
+import { type LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-import { ContentContainer } from '~/components/styledComponents/ContentContainer'
-import { getDancers_Id_Name } from '~/models/dancer.server'
+import { useState } from 'react'
+import BrowseStudioDanceListing from '~/components/parents/BrowseStudioDanceListing'
+import { PageHeader } from '~/components/styledComponents/PageHeader'
+import { getDancersForEnrollment } from '~/models/dancer.server'
 import { getStudioDancesToBrowse } from '~/models/studio.server'
 import { getUserId } from '~/session.server'
+
+export type FormattedDancer = {
+  id: string
+  firstName: string
+  // birthdate: Date | null
+  enrollments: string[] // Now just an array of strings
+}
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const userId = await getUserId(request)
@@ -17,10 +22,16 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     throw new Error('no studio Id or no User Id  provided')
   }
 
-  const dancerIds = await getDancers_Id_Name(userId)
+  const dancers = await getDancersForEnrollment(userId)
 
-  const studioDances = await getStudioDancesToBrowse({ studioId })
-  return { studioDances, dancerIds }
+  // change array of enrollment objects to array of enrollment ids:
+  const formattedDancers: FormattedDancer[] = dancers.map((dancer) => ({
+    ...dancer, // Spread the original dancer properties
+    enrollments: dancer.enrollments.map((enrollment) => enrollment.classId), // Transform to array of strings
+  }))
+
+  const studio = await getStudioDancesToBrowse({ studioId })
+  return { studio, formattedDancers, studioId }
 }
 
 // dance name
@@ -37,33 +48,50 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 // change UI to indicate requested
 
 export default function BrowseStudioDances() {
-  const { studioDances, dancerIds } = useLoaderData<typeof loader>()
-  console.log('studioDances', studioDances)
+  const { studio, formattedDancers, studioId } = useLoaderData<typeof loader>()
+  console.log('dancers', formattedDancers)
+  const [activeDancer, setActiveDancer] = useState(formattedDancers[0])
 
   return (
     <div>
-      browse studio dances
+      <PageHeader headerText={`Classes at ${studio?.name}`} />
+
       {/* 
 // studio name
 // studio address
 // studio website
 // studio about
 // studio image(s) */}
-      <ul className='flex flex-col items-center'>
-        {studioDances.map((dance) => (
-          <li
-            key={dance.id}
-            className='flex p-4 m-4 w-4/5 w-min-[300px] w-max-[600px]'
-          >
-            <ContentContainer className='p-4 w-full'>
-              <p>Name: {dance.name}</p>
-              {/* <p>Style: {dance.styleOfDance}</p> */}
-              <p>Age Level: {dance.ageLevel.name}</p>
-              <button className='btn btn-action'>Enroll</button>
-            </ContentContainer>
-          </li>
-        ))}
-      </ul>
+      <div className='w-4/5 w-min-[300px] w-max-[600px] '>
+        <div className='w-full flex justify-center gap-8 m-4'>
+          {formattedDancers.map((dancer) => (
+            <button
+              key={dancer.id}
+              className={`px-4 py-2 border rounded-full
+            
+            ${
+              activeDancer.id === dancer.id
+                ? 'btn-action text-white'
+                : 'bg-slate-300'
+            }
+            `}
+              onClick={() => setActiveDancer(dancer)}
+            >
+              {dancer.firstName}
+            </button>
+          ))}
+        </div>
+        <ul className='flex flex-col items-center'>
+          {studio?.danceClasses.map((dance) => (
+            <BrowseStudioDanceListing
+              key={dance.id}
+              dancer={activeDancer}
+              danceClass={dance}
+              studioId={studioId}
+            />
+          ))}
+        </ul>
+      </div>
     </div>
   )
 }

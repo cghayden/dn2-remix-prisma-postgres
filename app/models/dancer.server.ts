@@ -39,6 +39,23 @@ export async function getDancers_Id_Name(userId: User['userId']) {
   return dancersNames
 }
 
+export async function getDancersForEnrollment(userId: User['userId']) {
+  const dancersNames = await prisma.dancer.findMany({
+    where: { parentId: userId },
+    select: {
+      firstName: true,
+      id: true,
+      birthdate: true,
+      enrollments: {
+        select: {
+          classId: true,
+        },
+      },
+    },
+  })
+  return dancersNames
+}
+
 export const getDancer = async (dancerId: Dancer['id']) => {
   const dancer = await prisma.dancer.findUnique({
     where: {
