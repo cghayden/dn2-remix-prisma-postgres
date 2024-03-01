@@ -118,3 +118,13 @@ body {
 .item-image-section_wrapper:has(form) .item-image-section {
   display: none;
 }
+
+.react-datepicker__input-container input {
+  background-color: var(--tw-gray-50);
+  color: var(--tw-gray-800);
+  border: 1px solid var(--tw-gray-300);
+  padding: 0.5rem 0.25rem;
+  border-radius: 0.25rem;
+}
+/* 
+class="w-full rounded border bg-gray-50 border-gray-300 text-gray-800 px-2 py-1 focus:ring-2 focus:ring-blue-300" */

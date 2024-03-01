@@ -20,7 +20,7 @@ export default {
   },
   plugins: [
     require('@tailwind-plugin/expose-colors')({
-      extract: ['indigo', 'cyan', 'rose', 'slate'],
+      extract: ['indigo', 'cyan', 'rose', 'slate', 'gray'],
     }),
   ],
 }
