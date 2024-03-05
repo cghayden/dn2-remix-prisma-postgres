@@ -39,7 +39,7 @@ function ParentLayout() {
 
   const parentLinks: NavLink[] = [
     // { label: 'Home', url: '/parent' },
-    { label: 'Create a New Dance', url: '/parent/addDanceClass' },
+    { label: 'Create a Custom Dance', url: '/parent/addCustomDance' },
     { label: 'Add a Dancer', url: '/parent/addDancer' },
     { label: 'Find a Studio', url: '/parent/searchStudios' },
     ...dancerLinks,

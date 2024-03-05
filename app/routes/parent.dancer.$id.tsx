@@ -48,6 +48,7 @@ export default function DancerIndex() {
           </Link>
         </div>
         <div className='p-8'>
+          {/* not currently using images until content moderation can be implemented */}
           {/* <div className='w-36'>
             <img
               src={`https://dancernotes.s3.us-east-2.amazonaws.com/${dancer.imageFilename}`}
@@ -56,8 +57,8 @@ export default function DancerIndex() {
           </div> */}
           <p>{dancer.firstName}</p>
         </div>
-        {/* TODO move add image to update dancer page */}
-        {!showForm && (
+        {/* not currently using images until content moderation can be implemented */}
+        {/* {!showForm && (
           <div className='py-4 px-8'>
             <Link
               to={`addImage`}
@@ -67,7 +68,7 @@ export default function DancerIndex() {
               Add Image
             </Link>
           </div>
-        )}
+        )} */}
         <Outlet context={{ showForm, toggleShowForm } satisfies ContextType} />
       </ContentContainer>
     </>

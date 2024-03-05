@@ -43,7 +43,7 @@ export default function ParentIndex() {
         {parent.dancers.map((dancer) => (
           <li key={dancer.id} className='my-2'>
             <ContentContainer className='p-6'>
-              <Link to={`/dancer/${dancer.id}`} className='inline-block w-full'>
+              <Link to={`dancer/${dancer.id}`} className='inline-block w-full'>
                 <div className='flex items-center'>
                   {/* <div className='w-14 h-14 overflow-hidden rounded-full'>
                     <img
