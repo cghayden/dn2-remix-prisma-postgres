@@ -11,7 +11,7 @@ import styles from './tailwind.css'
 import cssGlobals from './css/global.css'
 import buttons from './css/buttons.css'
 import '@fontsource/inter/400.css'
-import { NavigationProvider } from './components/context/NavContext'
+// import { NavigationProvider } from './components/context/NavContext'
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: styles },
@@ -38,14 +38,14 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <NavigationProvider>
-        <body className='bg-gray-150 text-base font-Inter min-h-screen'>
-          <Outlet />
-          <ScrollRestoration />
-          <Scripts />
-          <LiveReload />
-        </body>
-      </NavigationProvider>
+      {/* <NavigationProvider> */}
+      <body className='bg-gray-150 text-base font-Inter min-h-screen'>
+        <Outlet />
+        <ScrollRestoration />
+        <Scripts />
+        <LiveReload />
+      </body>
+      {/* </NavigationProvider> */}
     </html>
   )
 }

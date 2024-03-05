@@ -18,7 +18,10 @@ export const NavigationProvider: React.FC<NavigationProviderProps> = ({
 }) => {
   const [showNav, setShowNav] = useState(false)
 
-  const toggleShowNav = () => setShowNav(!showNav)
+  const toggleShowNav = () => {
+    console.log('firing toggler')
+    setShowNav(!showNav)
+  }
 
   return (
     <NavigationContext.Provider value={{ showNav, toggleShowNav }}>
