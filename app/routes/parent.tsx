@@ -54,7 +54,7 @@ function ParentLayout() {
           <Outlet />
         </div>
       </main>
-      <footer>Footer</footer>
+      {/* <footer>Footer</footer> */}
     </>
   )
 }

@@ -26,6 +26,19 @@ export async function createParentDancer({
   })
 }
 
+export async function raw_getDancer({ dancerId }: { dancerId: Dancer['id'] }) {
+  const dancer = await prisma.$queryRaw`
+   
+  `
+  return dancer
+}
+
+export async function raw_getDancers() {
+  const dancers = await prisma.$queryRaw`
+    SELECT * FROM User`
+  return dancers
+}
+
 export async function updateDancer(
   dancerId: Dancer['id'],
   data: Partial<Dancer>

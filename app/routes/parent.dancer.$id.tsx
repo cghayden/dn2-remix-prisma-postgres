@@ -2,7 +2,7 @@ import { type LoaderFunctionArgs } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Link, Outlet, useLoaderData, useOutletContext } from '@remix-run/react'
 import { ContentContainer } from '~/components/styledComponents/ContentContainer'
-import { getDancer } from '~/models/dancer.server'
+import { getDancer, raw_getDancer } from '~/models/dancer.server'
 import { useEffect, useState } from 'react'
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
@@ -11,6 +11,13 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   if (!dancerId) {
     return redirect('/parent')
   }
+  //   const dancer = await raw_getDancer({ dancerId })
+  //   console.log('raw dancer', dancer)
+  //   if (!dancer) {
+  //     return redirect('/parent')
+  //   }
+  //   return json({ dancer })
+  // }
   const dancer = await getDancer(dancerId)
   if (!dancer || !dancer.id) {
     return redirect('/parent')
@@ -34,7 +41,7 @@ export default function DancerIndex() {
   return (
     <>
       <h1 className='text-xl font-bold py-4'>Dancer Page/Index</h1>
-      <ContentContainer className='relative'>
+      <ContentContainer className='relative w-5/6 max-w-[600px]'>
         <div className='absolute top-0 right-0 p-4'>
           <Link to={`edit`} className='text-rose-600'>
             Edit Dancer
