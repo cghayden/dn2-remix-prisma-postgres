@@ -23,7 +23,6 @@ export async function action({ request }: ActionFunctionArgs) {
   const { searchVal } = submission.value
 
   const studios = await parentSearchStudios({ searchVal })
-  console.log('studios response', studios)
 
   return json({ submission, studios })
 }
