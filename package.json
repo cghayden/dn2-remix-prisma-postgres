@@ -14,7 +14,8 @@
     "deleteParents": "node prisma/delete/deleteParentsAndDancers.js",
     "deleteStudios": "node prisma/delete/deleteStudios.js",
     "deleteStudioClasses": "node prisma/delete/deleteStudioDanceClasses.js",
-    "seedAll": "npm-run-all seedStudios seedStudioClasses seedParents"
+    "seedAll": "npm-run-all seedStudios seedStudioClasses seedParents",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.472.0",
