@@ -1,7 +1,8 @@
 datasource db {
-  // provider = "postgresql" (for render hosted psql)
-  provider = "cockroachdb"
-  url      = env("DATABASE_URL")
+  // provider = "cockroachdb"
+  provider  = "postgresql" // (for render or supabase hosted psql)
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 generator client {
