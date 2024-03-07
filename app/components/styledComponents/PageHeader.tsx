@@ -5,20 +5,20 @@ type PageHeaderProps = {
   headerText: string
   className?: string
   actionRoute?: string | null
-  navigateBack?: boolean
+  navigateBackUrl?: string | null
 }
 
 export function PageHeader({
   headerText,
   className = '',
-  navigateBack = false,
+  navigateBackUrl = null,
   actionRoute = null,
 }: PageHeaderProps) {
   return (
     <div className={`pageHeader p-4 flex items-center ${className}`}>
       <div className='w-[2rem]'>
-        {navigateBack ? (
-          <Link to={`../../${headerText.toLowerCase()}`}>
+        {navigateBackUrl ? (
+          <Link to={`${navigateBackUrl}`}>
             <LeftArrowSvg />
           </Link>
         ) : (

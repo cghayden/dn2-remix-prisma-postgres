@@ -1,6 +1,6 @@
 import { Link } from '@remix-run/react'
 import MenuSvg from '../icons/MenuSvg'
-import { useNavContext } from '../context/NavContext'
+// import { useNavContext } from '../context/NavContext'
 // TODO - make this a reusable component for parent/studio/etc.
 
 export type HeaderProps = {
@@ -13,8 +13,14 @@ export type NavLink = {
   url: string
 }
 
-export default function StudioHeader() {
-  const { toggleShowNav } = useNavContext()
+export default function StudioHeader({
+  showNav,
+  toggleShowNav,
+}: {
+  showNav: boolean
+  toggleShowNav: React.Dispatch<React.SetStateAction<boolean>>
+}) {
+  // const { toggleShowNav } = useNavContext()
 
   // Close the navigation panel anytime pathname changes
   // useEffect(() => {
@@ -28,7 +34,7 @@ export default function StudioHeader() {
         type='button'
         aria-label='show navigation menu'
         onClick={() => {
-          toggleShowNav()
+          toggleShowNav(!showNav)
         }}
       >
         <MenuSvg />

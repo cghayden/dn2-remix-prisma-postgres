@@ -5,6 +5,7 @@ import { requireStudio } from '~/models/studio.server'
 import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 import Nav from '~/components/Nav'
 import type { NavLink } from 'types'
+import { useState } from 'react'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const studioUser = await requireStudio(request)
@@ -13,6 +14,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export default function StudioLayout() {
   // const studioUser = useLoaderData<typeof loader>()
+  const [showNav, toggleShowNav] = useState(false)
 
   const studioLinks: NavLink[] = [
     { label: 'Home', url: '/studio' },
@@ -26,8 +28,12 @@ export default function StudioLayout() {
   ]
   return (
     <>
-      <StudioHeader />
-      <Nav links={studioLinks} />
+      <StudioHeader showNav={showNav} toggleShowNav={toggleShowNav} />
+      <Nav
+        links={studioLinks}
+        showNav={showNav}
+        toggleShowNav={toggleShowNav}
+      />
       <main className='main_custom'>
         <div className='flex-1'>
           <Outlet />

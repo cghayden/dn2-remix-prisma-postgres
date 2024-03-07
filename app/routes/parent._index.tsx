@@ -1,6 +1,7 @@
 import { redirect, type LoaderFunctionArgs, json } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import { Link, useLoaderData } from '@remix-run/react'
 import { ContentContainer } from '~/components/styledComponents/ContentContainer'
+import { PageHeader } from '~/components/styledComponents/PageHeader'
 import { prisma } from '~/db.server'
 import { requireParentUserId } from '~/models/parent.server'
 
@@ -37,20 +38,22 @@ export default function ParentIndex() {
   }
   return (
     <div>
-      <h1>Parent Index</h1>
+      <PageHeader headerText='My Dancers' />
       <ul>
         {parent.dancers.map((dancer) => (
-          <li key={dancer.id}>
+          <li key={dancer.id} className='my-2'>
             <ContentContainer className='p-6'>
-              <div className='flex items-center'>
-                {/* <div className='w-14 h-14 overflow-hidden rounded-full'>
-                  <img
-                    src={`https://dancernotes.s3.us-east-2.amazonaws.com/${dancer.imageFilename}`}
-                    alt='dancerImage'
-                  />
-                </div> */}
-                <p>{dancer.firstName}</p>
-              </div>
+              <Link to={`dancer/${dancer.id}`} className='inline-block w-full'>
+                <div className='flex items-center'>
+                  {/* <div className='w-14 h-14 overflow-hidden rounded-full'>
+                    <img
+                      src={`https://dancernotes.s3.us-east-2.amazonaws.com/${dancer.imageFilename}`}
+                      alt='dancerImage'
+                    />
+                  </div> */}
+                  <p>{dancer.firstName}</p>
+                </div>
+              </Link>
             </ContentContainer>
           </li>
         ))}

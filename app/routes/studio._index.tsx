@@ -19,7 +19,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function StudioIndex() {
   const { dances } = useLoaderData<typeof loader>()
-  console.log('dances', dances)
   return (
     <>
       <PageHeader headerText='Studio Home' />

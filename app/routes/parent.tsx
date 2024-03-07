@@ -38,8 +38,8 @@ function ParentLayout() {
     : []
 
   const parentLinks: NavLink[] = [
-    // { label: 'Home', url: '/' },
-    { label: 'Create a New Dance', url: '/parent/addDanceClass' },
+    // { label: 'Home', url: '/parent' },
+    { label: 'Create a Custom Dance', url: '/parent/addCustomDance' },
     { label: 'Add a Dancer', url: '/parent/addDancer' },
     { label: 'Find a Studio', url: '/parent/searchStudios' },
     ...dancerLinks,
@@ -54,7 +54,7 @@ function ParentLayout() {
           <Outlet />
         </div>
       </main>
-      <footer>Footer</footer>
+      {/* <footer>Footer</footer> */}
     </>
   )
 }

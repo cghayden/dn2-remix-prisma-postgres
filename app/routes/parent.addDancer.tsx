@@ -1,4 +1,8 @@
-import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node'
+import type {
+  ActionFunctionArgs,
+  LinksFunction,
+  MetaFunction,
+} from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Form, useActionData } from '@remix-run/react'
 import { createParentDancer } from '~/models/dancer.server'
@@ -7,6 +11,17 @@ import { useForm } from '@conform-to/react'
 import { parse } from '@conform-to/zod'
 import { TextInput } from '~/components/forms/TextInput'
 import { requireParentUserId } from '~/models/parent.server'
+import { useState } from 'react'
+import ReactDatePicker from 'react-datepicker'
+
+import datePickerStyles from 'react-datepicker/dist/react-datepicker.css'
+import { normalizeDate } from '~/lib/normalizeDate'
+// @ts-expect-error otherwise it doesn't work
+const DatePicker = ReactDatePicker.default
+
+export const links: LinksFunction = () => [
+  { rel: 'stylesheet', href: datePickerStyles },
+]
 
 export const meta: MetaFunction = () => [{ title: 'Add a Dancer' }]
 // export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -18,6 +33,7 @@ export const meta: MetaFunction = () => [{ title: 'Add a Dancer' }]
 const dancerSchema = z.object({
   firstName: z.string({ required_error: 'First Name is required' }),
   lastName: z.string({ required_error: 'Last Name is required' }),
+  birthdate: z.date(),
 })
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -29,25 +45,27 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return json(submission)
   }
 
-  const { firstName, lastName } = submission.value
+  const { firstName, lastName, birthdate } = submission.value
 
   // dont allow parent to create a dancer with the same name?
-  const newDancer = await createParentDancer(firstName, lastName, userId)
+  const newDancer = await createParentDancer({
+    firstName,
+    lastName,
+    userId,
+    birthdate: normalizeDate(birthdate),
+  })
   return redirect(`/parent/dancer/${newDancer.id}`)
 }
 
 export default function AddDancer() {
   const lastSubmission = useActionData<typeof action>()
+  const [startDate, setStartDate] = useState(new Date())
+  console.log('startDate', normalizeDate(startDate))
 
   // The `useForm` hook will return everything you need to setup a form including the error and config of each field
   const [form, { firstName, lastName }] = useForm({
     // The last submission will be used to report the error and serves as the default value and initial error of the form for progressive enhancement
     lastSubmission,
-    // run validation logic on client (if slow connection)
-    // shouldValidate: 'onBlur',
-    // onValidate({ formData }) {
-    //   return parse(formData, { schema })
-    // },
   })
 
   return (
@@ -77,6 +95,21 @@ export default function AddDancer() {
               <input type='file' accept='image/*' name='imgFile' />
             </div> */}
           </div>
+
+          <div>
+            <div className='input_item'>
+              <label className='block'>Birthdate:</label>
+              <DatePicker
+                name='birthdate'
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                peekNextMonth
+                showYearDropdown
+                dropdownMode='select'
+              />
+            </div>
+          </div>
+
           <div className='pt-4'>
             <button
               type='submit'

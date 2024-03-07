@@ -1,15 +1,22 @@
 import type { Dancer, User } from '@prisma/client'
 import { prisma } from '~/db.server'
 
-export async function createParentDancer(
-  firstName: Dancer['firstName'],
-  lastName: Dancer['lastName'],
+export async function createParentDancer({
+  firstName,
+  lastName,
+  userId,
+  birthdate,
+}: {
+  firstName: Dancer['firstName']
+  lastName: Dancer['lastName']
   userId: User['userId']
-) {
+  birthdate: Dancer['birthdate']
+}) {
   return await prisma.dancer.create({
     data: {
       firstName,
       lastName,
+      birthdate,
       parent: {
         connect: {
           userId: userId,
@@ -17,6 +24,19 @@ export async function createParentDancer(
       },
     },
   })
+}
+
+export async function raw_getDancer({ dancerId }: { dancerId: Dancer['id'] }) {
+  const dancer = await prisma.$queryRaw`
+   
+  `
+  return dancer
+}
+
+export async function raw_getDancers() {
+  const dancers = await prisma.$queryRaw`
+    SELECT * FROM User`
+  return dancers
 }
 
 export async function updateDancer(

@@ -1,10 +1,18 @@
 import { Link } from 'react-router-dom'
 import { Form } from '@remix-run/react'
-import { useNavContext } from './context/NavContext'
+// import { useNavContext } from './context/NavContext'
 import type { NavLink } from 'types'
 
-export default function Nav({ links }: { links: NavLink[] }) {
-  const { showNav, toggleShowNav } = useNavContext()
+export default function Nav({
+  links,
+  showNav,
+  toggleShowNav,
+}: {
+  links: NavLink[]
+  showNav: boolean
+  toggleShowNav: React.Dispatch<React.SetStateAction<boolean>>
+}) {
+  // const { showNav, toggleShowNav } = useNavContext()
   const settingsLinks = links.filter((link) => link.url.startsWith('config'))
   const apparelLinks = links.filter(
     (link) => link.url.startsWith('footwear') || link.url.startsWith('tights')
@@ -26,7 +34,7 @@ export default function Nav({ links }: { links: NavLink[] }) {
                   className='flex items-center my-2 pl-4 pr-2'
                   to={`${link.url}`}
                   onClick={() => {
-                    toggleShowNav()
+                    toggleShowNav(!showNav)
                   }}
                 >
                   <span>{link.label}</span>
@@ -45,7 +53,7 @@ export default function Nav({ links }: { links: NavLink[] }) {
                   className='flex items-center my-2 pl-4 pr-2'
                   to={`${link.url}`}
                   onClick={() => {
-                    toggleShowNav()
+                    toggleShowNav(!showNav)
                   }}
                 >
                   <span>{link.label}</span>
@@ -63,7 +71,7 @@ export default function Nav({ links }: { links: NavLink[] }) {
                   className='flex items-center my-2 pl-4 pr-2'
                   to={`${link.url}`}
                   onClick={() => {
-                    toggleShowNav()
+                    toggleShowNav(!showNav)
                   }}
                 >
                   {/* <div className='w-[20px] h-[20px] bg-white mr-2 mt-2 mb-2'></div> */}

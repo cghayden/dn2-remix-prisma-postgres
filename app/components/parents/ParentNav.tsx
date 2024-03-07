@@ -1,14 +1,7 @@
 import { Link } from 'react-router-dom'
-// import LogoutForm from '../LogoutForm'
-// import XSvg from '../icons/XSvg'
 import { Form } from '@remix-run/react'
 import type { NavLink } from 'types'
 import { useNavContext } from '../context/NavContext'
-
-// type ComponentProps = {
-//   showNav: boolean
-//   toggleShowNav: (bool: boolean) => void
-// }
 
 export default function ParentNav({ links }: { links: NavLink[] }) {
   const { showNav, toggleShowNav } = useNavContext()
@@ -24,18 +17,11 @@ export default function ParentNav({ links }: { links: NavLink[] }) {
     `}
     >
       <nav className='nav_custom items-stretch flex flex-col flex-auto h-full min-h-full min-w-[15rem] pt-4'>
-        {/* <div className='flex'>
-          <button
-            type='button'
-            className='ml-auto btn'
-            aria-label='close navigation'
-            onClick={() => toggleShowNav(false)}
-          >
-            <XSvg w={'24'} h={'24'} />
-          </button>
-        </div> */}
-        <div>
-          <legend className=' pl-4 font-bold text-l'>Dancers</legend>
+        <Link to={'/parent'} className=' pl-4 py-2 font-bold inline-block'>
+          Home
+        </Link>
+        <div className='my-2'>
+          <legend className=' pl-4 font-bold'>Dancers</legend>
 
           <ul>
             {dancerLinks.map((link) => (
@@ -53,7 +39,9 @@ export default function ParentNav({ links }: { links: NavLink[] }) {
             ))}
           </ul>
         </div>
-        <div>
+        <div className='my-2'>
+          <legend className=' pl-4 font-bold'>Actions</legend>
+
           <ul>
             {contentLinks.map((link) => (
               <li key={link.label} className='px-3'>
@@ -71,7 +59,7 @@ export default function ParentNav({ links }: { links: NavLink[] }) {
           </ul>
         </div>
 
-        <div className='pb-6'>
+        <div className='pb-6 my-2'>
           <legend className=' pl-4 font-bold text-l'>Settings</legend>
           <ul>
             {settingsLinks.map((link) => (
