@@ -1,6 +1,7 @@
 import { seedStudioModule } from '../../prisma/seed/seedStudios'
 
 export async function loader({ request }) {
+  console.log('cron loader fired')
   if (
     request.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}`
   ) {
