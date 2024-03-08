@@ -12,7 +12,6 @@ export default function Nav({
   showNav: boolean
   toggleShowNav: React.Dispatch<React.SetStateAction<boolean>>
 }) {
-  // const { showNav, toggleShowNav } = useNavContext()
   const settingsLinks = links.filter((link) => link.url.startsWith('config'))
   const apparelLinks = links.filter(
     (link) => link.url.startsWith('footwear') || link.url.startsWith('tights')

@@ -5,6 +5,7 @@ import { requireParentUserId } from '~/models/parent.server'
 import StudioHeader from '~/components/studios/StudioHeader'
 import Nav from '~/components/parents/ParentNav'
 import type { NavLink } from 'types'
+import { useState } from 'react'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   // check for userId(logged in user) and 'PARENT' type, return id if so
@@ -27,6 +28,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 function ParentLayout() {
   const { parentNavData } = useLoaderData<typeof loader>()
+  const [showNav, toggleShowNav] = useState(false)
 
   const dancerLinks = parentNavData?.dancers
     ? parentNavData?.dancers.map((dancer) => {
@@ -47,8 +49,12 @@ function ParentLayout() {
   ]
   return (
     <>
-      <StudioHeader />
-      <Nav links={parentLinks} />
+      <StudioHeader showNav={showNav} toggleShowNav={toggleShowNav} />
+      <Nav
+        links={parentLinks}
+        showNav={showNav}
+        toggleShowNav={toggleShowNav}
+      />
       <main className='main_custom'>
         <div className='px-6 flex-1'>
           <Outlet />

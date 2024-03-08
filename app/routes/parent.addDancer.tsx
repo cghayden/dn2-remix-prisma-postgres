@@ -60,7 +60,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export default function AddDancer() {
   const lastSubmission = useActionData<typeof action>()
   const [startDate, setStartDate] = useState(new Date())
-  console.log('startDate', normalizeDate(startDate))
+  // console.log('startDate', normalizeDate(startDate))
 
   // The `useForm` hook will return everything you need to setup a form including the error and config of each field
   const [form, { firstName, lastName }] = useForm({

@@ -1,12 +1,18 @@
 import { Link } from 'react-router-dom'
 import { Form } from '@remix-run/react'
 import type { NavLink } from 'types'
-import { useNavContext } from '../context/NavContext'
+// import { useNavContext } from '../context/NavContext'
 
-export default function ParentNav({ links }: { links: NavLink[] }) {
-  const { showNav, toggleShowNav } = useNavContext()
+export default function ParentNav({
+  links,
+  showNav,
+  toggleShowNav,
+}: {
+  links: NavLink[]
+  showNav: boolean
+  toggleShowNav: React.Dispatch<React.SetStateAction<boolean>>
+}) {
   const settingsLinks = links.filter((link) => link.url.startsWith('config'))
-  // const apparelLinks = links.filter((link) => link.url.startsWith('apparel'))
   const contentLinks = links.filter((link) => link.url.startsWith('/'))
   const dancerLinks = links.filter((link) => link.url.startsWith('dancer'))
 
