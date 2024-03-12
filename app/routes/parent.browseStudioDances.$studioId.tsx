@@ -1,10 +1,17 @@
-import { type LoaderFunctionArgs } from '@remix-run/node'
+import {
+  type ActionFunctionArgs,
+  json,
+  type LoaderFunctionArgs,
+} from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { useState } from 'react'
 import BrowseStudioDanceListing from '~/components/parents/BrowseStudioDanceListing'
 import { PageHeader } from '~/components/styledComponents/PageHeader'
 import { getDancersForEnrollment } from '~/models/dancer.server'
-import { getStudioDancesToBrowse } from '~/models/studio.server'
+import {
+  enrollDancerInDanceClass,
+  getStudioDancesToBrowse,
+} from '~/models/studio.server'
 import { getUserId } from '~/session.server'
 
 export type FormattedDancer = {
@@ -14,10 +21,35 @@ export type FormattedDancer = {
   enrollments: string[] // Now just an array of strings
 }
 
+export const action = async ({ request }: ActionFunctionArgs) => {
+  // await requireStudioUserId(request)
+  const formData = await request.formData()
+  const danceClassId = formData.get('danceClassId')
+  const studioId = formData.get('studioId')
+  const dancerId = formData.get('dancerId')
+
+  if (!danceClassId || typeof danceClassId !== 'string') {
+    return { error: `incorrect danceClassId provided ` }
+  }
+  if (!dancerId || typeof dancerId !== 'string') {
+    return { error: `incorrect dancerId provided ` }
+  }
+  if (!studioId || typeof studioId !== 'string') {
+    return { error: `incorrect studioId provided ` }
+  }
+
+  const enrollment = await enrollDancerInDanceClass({
+    danceClassId,
+    dancerId,
+    studioId,
+  })
+
+  return json(enrollment)
+}
+
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const userId = await getUserId(request)
   const studioId = params.studioId
-
   if (!studioId || !userId) {
     throw new Error('no studio Id or no User Id  provided')
   }
@@ -31,6 +63,9 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   }))
 
   const studio = await getStudioDancesToBrowse({ studioId })
+  if (!studio) {
+    throw new Error('could studio could not be found')
+  }
   return { studio, formattedDancers, studioId }
 }
 
@@ -49,8 +84,11 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 export default function BrowseStudioDances() {
   const { studio, formattedDancers, studioId } = useLoaderData<typeof loader>()
-  console.log('dancers', formattedDancers)
-  const [activeDancer, setActiveDancer] = useState(formattedDancers[0])
+  const [activeDancerId, setActiveDancerId] = useState(formattedDancers[0].id)
+
+  const activeDancer =
+    formattedDancers.find((dancer) => dancer.id === activeDancerId) ||
+    formattedDancers[0]
 
   return (
     <>
@@ -75,14 +113,14 @@ export default function BrowseStudioDances() {
                 : 'bg-slate-300'
             }
             `}
-              onClick={() => setActiveDancer(dancer)}
+              onClick={() => setActiveDancerId(dancer.id)}
             >
               {dancer.firstName}
             </button>
           ))}
         </div>
         <ul className='flex flex-col items-center'>
-          {studio?.danceClasses.map((dance) => (
+          {studio.danceClasses.map((dance) => (
             <BrowseStudioDanceListing
               key={dance.id}
               dancer={activeDancer}
