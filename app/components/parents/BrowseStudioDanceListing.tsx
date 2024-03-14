@@ -2,7 +2,6 @@ import { useFetcher } from '@remix-run/react'
 import { ContentContainer } from '~/components/styledComponents/ContentContainer'
 import { type action } from '../../routes/parent.browseStudioDances.resourceEnroll'
 import { type FormattedDancer } from '~/routes/parent.browseStudioDances.$studioId'
-import { useEffect, useState } from 'react'
 
 export type BrowseStudioDanceClassType = {
   id: string
@@ -23,24 +22,8 @@ export default function BrowseStudioDanceListing({
   studioId: string
 }) {
   const fetcher = useFetcher<typeof action>()
-  // const [buttonState, setButtonState] = useState<string>(
-  //   `Enroll ${dancer.firstName}`
-  // )
   const loading = fetcher.state === 'loading'
   const isEnrolled = dancer.enrollments.includes(danceClass.id)
-
-  // useEffect(() => {
-  //   switch (fetcher.state) {
-  //     case 'idle':
-  //       setButtonState(
-  //         dancer.enrollments.includes(danceClass.id) ? `Enrolled` : `Enroll ${dancer.firstName}`
-  //       )
-  //     case 'loading':
-  //       setButtonState('Enrolling...')
-  //     default:
-  //       setButtonState(`Enroll ${dancer.firstName}`)
-  //   }
-  // }, [fetcher.state, dancer.firstName, dancer.enrollments, danceClass.id])
 
   return (
     <li className='flex p-4 m-4 w-full'>

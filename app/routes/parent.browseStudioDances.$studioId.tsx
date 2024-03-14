@@ -22,7 +22,6 @@ export type FormattedDancer = {
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  // await requireStudioUserId(request)
   const formData = await request.formData()
   const danceClassId = formData.get('danceClassId')
   const studioId = formData.get('studioId')
