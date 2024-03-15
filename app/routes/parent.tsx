@@ -10,6 +10,24 @@ import { useState } from 'react'
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   // check for userId(logged in user) and 'PARENT' type, return id if so
   const userId = await requireParentUserId(request)
+  const studios = await prisma.studio.findMany({
+    where: {
+      enrollments: {
+        some: {
+          dancer: {
+            parent: {
+              userId,
+            },
+          },
+        },
+      },
+    },
+    select: {
+      name: true,
+      userId: true,
+    },
+    distinct: ['userId'],
+  })
   const parentNavData = await prisma.parent.findUnique({
     where: {
       userId: userId,
@@ -23,11 +41,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       },
     },
   })
-  return json({ parentNavData })
+  return json({ parentNavData, studios })
 }
 
 function ParentLayout() {
-  const { parentNavData } = useLoaderData<typeof loader>()
+  const { parentNavData, studios } = useLoaderData<typeof loader>()
   const [showNav, toggleShowNav] = useState(false)
 
   const dancerLinks = parentNavData?.dancers
@@ -39,12 +57,22 @@ function ParentLayout() {
       })
     : []
 
+  const studioLinks = studios
+    ? studios.map((studio) => {
+        return {
+          label: `${studio.name}`,
+          url: `studio/${studio.userId}`,
+        }
+      })
+    : []
+
   const parentLinks: NavLink[] = [
     // { label: 'Home', url: '/parent' },
     { label: 'Create a Custom Dance', url: '/parent/addCustomDance' },
     { label: 'Add a Dancer', url: '/parent/addDancer' },
     { label: 'Find a Studio', url: '/parent/searchStudios' },
     ...dancerLinks,
+    ...studioLinks,
     // { label: 'Configuration', url: '/parent/settings' },
   ]
   return (
@@ -52,6 +80,7 @@ function ParentLayout() {
       <StudioHeader showNav={showNav} toggleShowNav={toggleShowNav} />
       <Nav
         links={parentLinks}
+        studioLinks={studioLinks}
         showNav={showNav}
         toggleShowNav={toggleShowNav}
       />

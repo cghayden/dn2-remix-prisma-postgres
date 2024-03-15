@@ -15,6 +15,7 @@ export default function ParentNav({
   const settingsLinks = links.filter((link) => link.url.startsWith('config'))
   const contentLinks = links.filter((link) => link.url.startsWith('/'))
   const dancerLinks = links.filter((link) => link.url.startsWith('dancer'))
+  const studioLinks = links.filter((link) => link.url.startsWith('studio'))
 
   return (
     <div
@@ -36,7 +37,26 @@ export default function ParentNav({
                   className='flex items-center my-2 pl-4 pr-2'
                   to={`${link.url}`}
                   onClick={() => {
-                    toggleShowNav()
+                    toggleShowNav(false)
+                  }}
+                >
+                  <span>{link.label}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className='my-2'>
+          <legend className=' pl-4 font-bold'>Studios</legend>
+
+          <ul>
+            {studioLinks.map((link) => (
+              <li key={link.label} className='px-3'>
+                <Link
+                  className='flex items-center my-2 pl-4 pr-2'
+                  to={`${link.url}`}
+                  onClick={() => {
+                    toggleShowNav(false)
                   }}
                 >
                   <span>{link.label}</span>
@@ -55,7 +75,7 @@ export default function ParentNav({
                   className='flex items-center my-2 pl-4 pr-2'
                   to={`${link.url}`}
                   onClick={() => {
-                    toggleShowNav()
+                    toggleShowNav(false)
                   }}
                 >
                   <span>{link.label}</span>
@@ -74,7 +94,7 @@ export default function ParentNav({
                   className='flex items-center my-2 pl-4 pr-2'
                   to={`${link.url}`}
                   onClick={() => {
-                    toggleShowNav()
+                    toggleShowNav(false)
                   }}
                 >
                   {/* <div className='w-[20px] h-[20px] bg-white mr-2 mt-2 mb-2'></div> */}

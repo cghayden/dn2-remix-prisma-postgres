@@ -34,10 +34,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // })
   // return studios
   // return 'ok'
-  return studiosForDancer
+  return studioDancers
 }
 export default function Playground() {
-  const studiosForDancer = useLoaderData<typeof loader>()
-  console.log('studiosForDancer', studiosForDancer)
+  const studioDancers = useLoaderData<typeof loader>()
+  console.log('studioDancers', studioDancers)
   return <div>Playground</div>
 }

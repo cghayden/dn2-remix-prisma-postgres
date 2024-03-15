@@ -48,8 +48,8 @@ model Dancer {
   parent        Parent       @relation(fields: [parentId], references: [userId], onDelete: Cascade)
   parentId      String
   enrollments   Enrollment[]
-  studios       Studio[]
   imageFilename String?
+  Studio        Studio[]
 }
 
 model Studio {
@@ -58,12 +58,13 @@ model Studio {
   name         String
   danceClasses DanceClass[]
   instructors  Instructor[]
-  dancers      Dancer[]
   enrollments  Enrollment[]
   ageLevels    AgeLevel[]
   skillLevels  SkillLevel[] //studio defined skill levels. (e.g. recreational, company, rising star, excel, etc.)
   tights       Tights[]
   footwear     Footwear[]
+  Dancer       Dancer?      @relation(fields: [dancerId], references: [id])
+  dancerId     String?
 }
 
 model DanceClass {
