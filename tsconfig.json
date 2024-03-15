@@ -4,7 +4,12 @@
     "**/*.ts",
     "**/*.tsx",
     "tailwind.config.js",
-    "prisma/seed.cjs"
+    "prisma/seed.cjs",
+    "app/lib/removeDuplicates.js",
+    "app/lib/generateNames.js",
+    "app/lib/deleteItemUtil.js",
+    "prisma/seed/seedStudios.js",
+    "prisma/seed/seedParents.js"
   ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
