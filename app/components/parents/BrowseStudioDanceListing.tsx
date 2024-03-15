@@ -6,7 +6,7 @@ import { type FormattedDancer } from '~/routes/parent.browseStudioDances.$studio
 export type BrowseStudioDanceClassType = {
   id: string
   name: string
-  ageLevel: {
+  ageLevel?: {
     name: string
   }
   styleOfDance: string | null
@@ -22,18 +22,17 @@ export default function BrowseStudioDanceListing({
   studioId: string
 }) {
   const fetcher = useFetcher<typeof action>()
-  // console.log('fetcher', fetcher)
-
-  const dancerIsEnrolled = dancer.enrollments.includes(danceClass.id)
+  const loading = fetcher.state === 'loading'
+  const isEnrolled = dancer.enrollments.includes(danceClass.id)
 
   return (
     <li className='flex p-4 m-4 w-full'>
       <ContentContainer
-        className={`p-4 w-full ${dancerIsEnrolled && 'bg-slate-200'}`}
+        className={`p-4 w-full ${isEnrolled && 'bg-slate-200'}`}
       >
         <p>Name: {danceClass.name}</p>
         {/* <p>Style: {dance.styleOfDance}</p> */}
-        <p>Age Level: {danceClass.ageLevel.name}</p>
+        {danceClass.ageLevel && <p>Age Level: {danceClass.ageLevel.name}</p>}
         <fetcher.Form
           method='post'
           id={`${danceClass.id}`}
@@ -44,12 +43,15 @@ export default function BrowseStudioDanceListing({
           <input type='hidden' name='studioId' value={studioId} />
           <button
             type='submit'
+            disabled={loading}
             form={`${danceClass.id}`}
-            className={`btn ${
-              dancerIsEnrolled ? 'bg-emerald-500' : 'btn-action'
-            }`}
+            className={`btn ${isEnrolled ? 'bg-emerald-500' : 'btn-action'}`}
           >
-            {dancerIsEnrolled ? `Enrolled` : `Enroll ${dancer.firstName}`}
+            {loading
+              ? 'Enrolling...'
+              : isEnrolled
+              ? 'Enrolled'
+              : `Enroll ${dancer.firstName}`}
           </button>
         </fetcher.Form>
       </ContentContainer>

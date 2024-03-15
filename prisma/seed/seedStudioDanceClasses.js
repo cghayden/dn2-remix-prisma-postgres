@@ -15,26 +15,30 @@ export function generateStudioDanceData(studio, stylesOfDance) {
   for (const ageLevel of ageLevels) {
     for (const style of stylesOfDance) {
       const shouldDuplicateForSkillLevels = [
-        'Mini',
+        // 'Mini',
         'Junior',
         'Teen',
         'Senior',
       ].includes(ageLevel.name)
 
       if (shouldDuplicateForSkillLevels) {
+        console.log(
+          'shouldDuplicateForSkillLevels',
+          shouldDuplicateForSkillLevels
+        )
         for (let skillLevel of skillLevels) {
           const tightsId = tights[Math.floor(Math.random() * tights.length)].id
           const footwearId =
             footwear[Math.floor(Math.random() * footwear.length)].id
           danceClasses.push({
-            name: `${ageLevel.name} ${skillLevel.id.slice(23)} ${style} `,
+            name: `${ageLevel.name} ${skillLevel.name} ${style} `,
             ageLevelId: ageLevel.id,
             skillLevelId: skillLevel.id,
             styleOfDance: style,
             tightsId: tightsId,
             footwearId: footwearId,
             studioId: studio.userId,
-            competitions: skillLevel.id.slice(23) === 'Company' ? true : false,
+            competitions: skillLevel.name === 'Company' ? true : false,
             recital: true,
           })
         }
@@ -62,7 +66,7 @@ export function generateStudioDanceData(studio, stylesOfDance) {
 
 export async function seedDanceClasses() {
   console.log('seeding studio dance classes')
-  const stylesOfDance = ['Tap', 'Jazz', 'Hip Hop', 'Lyric', 'Ballet']
+  const stylesOfDance = ['Tap', 'Jazz', 'Hip Hop', 'Lyric']
 
   const studios = await prisma.studio.findMany({
     select: {

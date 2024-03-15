@@ -16,37 +16,37 @@ const age_levels = [
 ]
 
 const tights = [
-  {
-    name: 'Capezio Studio Basic Fishnet Seamless',
-    color: 'Black',
-    url: 'https://www.capezio.com/studio-basics-fishnet-seamless-tight-child',
-  },
-  {
-    name: 'Capezio Ultra Soft Stirrup',
-    color: 'Light Suntan',
-    url: 'https://discountdance.com/dancewear/style_1961C.html?&pid=25514&Shop=Style&&skey=capezio+ultra+soft+stirrup+tights&search=true&SortOrder=R&SID=1873605563',
-  },
-  {
-    name: 'Bloch Endura Footed',
-    color: 'Light Pink',
-    url: 'https://us.blochworld.com/products/girls-endura-footed-tights-light-pink',
-  },
-  {
-    name: 'Bloch Contoursoft Stirrup',
-    color: 'Tan',
-    url: 'https://us.blochworld.com/collections/children-dancewear-tights/products/girls-contoursoft-stirrup-tights-tan',
-  },
-  {
-    name: 'Capezio Studio Basic Fishnet Seamless',
-    color: 'Black',
-    url: 'https://www.capezio.com/studio-basics-fishnet-seamless-tight-child',
-  },
+  // {
+  //   name: 'Capezio Studio Basic Fishnet Seamless',
+  //   color: 'Black',
+  //   url: 'https://www.capezio.com/studio-basics-fishnet-seamless-tight-child',
+  // },
+  // {
+  //   name: 'Capezio Ultra Soft Stirrup',
+  //   color: 'Light Suntan',
+  //   url: 'https://discountdance.com/dancewear/style_1961C.html?&pid=25514&Shop=Style&&skey=capezio+ultra+soft+stirrup+tights&search=true&SortOrder=R&SID=1873605563',
+  // },
+  // {
+  //   name: 'Bloch Endura Footed',
+  //   color: 'Light Pink',
+  //   url: 'https://us.blochworld.com/products/girls-endura-footed-tights-light-pink',
+  // },
+  // {
+  //   name: 'Bloch Contoursoft Stirrup',
+  //   color: 'Tan',
+  //   url: 'https://us.blochworld.com/collections/children-dancewear-tights/products/girls-contoursoft-stirrup-tights-tan',
+  // },
+  // {
+  //   name: 'Capezio Studio Basic Fishnet Seamless',
+  //   color: 'Black',
+  //   url: 'https://www.capezio.com/studio-basics-fishnet-seamless-tight-child',
+  // },
   {
     name: 'Capezio Ultra Soft Footed',
     color: 'Ballet Pink',
     url: 'https://www.capezio.com/ultra-soft-footed-tight-girls',
   },
-  { name: 'Capezio Footed', color: 'Ballet Pink', url: '' },
+  // { name: 'Capezio Footed', color: 'Ballet Pink', url: '' },
   {
     name: 'Body Wrappers Total Stretch Seamless Fishnet',
     color: 'Black',
@@ -70,21 +70,21 @@ const footwear = [
     color: 'Caramel',
     url: 'https://www.capezio.com/lily-ballet-shoe-child',
   },
-  {
-    name: 'Capezio Slip On Jazz, E-Series',
-    color: 'Caramel',
-    url: 'https://www.capezio.com/e-series-jazz-slip-on-child',
-  },
-  {
-    name: 'Capezio Lily',
-    color: 'Ballet Pink',
-    url: 'https://www.capezio.com/lily-ballet-shoe-child',
-  },
-  {
-    name: 'Pastry Glam Pie Glitter',
-    color: 'Black with White Sole',
-    url: 'https://www.lovepastry.com/products/glam-pie-glitter-youth-sneakers-black',
-  },
+  // {
+  //   name: 'Capezio Slip On Jazz, E-Series',
+  //   color: 'Caramel',
+  //   url: 'https://www.capezio.com/e-series-jazz-slip-on-child',
+  // },
+  // {
+  //   name: 'Capezio Lily',
+  //   color: 'Ballet Pink',
+  //   url: 'https://www.capezio.com/lily-ballet-shoe-child',
+  // },
+  // {
+  //   name: 'Pastry Glam Pie Glitter',
+  //   color: 'Black with White Sole',
+  //   url: 'https://www.lovepastry.com/products/glam-pie-glitter-youth-sneakers-black',
+  // },
   {
     name: 'Capezio Hanami Canvas',
     color: 'Light Pink',
@@ -95,31 +95,31 @@ const footwear = [
     color: 'Caramel',
     url: 'https://www.capezio.com/mary-jane',
   },
-  {
-    name: 'Capezio Cadence',
-    color: 'Black',
-    url: 'https://www.capezio.com/cadence-tap-shoe-child',
-  },
+  // {
+  //   name: 'Capezio Cadence',
+  //   color: 'Black',
+  //   url: 'https://www.capezio.com/cadence-tap-shoe-child',
+  // },
   {
     name: 'Capezio Roxy',
     color: 'Black',
     url: 'https://www.capezio.com/roxy-tap-shoe',
   },
-  {
-    name: 'Bloch Jason Samuels Smith Tap Shoes',
-    color: 'Black',
-    url: 'https://us.blochworld.com/products/ladies-jason-samuels-smith-tap-shoes-black-leather?_pos=1&_psq=samuel%20&_ss=e&_v=1.0',
-  },
+  // {
+  //   name: 'Bloch Jason Samuels Smith Tap Shoes',
+  //   color: 'Black',
+  //   url: 'https://us.blochworld.com/products/ladies-jason-samuels-smith-tap-shoes-black-leather?_pos=1&_psq=samuel%20&_ss=e&_v=1.0',
+  // },
   {
     name: 'Nike Dunk Low',
     color: 'Black and White',
     url: 'https://www.nike.com/t/dunk-low-womens-shoes-ppQwKZ/DD1503-101?_gl=1*1hl910n*_up*MQ..&gclid=CjwKCAiA29auBhBxEiwAnKcSqi6FfsKq7srSLOsTL_zWAVggcAy7MbCS7aZlfmYz2gITUC-4_y_fZRoCvkEQAvD_BwE&gclsrc=aw.ds',
   },
-  {
-    name: 'Capezio Fierce Dance Sneaker',
-    color: 'Black',
-    url: 'https://www.capezio.com/fierce-dansneakerr-child',
-  },
+  // {
+  //   name: 'Capezio Fierce Dance Sneaker',
+  //   color: 'Black',
+  //   url: 'https://www.capezio.com/fierce-dansneakerr-child',
+  // },
 ]
 
 export async function seedStudios() {
@@ -149,6 +149,7 @@ export async function seedStudios() {
           },
         },
       })
+
       .then(async (user) => {
         console.log('new studio user:', user)
         console.log('seeding skill levels...')

@@ -9,7 +9,7 @@
 }
 
 .btn-action:disabled {
-  background-color: var(--tw-slate-300);
+  background-color: var(--tw-slate-500);
 }
 
 .btn-confirm {
