@@ -274,6 +274,34 @@ export async function getStudioDancesToBrowse({
   return studioDances
 }
 
+export async function getStudioDancers(studioId: Studio['userId']) {
+  return await prisma.dancer.findMany({
+    where: {
+      enrollments: {
+        some: {
+          studioId: studioId,
+        },
+      },
+    },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      parent: {
+        select: {
+          firstName: true,
+        },
+      },
+      enrollments: {
+        where: {
+          studioId: studioId,
+        },
+        select: { studioId: true, class: { select: { name: true } } },
+      },
+    },
+  })
+}
+
 // MUTATIONS //
 
 export async function updateAgeLevel(

@@ -1,10 +1,12 @@
 import { redirect, type LoaderFunctionArgs, json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import DanceClassListing from '~/components/DanceClassListing'
-import { DanceListing } from '~/components/studios/SingleDanceLink'
-import { ContentContainer } from '~/components/styledComponents/ContentContainer'
+import DancerListing from '~/components/DancerListing'
 import { PageHeader } from '~/components/styledComponents/PageHeader'
-import { getDanceClasses_Name_Id, getFullStudio } from '~/models/studio.server'
+import {
+  getDanceClasses_Name_Id,
+  getStudioDancers,
+} from '~/models/studio.server'
 import { getUserId } from '~/session.server'
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -14,18 +16,22 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
   const dances = await getDanceClasses_Name_Id(userId)
   // const studio = await getFullStudio(userId)
-  return json({ dances })
+  const studioDancers = await getStudioDancers(userId)
+  const dancers = studioDancers.map((dancer) => {
+    return { name: `${dancer.firstName} ${dancer.lastName}`, id: dancer.id }
+  })
+  return json({ dances, dancers })
 }
 
 export default function StudioIndex() {
-  const { dances } = useLoaderData<typeof loader>()
+  const { dances, dancers } = useLoaderData<typeof loader>()
+  console.log('studioDancers', dancers)
   return (
     <>
       <PageHeader headerText='Studio Home' />
       <div className='pageContent flex justify-center'>
-        <ContentContainer>
-          {<DanceClassListing danceClasses={dances} />}
-        </ContentContainer>
+        <DanceClassListing danceClasses={dances} />
+        <DancerListing dancers={dancers} />
       </div>
     </>
   )
