@@ -17,9 +17,25 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const dances = await getDanceClasses_Name_Id(userId)
   // const studio = await getFullStudio(userId)
   const studioDancers = await getStudioDancers(userId)
-  const dancers = studioDancers.map((dancer) => {
-    return { name: `${dancer.firstName} ${dancer.lastName}`, id: dancer.id }
-  })
+  const dancers = studioDancers
+    .sort((a, b) => {
+      const nameA = a.lastName.toUpperCase()
+      const nameB = b.lastName.toUpperCase()
+
+      if (nameA < nameB) {
+        return -1
+      }
+      if (nameA > nameB) {
+        return 1
+      }
+
+      // names must be equal
+      return 0
+    })
+
+    .map((dancer) => {
+      return { name: `${dancer.lastName}, ${dancer.firstName}`, id: dancer.id }
+    })
   return json({ dances, dancers })
 }
 
@@ -29,7 +45,7 @@ export default function StudioIndex() {
   return (
     <>
       <PageHeader headerText='Studio Home' />
-      <div className='pageContent flex justify-center'>
+      <div className='grid grid-cols-2'>
         <DanceClassListing danceClasses={dances} />
         <DancerListing dancers={dancers} />
       </div>
