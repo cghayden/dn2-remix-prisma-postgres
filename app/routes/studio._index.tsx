@@ -15,7 +15,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return redirect('/')
   }
   const dances = await getDanceClasses_Name_Id(userId)
-  // const studio = await getFullStudio(userId)
   const studioDancers = await getStudioDancers(userId)
   const dancers = studioDancers
     .sort((a, b) => {
@@ -41,7 +40,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function StudioIndex() {
   const { dances, dancers } = useLoaderData<typeof loader>()
-  console.log('studioDancers', dancers)
   return (
     <>
       <PageHeader headerText='Studio Home' />
