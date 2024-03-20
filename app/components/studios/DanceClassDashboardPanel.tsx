@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { DanceListing } from './studios/SingleDanceLink'
-import { DashboardContainer } from './styledComponents/DashboardContainer'
+import { DanceListing } from './SingleDanceLink'
+import { DashboardContainer } from '../styledComponents/DashboardContainer'
 
 type DanceListing = {
   id: string
@@ -9,8 +9,7 @@ type DanceListing = {
 type Props = {
   danceClasses: DanceListing[]
 }
-
-function DanceClassListing({ danceClasses = [] }: Props) {
+export default function DanceClassDashboardPanel({ danceClasses = [] }: Props) {
   const [searchQuery, setSearchQuery] = useState('')
   const filteredDances = danceClasses.filter((danceClass) =>
     danceClass.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -39,5 +38,3 @@ function DanceClassListing({ danceClasses = [] }: Props) {
     </div>
   )
 }
-
-export default DanceClassListing

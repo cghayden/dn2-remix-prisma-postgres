@@ -1,4 +1,4 @@
-import type { Filter } from '~/routes/studio.danceClasses'
+import type { Filters } from '~/routes/studio.danceClasses'
 
 type FilterCategories = {
   ageLevels: { id: string; name: string }[]
@@ -11,17 +11,17 @@ export default function StudioFilter({
   setFilters,
 }: {
   categories: FilterCategories
-  filters: Filter
-  setFilters: React.Dispatch<React.SetStateAction<Filter>>
+  filters: Filters
+  setFilters: React.Dispatch<React.SetStateAction<Filters>>
 }) {
   const handleFilterChange = (
-    category: keyof Filter,
-    id: string,
+    category: keyof Filters,
+    name: string,
     isChecked: boolean
   ) => {
     const newFilterValues = isChecked
-      ? [...filters[category], id] // Add id
-      : filters[category].filter((value) => value !== id) // Remove id
+      ? [...filters[category], name] // Add id
+      : filters[category].filter((value) => value !== name) // Remove id
 
     setFilters((prevFilters) => ({
       ...prevFilters,
@@ -42,12 +42,12 @@ export default function StudioFilter({
                   <input
                     name={ageLevel.name}
                     type='checkbox'
-                    value={ageLevel.id}
-                    checked={filters.ageLevel?.includes(ageLevel.id)}
+                    value={ageLevel.name}
+                    checked={filters.ageLevel?.includes(ageLevel.name)}
                     onChange={(e) =>
                       handleFilterChange(
                         'ageLevel',
-                        ageLevel.id,
+                        ageLevel.name,
                         e.target.checked
                       )
                     }
@@ -67,12 +67,12 @@ export default function StudioFilter({
                   <input
                     name={tightsItem.name}
                     type='checkbox'
-                    value={tightsItem.id}
-                    checked={filters.tights?.includes(tightsItem.id)}
+                    value={tightsItem.name}
+                    checked={filters.tights?.includes(tightsItem.name)}
                     onChange={(e) =>
                       handleFilterChange(
                         'tights',
-                        tightsItem.id,
+                        tightsItem.name,
                         e.target.checked
                       )
                     }

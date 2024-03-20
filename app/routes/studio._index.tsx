@@ -1,7 +1,7 @@
 import { redirect, type LoaderFunctionArgs, json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-import DanceClassListing from '~/components/DanceClassListing'
-import DancerListing from '~/components/DancerListing'
+import DanceClassDashboardPanel from '~/components/studios/DanceClassDashboardPanel'
+import DancerDashboardPanel from '~/components/studios/DancerDashboardPanel'
 import { PageHeader } from '~/components/styledComponents/PageHeader'
 import {
   getDanceClasses_Name_Id,
@@ -44,8 +44,8 @@ export default function StudioIndex() {
     <>
       <PageHeader headerText='Studio Home' />
       <div className='grid grid-cols-2'>
-        <DanceClassListing danceClasses={dances} />
-        <DancerListing dancers={dancers} />
+        <DanceClassDashboardPanel danceClasses={dances} />
+        <DancerDashboardPanel dancers={dancers} />
       </div>
     </>
   )

@@ -1,5 +1,5 @@
 import { Link } from '@remix-run/react'
-import { DashboardContainer } from './styledComponents/DashboardContainer'
+import { DashboardContainer } from '../styledComponents/DashboardContainer'
 import { useState } from 'react'
 
 type DancerListing = {
@@ -9,8 +9,7 @@ type DancerListing = {
 type Props = {
   dancers: DancerListing[]
 }
-
-function DanceClassListing({ dancers = [] }: Props) {
+export default function DancerDashboardPanel({ dancers = [] }: Props) {
   const [searchQuery, setSearchQuery] = useState('')
   const filteredDancers = dancers.filter((dancer) =>
     dancer.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -41,5 +40,3 @@ function DanceClassListing({ dancers = [] }: Props) {
     </div>
   )
 }
-
-export default DanceClassListing
