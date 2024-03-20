@@ -53,18 +53,19 @@ model Dancer {
 }
 
 model Studio {
-  userId       String       @id // UUID type, primary key and foreign key to User
-  user         User         @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  name         String
-  danceClasses DanceClass[]
-  instructors  Instructor[]
-  enrollments  Enrollment[]
-  ageLevels    AgeLevel[]
-  skillLevels  SkillLevel[] //studio defined skill levels. (e.g. recreational, company, rising star, excel, etc.)
-  tights       Tights[]
-  footwear     Footwear[]
-  Dancer       Dancer?      @relation(fields: [dancerId], references: [id])
-  dancerId     String?
+  userId        String       @id // UUID type, primary key and foreign key to User
+  user          User         @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  name          String
+  danceClasses  DanceClass[]
+  instructors   Instructor[]
+  enrollments   Enrollment[]
+  ageLevels     AgeLevel[]
+  skillLevels   SkillLevel[] //studio defined skill levels. (e.g. recreational, company, rising star, excel, etc.)
+  tights        Tights[]
+  footwear      Footwear[]
+  stylesOfDance String[]
+  Dancer        Dancer?      @relation(fields: [dancerId], references: [id])
+  dancerId      String? // WHY is this there a singular Dancer relation??
 }
 
 model DanceClass {

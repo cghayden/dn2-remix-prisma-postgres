@@ -3,6 +3,7 @@ import type { Filters } from '~/routes/studio.danceClasses'
 type FilterCategories = {
   ageLevels: { id: string; name: string }[]
   tights: { id: string; name: string }[]
+  stylesOfDance: string[]
 }
 
 export default function StudioFilter({
@@ -78,6 +79,31 @@ export default function StudioFilter({
                     }
                   />
                   {tightsItem.name}
+                </label>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className='my-6'>
+          <legend className='pl-4 pb-4'>Tights</legend>
+          <ul>
+            {categories.stylesOfDance.map((style) => (
+              <li key={style}>
+                <label>
+                  <input
+                    name={style}
+                    type='checkbox'
+                    value={style}
+                    checked={filters.styleOfDance?.includes(style)}
+                    onChange={(e) =>
+                      handleFilterChange(
+                        'styleOfDance',
+                        style,
+                        e.target.checked
+                      )
+                    }
+                  />
+                  {style}
                 </label>
               </li>
             ))}

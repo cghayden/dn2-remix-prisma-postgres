@@ -12,6 +12,7 @@ import ActiveFilterDisplay from '~/components/ActiveFilterDisplay'
 export type Filters = {
   ageLevel: string[]
   tights: string[]
+  styleOfDance: string[]
 }
 
 export type DanceListingType = {
@@ -23,6 +24,7 @@ export type DanceListingType = {
   ageLevel: {
     name: string
   }
+  styleOfDance: string | null
 }
 
 export type LoaderType = {
@@ -53,6 +55,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
           name: true,
         },
       },
+      styleOfDance: true,
       tights: {
         select: {
           name: true,
@@ -78,6 +81,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
           name: true,
         },
       },
+      stylesOfDance: true,
     },
   })
   const data: LoaderType = { dances, filterData }
@@ -86,10 +90,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function DanceClasses() {
   const { dances, filterData } = useLoaderData<typeof loader>()
+  console.log('filterData', filterData)
 
   const [filters, setFilters] = useState<Filters>({
     ageLevel: [],
     tights: [],
+    styleOfDance: [],
   })
 
   const [filteredDances, setFilteredDances] = useState<
@@ -103,8 +109,11 @@ export default function DanceClasses() {
           (filters.ageLevel.length === 0 ||
             filters.ageLevel.includes(dance.ageLevel.name)) &&
           (filters.tights.length === 0 ||
-            (dance.tights?.name && filters.tights.includes(dance.tights.name)))
-        // && (filters.footwear.length === 0 || filters.footwear.includes(dance.footwearId))
+            (dance.tights?.name &&
+              filters.tights.includes(dance.tights.name))) &&
+          (filters.styleOfDance.length === 0 ||
+            (dance.styleOfDance &&
+              filters.styleOfDance?.includes(dance.styleOfDance)))
       )
       setFilteredDances(result)
     }
