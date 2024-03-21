@@ -24,6 +24,7 @@ export default function StudioConfigIndex() {
         page='Skill Levels'
         data={skillLevels}
       />
+      {/* styles fo dance list */}
     </>
   )
 }

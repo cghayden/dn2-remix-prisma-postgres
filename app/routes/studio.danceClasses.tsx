@@ -1,11 +1,10 @@
-import { json, type LoaderFunctionArgs } from '@remix-run/node'
+import { type LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { requireStudioUserId } from '~/models/studio.server'
 import { prisma } from '~/db.server'
 import StudioFilter from '~/components/studios/StudioFilter'
 import { useEffect, useState } from 'react'
 
-import type { DanceClass } from '@prisma/client'
 import DancesPageDanceListings from '~/components/studios/DancesPageDanceListings'
 import ActiveFilterDisplay from '~/components/ActiveFilterDisplay'
 
