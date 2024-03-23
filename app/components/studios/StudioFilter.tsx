@@ -60,6 +60,31 @@ export default function StudioFilter({
           </ul>
         </div>
         <div className='my-6'>
+          <legend className='pl-4 pb-4'>Style</legend>
+          <ul>
+            {categories.stylesOfDance.map((style) => (
+              <li key={style}>
+                <label>
+                  <input
+                    name={style}
+                    type='checkbox'
+                    value={style}
+                    checked={filters.stylesOfDance?.includes(style)}
+                    onChange={(e) =>
+                      handleFilterChange(
+                        'stylesOfDance',
+                        style,
+                        e.target.checked
+                      )
+                    }
+                  />
+                  {style}
+                </label>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className='my-6'>
           <legend className='pl-4 pb-4'>Tights</legend>
           <ul>
             {categories.tights.map((tightsItem) => (
@@ -79,31 +104,6 @@ export default function StudioFilter({
                     }
                   />
                   {tightsItem.name}
-                </label>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className='my-6'>
-          <legend className='pl-4 pb-4'>Tights</legend>
-          <ul>
-            {categories.stylesOfDance.map((style) => (
-              <li key={style}>
-                <label>
-                  <input
-                    name={style}
-                    type='checkbox'
-                    value={style}
-                    checked={filters.styleOfDance?.includes(style)}
-                    onChange={(e) =>
-                      handleFilterChange(
-                        'styleOfDance',
-                        style,
-                        e.target.checked
-                      )
-                    }
-                  />
-                  {style}
                 </label>
               </li>
             ))}

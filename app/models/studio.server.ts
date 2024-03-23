@@ -193,6 +193,7 @@ export async function getStudioConfig(userId: User['userId']) {
       skillLevels: true,
       tights: true,
       footwear: true,
+      stylesOfDance: true,
     },
   })
   return studio

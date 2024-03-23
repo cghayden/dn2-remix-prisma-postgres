@@ -11,7 +11,7 @@ import ActiveFilterDisplay from '~/components/ActiveFilterDisplay'
 export type Filters = {
   ageLevel: string[]
   tights: string[]
-  styleOfDance: string[]
+  stylesOfDance: string[]
 }
 
 export type DanceListingType = {
@@ -37,6 +37,7 @@ export type LoaderType = {
       id: string
       name: string
     }[]
+    stylesOfDance: string[]
   } | null
 }
 
@@ -83,6 +84,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       stylesOfDance: true,
     },
   })
+
   const data: LoaderType = { dances, filterData }
   return data
 }
@@ -94,7 +96,7 @@ export default function DanceClasses() {
   const [filters, setFilters] = useState<Filters>({
     ageLevel: [],
     tights: [],
-    styleOfDance: [],
+    stylesOfDance: [],
   })
 
   const [filteredDances, setFilteredDances] = useState<
@@ -110,9 +112,9 @@ export default function DanceClasses() {
           (filters.tights.length === 0 ||
             (dance.tights?.name &&
               filters.tights.includes(dance.tights.name))) &&
-          (filters.styleOfDance.length === 0 ||
+          (filters.stylesOfDance.length === 0 ||
             (dance.styleOfDance &&
-              filters.styleOfDance?.includes(dance.styleOfDance)))
+              filters.stylesOfDance?.includes(dance.styleOfDance)))
       )
       setFilteredDances(result)
     }
