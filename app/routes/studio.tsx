@@ -18,6 +18,7 @@ export default function StudioLayout() {
 
   const studioLinks: NavLink[] = [
     { label: 'Home', url: '/studio' },
+    { label: 'Dancers', url: '/studio/dancers' },
     { label: 'Dance Classes', url: '/studio/danceClasses' },
     { label: 'Create a New Dance', url: '/studio/addDanceClass' },
     // { label: 'Configuration', url: '/studio/settings' },

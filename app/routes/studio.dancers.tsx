@@ -1,5 +1,5 @@
 import { prisma } from '~/db.server'
-import { useLoaderData } from '@remix-run/react'
+import { Link, useLoaderData } from '@remix-run/react'
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import { requireStudioUserId } from '~/models/studio.server'
 import { PageHeader } from '~/components/styledComponents/PageHeader'
@@ -23,6 +23,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
       },
       parent: true, // If you want to include parent details
     },
+    orderBy: {
+      lastName: 'asc',
+    },
   })
 
   return studioDancers
@@ -36,7 +39,9 @@ export default function Playground() {
       <ul>
         {studioDancers.map((dancer) => (
           <li key={dancer.id}>
-            {dancer.firstName} {dancer.lastName}
+            <Link to={`/studio/dancer/${dancer.id}`}>
+              {dancer.lastName}, {dancer.firstName}
+            </Link>
           </li>
         ))}
       </ul>
