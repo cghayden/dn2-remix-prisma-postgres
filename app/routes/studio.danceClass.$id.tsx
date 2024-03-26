@@ -29,6 +29,7 @@ const danceSchema = z.object({
   skillLevelId: z.string(),
   tightsId: z.string().optional(),
   footwearId: z.string().optional(),
+  styleOfDance: z.string(),
 })
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -53,6 +54,7 @@ export async function action({ request }: ActionFunctionArgs) {
     skillLevelId,
     tightsId,
     footwearId,
+    styleOfDance,
   } = submission.value
 
   await updateStudioDance({
@@ -66,6 +68,7 @@ export async function action({ request }: ActionFunctionArgs) {
     skillLevelId,
     tightsId,
     footwearId,
+    styleOfDance,
   }).catch((err) => {
     throw new Error(err.message)
   })
@@ -88,6 +91,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 export default function UpdateDanceClass() {
   const { studioConfig, danceClass } = useLoaderData<typeof loader>()
+  console.log('danceClass', danceClass)
   const lastSubmission = useActionData<typeof action>()
   const [selectedAgeLevel, setSelectedAgeLevel] = useState(
     danceClass?.ageLevelId ? danceClass.ageLevelId : ''
@@ -100,6 +104,9 @@ export default function UpdateDanceClass() {
   )
   const [selectedFootwear, setSelectedFootwear] = useState(
     danceClass?.footwearId ? danceClass.footwearId : ''
+  )
+  const [selectedStyle, setSelectedStyle] = useState(
+    danceClass?.styleOfDance ?? ''
   )
 
   // The `useForm` hook will return everything you need to setup a form including the error and config of each field
@@ -147,10 +154,35 @@ export default function UpdateDanceClass() {
               label={'Performance Name'}
               error={performanceName.error}
               required={false}
-              defaultValue={danceClass?.performanceName}
+              defaultValue={danceClass?.performanceName ?? ''}
             />
           </div>
+          {/* Style Of Dance  */}
 
+          <div className='input_item'>
+            <label
+              className='block text-sm text-gray-600 mb-1'
+              htmlFor={'styleOfDance'}
+            >
+              Style of Dance
+            </label>
+            <input type='hidden' name='styleOfDance' value={selectedStyle} />
+            {studioConfig.stylesOfDance.map((style) => (
+              <button
+                type='button'
+                key={style}
+                className={`inline-block text-sm px-4 py-2 border rounded-full mr-2 mb-2 
+                          ${
+                            selectedStyle === style
+                              ? 'bg-green-500 text-white'
+                              : 'bg-gray-200 text-gray-700'
+                          }`}
+                onClick={() => setSelectedStyle(style)}
+              >
+                {style}
+              </button>
+            ))}
+          </div>
           {/* Age Level */}
           <div className='input_item'>
             <label

@@ -27,6 +27,7 @@ const danceSchema = z.object({
   skillLevelId: z.string(),
   tightsId: z.string().optional(),
   footwearId: z.string().optional(),
+  styleOfDance: z.string(),
 })
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -48,6 +49,7 @@ export async function action({ request }: ActionFunctionArgs) {
     skillLevelId,
     tightsId,
     footwearId,
+    styleOfDance,
   } = submission.value
 
   await createStudioDance({
@@ -60,6 +62,7 @@ export async function action({ request }: ActionFunctionArgs) {
     skillLevelId,
     tightsId,
     footwearId,
+    styleOfDance,
   }).catch((err) => {
     throw new Error(err.message)
   })
@@ -82,6 +85,7 @@ export default function AddDanceClass() {
   const [selectedSkillLevel, setSelectedSkillLevel] = useState('')
   const [selectedTights, setSelectedTights] = useState('')
   const [selectedFootwear, setSelectedFootwear] = useState('')
+  const [selectedStyle, setSelectedStyle] = useState('')
 
   // The `useForm` hook will return everything you need to setup a form including the error and config of each field
   const [
@@ -95,6 +99,7 @@ export default function AddDanceClass() {
       footwearId,
       competitions,
       recital,
+      // styleOfDance,
     },
   ] = useForm({
     // The last submission will be used to report the error and serves as the default value and initial error of the form for progressive enhancement
@@ -126,6 +131,32 @@ export default function AddDanceClass() {
               error={performanceName.error}
               required={false}
             />
+          </div>
+
+          {/* Style OF Dance */}
+          <div className='input_item'>
+            <label
+              className='block text-sm text-gray-600 mb-1'
+              htmlFor={'ageLevel'}
+            >
+              Style of Dance{' '}
+            </label>
+            <input type='hidden' name='styleOfDance' value={selectedStyle} />
+            {studioConfig.stylesOfDance.map((style) => (
+              <button
+                type='button'
+                key={style}
+                className={`inline-block text-sm px-4 py-2 border rounded-full mr-2 mb-2 
+                          ${
+                            selectedStyle === style
+                              ? 'bg-green-500 text-white'
+                              : 'bg-gray-200 text-gray-700'
+                          }`}
+                onClick={() => setSelectedStyle(style)}
+              >
+                {style}
+              </button>
+            ))}
           </div>
 
           {/* Age Level */}
