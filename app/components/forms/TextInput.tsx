@@ -14,7 +14,7 @@ export type ComposeTextInputProps = {
   label: string | null
   name: string
   required?: boolean
-  defaultValue?: string | null | undefined
+  defaultValue?: string
   error: string | undefined
   type?: string
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
@@ -47,7 +47,7 @@ export function TextInput({
           autoComplete={name}
           aria-invalid={error ? 'true' : undefined}
           aria-describedby={error ? `${name}-error` : undefined}
-          defaultValue={defaultValue}
+          defaultValue={defaultValue ?? ''}
           className='w-full rounded border bg-gray-50 border-gray-300 text-gray-800 px-2 py-1 focus:ring-2 focus:ring-blue-300'
         />
         {error ? (

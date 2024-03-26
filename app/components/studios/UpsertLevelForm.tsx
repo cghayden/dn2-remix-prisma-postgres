@@ -19,6 +19,7 @@ export function UpsertLevelForm({
   formRef,
 }: LevelEditableListProps) {
   const fetcher = useFetcher<typeof action>()
+  console.log('upsert level form fetcher', fetcher)
   const lastSubmission = fetcher?.data
   let success = fetcher?.data
   let isSaving = fetcher.state === 'submitting'

@@ -3,7 +3,7 @@ import { useFetcher } from '@remix-run/react'
 
 export default function RemoveStringFromDbArray({ entry }: { entry: string }) {
   const fetcher = useFetcher()
-  console.log('fetcher', fetcher)
+  // console.log('fetcher', fetcher)
   let isDeleting = fetcher.state === 'submitting'
   // let fetcherState = fetcher.state
 

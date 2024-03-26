@@ -35,6 +35,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         id: levelId,
       },
     })
+    return 'level deleted'
   }
 
   if (levelType === 'ageLevel') {

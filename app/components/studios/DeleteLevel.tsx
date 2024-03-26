@@ -10,7 +10,7 @@ type DeleteLevelProps = {
 
 export default function DeleteLevel({ levelId, levelType }: DeleteLevelProps) {
   const fetcher = useFetcher()
-  console.log('fetcher', fetcher)
+  console.log('fetcher deleteLevel', fetcher)
   let isDeleting = fetcher.state === 'submitting'
   // let fetcherState = fetcher.state
 

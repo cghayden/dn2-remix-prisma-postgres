@@ -2,19 +2,22 @@ import { useRef, useState } from 'react'
 import { ContentContainer } from '~/components/styledComponents/ContentContainer'
 import { TableHeader } from '~/components/styledComponents/TableHeader'
 import { cn } from '~/lib/tailwindUtils'
-import { v4 as uuidv4 } from 'uuid'
 import { EditArrayForm } from './EditArrayForm'
-// import { PushStringToArrayForm } from './PushStringToArrayForm'
+import type { KeyedStyleOfDance } from '~/routes/studio.config._index'
 
 type ConfigItemListProps = {
-  data: string[]
+  data: KeyedStyleOfDance[]
   page: 'Age Levels' | 'Skill Levels' | 'Styles of Dance'
-  // itemType: 'ageLevel' | 'skillLevel' | 'styleOfDance'
+  itemType: 'styleOfDance'
 }
 
 export default function StringArrayTable({ data, page }: ConfigItemListProps) {
-  const formRef = useRef<HTMLFormElement>(null)
+  const arrayFormRef = useRef<HTMLFormElement>(null)
   const [editMode, toggleEditMode] = useState(false)
+
+  // using uuidv4() as key causes infinite re-render
+  // Keys must not change or that defeats their purpose! Don’t generate them while rendering.
+
   return (
     <div className='w-5/6 mx-auto mb-8'>
       <TableHeader headerText={page} className=''>
@@ -66,22 +69,29 @@ export default function StringArrayTable({ data, page }: ConfigItemListProps) {
           {editMode ? (
             <tbody>
               {data.map((entry) => (
-                <EditArrayForm key={entry} entry={entry} actionType='update' />
+                <EditArrayForm
+                  key={entry.key}
+                  entry={entry.style}
+                  actionType='update'
+                />
               ))}
               {/* in edit provide a blank entry at the end of the list to enter a new level name and desc. */}
-              <EditArrayForm actionType='new' formRef={formRef} />
+              <EditArrayForm
+                actionType='new'
+                entry=''
+                arrayFormRef={arrayFormRef}
+              />
             </tbody>
           ) : (
             <tbody>
               {data.map((entry) => (
                 <tr
-                  key={uuidv4()}
+                  key={entry.key}
                   className='grid grid-cols-2 border-b-2 last:border-b-0'
                 >
                   <th className='px-4 py-2 text-sm font-semibold text-start'>
-                    {entry}
+                    {entry.style}
                   </th>
-                  {/* <td className='px-4 py-2 text-sm'>{entry.description}</td> */}
                 </tr>
               ))}
             </tbody>

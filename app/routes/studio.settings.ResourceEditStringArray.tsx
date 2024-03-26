@@ -6,7 +6,7 @@ import { prisma } from '~/db.server'
 
 const styleOfDanceSchema = z.object({
   originalEntry: z.string().optional(),
-  newEntry: z.string(),
+  newEntry: z.string().optional(),
   // newLevelName: z
   //   .string()
   //   .min(2, { message: 'Level Name Must Be At Least 2 Characters' }),
@@ -24,8 +24,6 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   const { actionType, originalEntry, newEntry } = submission.value
-  console.log('actionType', actionType)
-  console.log('newEntry', newEntry)
 
   if (actionType === 'new') {
     // add to array on studio
@@ -39,10 +37,9 @@ export async function action({ request }: ActionFunctionArgs) {
         },
       },
     })
-    return json(submission)
   }
 
-  if (actionType === 'update') {
+  if (actionType === 'update' || 'delete') {
     const studio = await prisma.studio.findUnique({
       where: {
         userId: userId,
@@ -56,23 +53,41 @@ export async function action({ request }: ActionFunctionArgs) {
       throw new Error('studio not found')
     }
 
-    studio.stylesOfDance.push(newEntry)
-    const newStyles = studio.stylesOfDance.filter(
-      (style) => style !== originalEntry
-    )
-    console.log('newStyles', newStyles)
-    await prisma.studio.update({
-      where: {
-        userId: userId,
-      },
-      data: {
-        stylesOfDance: newStyles,
-      },
-    })
+    //update an entry
+    if (actionType === 'update') {
+      if (!newEntry) {
+        return json(submission)
+      }
+      studio.stylesOfDance.push(newEntry)
+      const newStyles = studio.stylesOfDance.filter(
+        (style) => style !== originalEntry
+      )
+      console.log('newStyles', newStyles)
+      await prisma.studio.update({
+        where: {
+          userId: userId,
+        },
+        data: {
+          stylesOfDance: newStyles,
+        },
+      })
+    }
 
-    // filter out old
+    //delete an entry
+    else {
+      const newStyles = studio.stylesOfDance.filter(
+        (entry) => entry !== originalEntry
+      )
+      await prisma.studio.update({
+        where: {
+          userId: userId,
+        },
+        data: {
+          stylesOfDance: newStyles,
+        },
+      })
+    }
     // add to array on studio
-    return json(submission)
   }
 
   return json(submission)
