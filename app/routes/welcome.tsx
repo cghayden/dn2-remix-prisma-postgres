@@ -20,6 +20,9 @@ export default function Welcome() {
           />
           <div className='absolute inset-0 bg-[color:rgba(27,167,254,0.4)] mix-blend-multiply' />
         </div>
+        <div className='text-gray-50 fixed bottom-20 left-2/4 -translate-x-2/4'>
+          <a href='loginSampleStudio'>Login To Sample Studio</a>
+        </div>
         <div className='grid place-items-center h-full'>
           <div className='relative'>
             <h1 className=' text-center text-5xl font-extrabold tracking-tight sm:text-6xl'>
@@ -63,6 +66,7 @@ export default function Welcome() {
               </div>
             </div>
           </div>
+          d
         </div>
       </div>
     </main>
