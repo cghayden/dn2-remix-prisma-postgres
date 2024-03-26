@@ -31,16 +31,12 @@ export function generateStudioDanceData(studio) {
             name: `${ageLevel.name} ${skillLevel.name} ${style} `,
             ageLevelId: ageLevel.id,
             skillLevelId: skillLevel.id,
-            styleOfDance: style,
             tightsId: tightsId,
             footwearId: footwearId,
             studioId: studio.userId,
             competitions: skillLevel.name === 'Company' ? true : false,
             recital: true,
-            styleOfDance:
-              stylesOfDance[
-                Math.floor(Math.random() * studio.stylesOfDance.length)
-              ],
+            styleOfDance: style,
           })
         }
       } else {

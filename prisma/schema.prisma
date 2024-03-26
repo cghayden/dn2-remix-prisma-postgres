@@ -134,6 +134,8 @@ model Footwear {
 model Instructor {
   userId     String       @id // ID type, primary key and foreign key to User
   user       User         @relation(fields: [userId], references: [userId])
+  firstName  String
+  lastName   String
   studios    Studio[] // Many-to-many relationship with Studio
   danceClass DanceClass[]
 }

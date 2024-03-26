@@ -218,6 +218,19 @@ export async function getDanceClass({
       competitions: true,
       recital: true,
       styleOfDance: true,
+      enrollments: {
+        distinct: 'dancerId',
+        select: {
+          id: true,
+          dancer: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
+      },
       ageLevel: {
         select: {
           name: true,
@@ -234,12 +247,21 @@ export async function getDanceClass({
         select: {
           name: true,
           id: true,
+          url: true,
         },
       },
       footwear: {
         select: {
           name: true,
           id: true,
+          url: true,
+        },
+      },
+      instructor: {
+        select: {
+          userId: true,
+          firstName: true,
+          lastName: true,
         },
       },
     },
