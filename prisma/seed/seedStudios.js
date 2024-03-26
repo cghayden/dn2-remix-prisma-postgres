@@ -125,6 +125,7 @@ const footwear = [
 export async function seedStudios() {
   console.log('seeding studios')
   const studioNames = ['A', 'B', 'C', 'D', 'E']
+  const stylesOfDance = ['Tap', 'Hip Hop', 'Jazz', 'Lyrical']
 
   for (const name of studioNames) {
     // Create Studio-type User
@@ -145,6 +146,7 @@ export async function seedStudios() {
           studio: {
             create: {
               name: `Studio ${name}`,
+              stylesOfDance: stylesOfDance,
             },
           },
         },

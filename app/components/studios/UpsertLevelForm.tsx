@@ -4,6 +4,7 @@ import { TextInput } from '../forms/TextInput'
 import { useEffect, useState } from 'react'
 import { useForm } from '@conform-to/react'
 import { type action } from '../../routes/studio.settings.ResourceEditLevels'
+import DeleteLevel from './DeleteLevel'
 
 type LevelEditableListProps = {
   level?: AgeLevel | SkillLevel
@@ -18,6 +19,7 @@ export function UpsertLevelForm({
   formRef,
 }: LevelEditableListProps) {
   const fetcher = useFetcher<typeof action>()
+  console.log('upsert level form fetcher', fetcher)
   const lastSubmission = fetcher?.data
   let success = fetcher?.data
   let isSaving = fetcher.state === 'submitting'
@@ -37,7 +39,7 @@ export function UpsertLevelForm({
 
   return (
     <tr>
-      <td>
+      <td className='relative'>
         <fetcher.Form
           {...form.props}
           id={level?.id ?? `new${levelType}`}
@@ -82,16 +84,14 @@ export function UpsertLevelForm({
                   Save
                 </button>
               )}
-              {/* <button
-                  type='button'
-                  className=' text-sm bg-red-600 text-white rounded transition px-2 py-[2px] duration-150 ease-in-out'
-                  onClick={() => toggleShowSaveButton(false)}
-                >
-                  Cancel
-                </button> */}
             </div>
           </div>
         </fetcher.Form>
+        <>
+          {level ? (
+            <DeleteLevel levelType={levelType} levelId={level.id} />
+          ) : null}
+        </>
       </td>
     </tr>
   )

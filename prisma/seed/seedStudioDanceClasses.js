@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 // after retrieving studios from db, this function populates an array of dance classes that can then be used in a prisma create many mutation to create those dances for the studio
-export function generateStudioDanceData(studio, stylesOfDance) {
+export function generateStudioDanceData(studio) {
   let danceClasses = []
   const ageLevels = studio.ageLevels
   const tights = studio.tights
@@ -11,6 +11,7 @@ export function generateStudioDanceData(studio, stylesOfDance) {
   const defaultSkillLevel = skillLevels.filter(
     (level) => level.name === 'Recreational'
   )[0]
+  const stylesOfDance = studio.stylesOfDance
 
   for (const ageLevel of ageLevels) {
     for (const style of stylesOfDance) {
@@ -22,10 +23,6 @@ export function generateStudioDanceData(studio, stylesOfDance) {
       ].includes(ageLevel.name)
 
       if (shouldDuplicateForSkillLevels) {
-        console.log(
-          'shouldDuplicateForSkillLevels',
-          shouldDuplicateForSkillLevels
-        )
         for (let skillLevel of skillLevels) {
           const tightsId = tights[Math.floor(Math.random() * tights.length)].id
           const footwearId =
@@ -34,12 +31,12 @@ export function generateStudioDanceData(studio, stylesOfDance) {
             name: `${ageLevel.name} ${skillLevel.name} ${style} `,
             ageLevelId: ageLevel.id,
             skillLevelId: skillLevel.id,
-            styleOfDance: style,
             tightsId: tightsId,
             footwearId: footwearId,
             studioId: studio.userId,
             competitions: skillLevel.name === 'Company' ? true : false,
             recital: true,
+            styleOfDance: style,
           })
         }
       } else {
@@ -66,11 +63,11 @@ export function generateStudioDanceData(studio, stylesOfDance) {
 
 export async function seedDanceClasses() {
   console.log('seeding studio dance classes')
-  const stylesOfDance = ['Tap', 'Jazz', 'Hip Hop', 'Lyric']
 
   const studios = await prisma.studio.findMany({
     select: {
       userId: true,
+      stylesOfDance: true,
       ageLevels: {
         select: {
           id: true,
@@ -102,7 +99,7 @@ export async function seedDanceClasses() {
     return
   }
   for (const studio of studios) {
-    const danceClassData = generateStudioDanceData(studio, stylesOfDance)
+    const danceClassData = generateStudioDanceData(studio)
     await prisma.danceClass.createMany({
       data: danceClassData,
     })

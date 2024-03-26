@@ -3,6 +3,15 @@
   padding: 8px 12px;
   color: var(--tw-slate-50);
 }
+.btn-sm {
+  padding: 4px 6px;
+  font-size: 12px;
+}
+
+.btn-xs {
+  padding: 2px 3px;
+  font-size: 10px;
+}
 
 .btn-action {
   background-color: var(--tw-indigo-500);

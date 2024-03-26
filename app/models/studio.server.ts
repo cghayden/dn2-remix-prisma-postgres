@@ -193,6 +193,7 @@ export async function getStudioConfig(userId: User['userId']) {
       skillLevels: true,
       tights: true,
       footwear: true,
+      stylesOfDance: true,
     },
   })
   return studio
@@ -216,6 +217,20 @@ export async function getDanceClass({
       ageLevelId: true,
       competitions: true,
       recital: true,
+      styleOfDance: true,
+      enrollments: {
+        distinct: 'dancerId',
+        select: {
+          id: true,
+          dancer: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
+      },
       ageLevel: {
         select: {
           name: true,
@@ -232,12 +247,21 @@ export async function getDanceClass({
         select: {
           name: true,
           id: true,
+          url: true,
         },
       },
       footwear: {
         select: {
           name: true,
           id: true,
+          url: true,
+        },
+      },
+      instructor: {
+        select: {
+          userId: true,
+          firstName: true,
+          lastName: true,
         },
       },
     },
@@ -272,6 +296,34 @@ export async function getStudioDancesToBrowse({
     },
   })
   return studioDances
+}
+
+export async function getStudioDancers(studioId: Studio['userId']) {
+  return await prisma.dancer.findMany({
+    where: {
+      enrollments: {
+        some: {
+          studioId: studioId,
+        },
+      },
+    },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      parent: {
+        select: {
+          firstName: true,
+        },
+      },
+      enrollments: {
+        where: {
+          studioId: studioId,
+        },
+        select: { studioId: true, class: { select: { name: true } } },
+      },
+    },
+  })
 }
 
 // MUTATIONS //
@@ -464,6 +516,7 @@ export async function createStudioDance({
   skillLevelId,
   tightsId = null,
   footwearId = null,
+  styleOfDance,
 }: {
   name: DanceClass['name']
   performanceName: DanceClass['performanceName']
@@ -474,6 +527,7 @@ export async function createStudioDance({
   skillLevelId: DanceClass['skillLevelId']
   tightsId?: DanceClass['tightsId'] | null
   footwearId?: DanceClass['footwearId'] | null
+  styleOfDance: string
 }) {
   await prisma.danceClass.create({
     data: {
@@ -486,6 +540,7 @@ export async function createStudioDance({
       skillLevelId,
       tightsId,
       footwearId,
+      styleOfDance,
     },
   })
 }
@@ -501,6 +556,7 @@ export async function updateStudioDance({
   skillLevelId,
   tightsId = null,
   footwearId = null,
+  styleOfDance,
 }: {
   danceClassId: DanceClass['id']
   name: DanceClass['name']
@@ -512,6 +568,7 @@ export async function updateStudioDance({
   skillLevelId: DanceClass['skillLevelId']
   tightsId?: DanceClass['tightsId'] | null
   footwearId?: DanceClass['footwearId'] | null
+  styleOfDance: string
 }) {
   await prisma.danceClass.update({
     where: {
@@ -527,6 +584,7 @@ export async function updateStudioDance({
       skillLevelId,
       tightsId,
       footwearId,
+      styleOfDance,
     },
   })
 }

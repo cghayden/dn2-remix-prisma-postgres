@@ -35,7 +35,7 @@ body {
 
 .levels_edit {
   display: grid;
-  grid-template-columns: 1fr 1fr 80px;
+  grid-template-columns: 1fr 1fr max-content;
   gap: 10px;
 }
 
@@ -60,7 +60,6 @@ body {
   gap: 1rem;
   padding-left: 4px;
   padding-right: 4px;
-  /* font-size: 0.875rem; */
 }
 .input_button_as_row div {
   flex-grow: 1;

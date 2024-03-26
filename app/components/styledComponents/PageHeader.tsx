@@ -5,12 +5,14 @@ type PageHeaderProps = {
   headerText: string
   className?: string
   actionRoute?: string | null
+  editRoute?: string | null
   navigateBackUrl?: string | null
 }
 
 export function PageHeader({
   headerText,
   className = '',
+  editRoute = null,
   navigateBackUrl = null,
   actionRoute = null,
 }: PageHeaderProps) {
@@ -29,6 +31,11 @@ export function PageHeader({
       {actionRoute && (
         <Link to={actionRoute} className='ml-auto text-2xl pr-8'>
           +
+        </Link>
+      )}
+      {editRoute && (
+        <Link to={editRoute} className='ml-auto text-xl pr-8 text-rose-700'>
+          Edit
         </Link>
       )}
     </div>

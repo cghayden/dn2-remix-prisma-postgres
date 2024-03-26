@@ -6,9 +6,10 @@ import {
 } from '@remix-run/node'
 import { Form, useActionData, useLoaderData } from '@remix-run/react'
 import {
-  createStudioDance,
+  updateStudioDance,
   getStudioConfig,
   requireStudioUserId,
+  getDanceClass,
 } from '~/models/studio.server'
 import { getUserId } from '~/session.server'
 import { z } from 'zod'
@@ -19,6 +20,7 @@ import { PageHeader } from '~/components/styledComponents/PageHeader'
 import { useState } from 'react'
 
 const danceSchema = z.object({
+  danceClassId: z.string(),
   name: z.string({ required_error: 'Name is required' }),
   performanceName: z.string().min(3).optional(),
   ageLevelId: z.string(),
@@ -34,13 +36,16 @@ export async function action({ request }: ActionFunctionArgs) {
   const studioId = await requireStudioUserId(request)
   const formData = await request.formData()
   const submission = parse(formData, { schema: danceSchema })
+  console.log('submission', submission)
 
   if (submission.intent !== 'submit' || !submission.value) {
     return json(submission)
   }
   // if boolean checkboxes are not checked, there will not be a submission
+  console.log('submission value', submission.value)
 
   const {
+    danceClassId,
     name,
     performanceName,
     ageLevelId,
@@ -52,7 +57,8 @@ export async function action({ request }: ActionFunctionArgs) {
     styleOfDance,
   } = submission.value
 
-  await createStudioDance({
+  await updateStudioDance({
+    danceClassId,
     name,
     performanceName: performanceName || null,
     studioId,
@@ -69,23 +75,39 @@ export async function action({ request }: ActionFunctionArgs) {
   return redirect('/studio')
 }
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
+  const danceId = params.id
+  if (!danceId) {
+    throw new Error('no dance Id provided')
+  }
   const userId = await getUserId(request)
   const studioConfig = await getStudioConfig(userId as string)
   if (!studioConfig)
     throw new Error('there was a problem retrieving Studio config')
   // get available ageLevels and skillLevels from loader to populate select
-  return { studioConfig }
+  const danceClass = await getDanceClass({ danceId })
+  return { studioConfig, danceClass }
 }
 
-export default function AddDanceClass() {
-  const { studioConfig } = useLoaderData<typeof loader>()
+export default function UpdateDanceClass() {
+  const { studioConfig, danceClass } = useLoaderData<typeof loader>()
+  console.log('danceClass', danceClass)
   const lastSubmission = useActionData<typeof action>()
-  const [selectedAgeLevel, setSelectedAgeLevel] = useState('')
-  const [selectedSkillLevel, setSelectedSkillLevel] = useState('')
-  const [selectedTights, setSelectedTights] = useState('')
-  const [selectedFootwear, setSelectedFootwear] = useState('')
-  const [selectedStyle, setSelectedStyle] = useState('')
+  const [selectedAgeLevel, setSelectedAgeLevel] = useState(
+    danceClass?.ageLevelId ? danceClass.ageLevelId : ''
+  )
+  const [selectedSkillLevel, setSelectedSkillLevel] = useState(
+    danceClass?.skillLevelId ? danceClass.skillLevelId : ''
+  )
+  const [selectedTights, setSelectedTights] = useState(
+    danceClass?.tightsId ? danceClass.tightsId : ''
+  )
+  const [selectedFootwear, setSelectedFootwear] = useState(
+    danceClass?.footwearId ? danceClass.footwearId : ''
+  )
+  const [selectedStyle, setSelectedStyle] = useState(
+    danceClass?.styleOfDance ?? ''
+  )
 
   // The `useForm` hook will return everything you need to setup a form including the error and config of each field
   const [
@@ -99,7 +121,6 @@ export default function AddDanceClass() {
       footwearId,
       competitions,
       recital,
-      // styleOfDance,
     },
   ] = useForm({
     // The last submission will be used to report the error and serves as the default value and initial error of the form for progressive enhancement
@@ -113,8 +134,10 @@ export default function AddDanceClass() {
 
   return (
     <>
-      <PageHeader headerText='Add A New Dance' />
+      <PageHeader headerText='Dance Classes' />
       <Form method='post' {...form.props} className='form_default w-5/6'>
+        <legend className='font-bold text-xl'>{danceClass?.name}</legend>
+        <input type='hidden' name='danceClassId' value={danceClass?.id} />
         <div className='input_section_wrapper'>
           <div className='input_item'>
             <TextInput
@@ -122,6 +145,7 @@ export default function AddDanceClass() {
               label={'Name'}
               error={name.error}
               required={true}
+              defaultValue={danceClass?.name}
             />
           </div>
           <div className='input_item'>
@@ -130,16 +154,17 @@ export default function AddDanceClass() {
               label={'Performance Name'}
               error={performanceName.error}
               required={false}
+              defaultValue={danceClass?.performanceName ?? ''}
             />
           </div>
+          {/* Style Of Dance  */}
 
-          {/* Style OF Dance */}
           <div className='input_item'>
             <label
               className='block text-sm text-gray-600 mb-1'
-              htmlFor={'ageLevel'}
+              htmlFor={'styleOfDance'}
             >
-              Style of Dance{' '}
+              Style of Dance
             </label>
             <input type='hidden' name='styleOfDance' value={selectedStyle} />
             {studioConfig.stylesOfDance.map((style) => (
@@ -158,7 +183,6 @@ export default function AddDanceClass() {
               </button>
             ))}
           </div>
-
           {/* Age Level */}
           <div className='input_item'>
             <label
@@ -183,21 +207,6 @@ export default function AddDanceClass() {
                 {level.name}
               </button>
             ))}
-            {/* 
-             old, traditional native select with dropdown...
-            <select
-              // required={true}
-              name='ageLevelId'
-              id='ageLevel'
-              className='w-full border rounded bg-gray-50 border-gray-300 text-gray-800 px-2 py-1 focus:ring-2 focus:ring-blue-300 pt-[5px] pb-[5px]'
-            >
-              <option value='12'>-- Choose a Dance Level --</option>
-              {studioConfig.ageLevels.map((level) => (
-                <option key={level.id} value={level.id}>
-                  {level.name}
-                </option>
-              ))}
-            </select> */}
             {ageLevelId.error ? (
               <div className='pt-1 text-red-700' id={`ageLevel-error`}>
                 {ageLevelId.error}
@@ -248,7 +257,11 @@ export default function AddDanceClass() {
             >
               Tights
             </label>
-            <input type='hidden' name='tightsId' value={selectedTights} />
+            <input
+              type='hidden'
+              name='tightsId'
+              value={selectedTights || undefined}
+            />
             {studioConfig.tights.map((tightsItem) => (
               <button
                 type='button'
@@ -279,7 +292,11 @@ export default function AddDanceClass() {
             >
               Footwear
             </label>
-            <input type='hidden' name='footwearId' value={selectedFootwear} />
+            <input
+              type='hidden'
+              name='footwearId'
+              value={selectedFootwear || undefined}
+            />
             {studioConfig.footwear.map((footwearItem) => (
               <button
                 type='button'
@@ -305,7 +322,10 @@ export default function AddDanceClass() {
           {/* Competitions Selector */}
           <div className='input_item'>
             <label className='flex gap-4'>
-              <input {...conform.input(competitions, { type: 'checkbox' })} />
+              <input
+                {...conform.input(competitions, { type: 'checkbox' })}
+                defaultChecked={danceClass?.competitions ? true : false}
+              />
               <span>This Dance will compete in competitions</span>
             </label>
           </div>
@@ -313,7 +333,10 @@ export default function AddDanceClass() {
           {/* Recital Selector */}
           <div className='input_item'>
             <label className='flex gap-4'>
-              <input {...conform.input(recital, { type: 'checkbox' })} />
+              <input
+                {...conform.input(recital, { type: 'checkbox' })}
+                defaultChecked={danceClass?.recital ? true : false}
+              />
               <span>Recital: Yes, this dance will be in the recital</span>
             </label>
           </div>
@@ -322,7 +345,7 @@ export default function AddDanceClass() {
             type='submit'
             className=' rounded bg-blue-500 mt-4 ml-2 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400'
           >
-            Create Class
+            Save Class
           </button>
         </div>
       </Form>
