@@ -1,12 +1,12 @@
 import { Outlet, useLoaderData, useRouteError } from '@remix-run/react'
 import StudioHeader from '~/components/studios/StudioHeader'
 import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
-import Nav from '~/components/Nav'
+import Nav from '~/components/studios/StudioNav'
 import type { NavLink } from 'types'
 import { useState } from 'react'
 import { requireStudio } from '~/models/studio.server'
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { User } from '~/components/Nav'
+import type { User } from '~/components/studios/StudioNav'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const studioUser = await requireStudio(request)
