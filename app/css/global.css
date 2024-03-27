@@ -125,5 +125,10 @@ body {
   padding: 0.5rem 0.25rem;
   border-radius: 0.25rem;
 }
-/* 
-class="w-full rounded border bg-gray-50 border-gray-300 text-gray-800 px-2 py-1 focus:ring-2 focus:ring-blue-300" */
+
+.dashboardPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+}

@@ -21,7 +21,7 @@ export default function DancerDashboardPanel({ dancers = [] }: Props) {
         <div className='p-4 w-full bg-slate-100 '>
           <input
             type='text'
-            className='p-2 border border-gray-200 rounded'
+            className='p-2 border border-gray-200 rounded w-full'
             placeholder='Search ...'
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}

@@ -43,7 +43,7 @@ export default function StudioIndex() {
   return (
     <>
       <PageHeader headerText='Studio Home' />
-      <div className='grid grid-cols-2'>
+      <div className='grid grid-cols-1 md:grid-cols-2'>
         <DanceClassDashboardPanel danceClasses={dances} />
         <DancerDashboardPanel dancers={dancers} />
       </div>
