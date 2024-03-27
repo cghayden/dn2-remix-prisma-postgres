@@ -1,19 +1,30 @@
-import { Outlet, useRouteError } from '@remix-run/react'
-import { type LoaderFunctionArgs } from '@remix-run/node'
+import { Outlet, useLoaderData, useRouteError } from '@remix-run/react'
 import StudioHeader from '~/components/studios/StudioHeader'
-import { requireStudio } from '~/models/studio.server'
 import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 import Nav from '~/components/Nav'
 import type { NavLink } from 'types'
 import { useState } from 'react'
+import { requireStudio } from '~/models/studio.server'
+import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { User } from '~/components/Nav'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const studioUser = await requireStudio(request)
-  return studioUser
+  const user: User = {
+    ...studioUser,
+    studio: studioUser.studio ? { name: studioUser.studio.name } : undefined,
+    parent: studioUser.parent
+      ? {
+          firstName: studioUser.parent.firstName,
+          lastName: studioUser.parent.lastName,
+        }
+      : undefined,
+  }
+  return user
 }
 
 export default function StudioLayout() {
-  // const studioUser = useLoaderData<typeof loader>()
+  const studioUser = useLoaderData<typeof loader>()
   const [showNav, toggleShowNav] = useState(false)
 
   const studioLinks: NavLink[] = [
@@ -21,11 +32,8 @@ export default function StudioLayout() {
     { label: 'Dancers', url: '/studio/dancers' },
     { label: 'Dance Classes', url: '/studio/danceClasses' },
     { label: 'Create a New Dance', url: '/studio/addDanceClass' },
-    // { label: 'Configuration', url: '/studio/settings' },
     { label: 'Footwear', url: 'footwear' },
     { label: 'Tights', url: 'tights' },
-    // { label: 'Age Levels', url: 'config/ageLevels' },
-    // { label: 'Skill Levels', url: 'config/skillLevels' },
     { label: 'Configuration', url: 'config' },
   ]
   return (
@@ -35,6 +43,7 @@ export default function StudioLayout() {
         links={studioLinks}
         showNav={showNav}
         toggleShowNav={toggleShowNav}
+        user={studioUser}
       />
       <main className='main_custom'>
         <div className='flex-1'>

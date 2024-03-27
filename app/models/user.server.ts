@@ -6,7 +6,26 @@ import { prisma } from '~/db.server'
 export type { User } from '@prisma/client'
 
 export async function getUserById(userId: User['userId']) {
-  return await prisma.user.findUnique({ where: { userId } })
+  return await prisma.user.findUnique({
+    where: { userId },
+    select: {
+      userId: true,
+      email: true,
+      type: true,
+      password: true,
+      studio: {
+        select: {
+          name: true,
+        },
+      },
+      parent: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
+    },
+  })
 }
 
 export async function getUserByEmail(email: User['email']) {
