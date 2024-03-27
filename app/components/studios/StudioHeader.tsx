@@ -28,17 +28,20 @@ export default function StudioHeader({
   // }, [pathname, toggleShowNav])
 
   return (
-    <header className='header'>
-      <button
-        className=' grid place-items-center md:hidden'
-        type='button'
-        aria-label='show navigation menu'
-        onClick={() => {
-          toggleShowNav(!showNav)
-        }}
-      >
-        <MenuSvg />
-      </button>
+    <header className='header bg-slate-900'>
+      {!showNav && (
+        <button
+          className=' grid place-items-center md:hidden'
+          type='button'
+          aria-label='show navigation menu'
+          onClick={(e) => {
+            e.stopPropagation()
+            toggleShowNav(!showNav)
+          }}
+        >
+          <MenuSvg />
+        </button>
+      )}
       <Link to='/studio' className='hidden md:block'>
         Dancernotes
       </Link>

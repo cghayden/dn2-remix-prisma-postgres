@@ -66,7 +66,7 @@ body {
 }
 
 .header {
-  background-color: #292524;
+  /* background-color: #292524; */
   display: flex;
   justify-items: center;
   padding: 1rem;
@@ -78,8 +78,8 @@ body {
 }
 
 .nav_frame_custom {
-  top: var(--header_height);
-  height: calc(100% - var(--header_height));
+  /* top: var(--header_height);
+  height: calc(100% - var(--header_height)); */
   z-index: 100;
 
   @media (min-width: 767px) {
