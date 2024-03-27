@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { Form } from '@remix-run/react'
 import type { NavLink } from 'types'
 import { useEffect, useRef } from 'react'
-import MenuSvg from './icons/MenuSvg'
+import MenuSvg from '../icons/MenuSvg'
 import type { User as PrismaUser, Studio, Parent } from '@prisma/client'
 
 export type User = Omit<PrismaUser, 'password'> & {
