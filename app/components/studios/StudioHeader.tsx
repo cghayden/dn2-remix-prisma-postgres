@@ -1,4 +1,3 @@
-import { Link } from '@remix-run/react'
 import MenuSvg from '../icons/MenuSvg'
 // import { useNavContext } from '../context/NavContext'
 // TODO - make this a reusable component for parent/studio/etc.
@@ -42,9 +41,9 @@ export default function StudioHeader({
           <MenuSvg />
         </button>
       )}
-      <Link to='/studio' className='hidden md:block'>
+      {/* <Link to='/studio' className='hidden md:block'>
         Dancernotes
-      </Link>
+      </Link> */}
     </header>
   )
 }

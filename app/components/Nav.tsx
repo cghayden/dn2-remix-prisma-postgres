@@ -3,21 +3,29 @@ import { Form } from '@remix-run/react'
 import type { NavLink } from 'types'
 import { useEffect, useRef } from 'react'
 import MenuSvg from './icons/MenuSvg'
+import type { User as PrismaUser, Studio, Parent } from '@prisma/client'
+
+export type User = Omit<PrismaUser, 'password'> & {
+  studio?: Pick<Studio, 'name'>
+  parent?: Pick<Parent, 'firstName' | 'lastName'>
+}
 
 export default function Nav({
   links,
   showNav,
   toggleShowNav,
+  user,
 }: {
   links: NavLink[]
   showNav: boolean
   toggleShowNav: React.Dispatch<React.SetStateAction<boolean>>
+  user: User
 }) {
-  const navRef = useRef(null)
+  const navRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (navRef.current && !navRef.current.contains(event.target)) {
+    function handleClickOutside(event: MouseEvent) {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
         toggleShowNav(false)
       }
     }
@@ -44,7 +52,7 @@ export default function Nav({
     `}
     >
       <nav className='nav_custom items-stretch flex flex-col flex-auto h-full min-h-full min-w-[15rem]'>
-        <div className='h-[3.5rem] bg-slate-900 flex items-center p-4 '>
+        <div className='h-[3.5rem] bg-slate-900 flex items-center p-4 text-slate-50 '>
           <button
             className=' grid place-items-center md:hidden text-slate-50'
             type='button'
@@ -55,6 +63,11 @@ export default function Nav({
           >
             <MenuSvg />
           </button>
+          <Link to={`/${user.type.toLowerCase()}`} className='hidden md:block'>
+            {user.type === 'STUDIO'
+              ? user.studio?.name
+              : user.parent?.firstName}
+          </Link>
         </div>
         <div className='pt-4'>
           <ul>
